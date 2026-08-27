@@ -1,0 +1,22 @@
+# Gradle / Android build outputs
+.gradle/
+build/
+app/build/
+*.apk
+*.aar
+
+# User / Local configuration & tokens
+local.properties
+.gdrive_token.json
+*.token
+
+# IDE & OS temporary files
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Misc temporary output files
+Failed
+Minimum
+*.log
