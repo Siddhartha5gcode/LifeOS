@@ -15,8 +15,21 @@
 <title>LifeOS Mobile - Personal Assistant</title>
 <meta name="theme-color" content="#0f172a">
 <meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="LifeOS">
+<link rel="manifest" href="manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js')
+        .then(reg => console.log('✅ PWA Service Worker Registered', reg))
+        .catch(err => console.log('⚠️ PWA Service Worker Registration Failed', err));
+    });
+  }
+</script>
 <style>
 :root {
   --bg: #0b0f19;
