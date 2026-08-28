@@ -201,7 +201,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent-indigo); 
 </head>
 <body>
 
-<!-- Full-Screen First Launch Welcome Auth Screen Overlay (Disabled for now — kept for future use) -->
+<!-- Full-Screen Welcome Auth Screen Overlay -->
 <div id="welcomeAuthOverlay" style="position:fixed; top:0; left:0; right:0; bottom:0; z-index:9999; background:#0b0f19; display:none; flex-direction:column; align-items:center; justify-content:center; padding:1.5rem; overflow-y:auto;">
   <div style="width:100%; max-width:420px; background:rgba(30,41,59,0.95); border:1px solid rgba(168,85,247,0.4); border-radius:1.25rem; padding:1.5rem; box-shadow:0 20px 50px rgba(0,0,0,0.8); backdrop-filter:blur(20px);">
     <div style="text-align:center; margin-bottom:1.25rem;">
@@ -217,11 +217,11 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent-indigo); 
       <button id="gateBtnForgot" class="m-btn-sm" style="flex:1; padding:0.65rem; text-align:center; background:transparent; color:var(--text-sub); font-weight:700; font-size:0.8rem;" onclick="switchGateMode('forgot')">❓ Recovery</button>
     </div>
 
-    <!-- 1. SIGN UP FORM (DEFAULT FOR NEW USER) -->
+    <!-- 1. SIGN UP FORM (COLLECTS NAME, MOBILE, GMAIL, PASSWORD) -->
     <form id="gateSignUpForm">
       <div style="margin-bottom:0.6rem;">
         <label style="font-size:0.75rem; color:var(--text-sub); display:block; margin-bottom:0.2rem;">Full Name</label>
-        <input type="text" id="gateSignUpName" placeholder="Enter Full Name" required>
+        <input type="text" id="gateSignUpName" placeholder="e.g. Siddhartha" required>
       </div>
       <div style="margin-bottom:0.6rem;">
         <label style="font-size:0.75rem; color:var(--text-sub); display:block; margin-bottom:0.2rem;">Mobile Number</label>
@@ -232,28 +232,59 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent-indigo); 
         <input type="email" id="gateSignUpEmail" placeholder="siddhartha12495@gmail.com" required>
       </div>
       <div style="margin-bottom:1rem;">
-        <label style="font-size:0.75rem; color:var(--text-sub); display:block; margin-bottom:0.2rem;">Create Security PIN / Password</label>
+        <label style="font-size:0.75rem; color:var(--text-sub); display:block; margin-bottom:0.2rem;">Create Password / Security PIN</label>
         <input type="password" id="gateSignUpPassword" placeholder="Create Password" required>
       </div>
-      <button type="submit" class="m-btn" style="padding:0.75rem; background:linear-gradient(135deg, #4285F4, #34A853); color:white; font-weight:700; font-size:0.95rem;">🚀 Create Account & Sync to Server</button>
+      <button type="submit" class="m-btn" style="padding:0.75rem; background:linear-gradient(135deg, #4285F4, #34A853); color:white; font-weight:700; font-size:0.95rem;">🚀 Create Account &amp; Sync Data</button>
     </form>
 
-    <!-- 2. SIGN IN FORM (FOR EXISTING USER) -->
-    <form id="gateSignInForm" style="display:none;">
-      <div style="margin-bottom:0.6rem;">
-        <label style="font-size:0.75rem; color:var(--text-sub); display:block; margin-bottom:0.2rem;">Gmail ID or Mobile Number</label>
-        <input type="text" id="gateSignInLogin" value="siddhartha12495@gmail.com" placeholder="Email or Mobile Number" required>
+    <!-- 2. SIGN IN FORM (PASSWORD OR OTP AUTH) -->
+    <div id="gateSignInForm" style="display:none;">
+      
+      <!-- Sub Method Selector: Password vs OTP -->
+      <div style="display:flex; gap:0.4rem; margin-bottom:0.8rem; background:rgba(0,0,0,0.3); padding:0.25rem; border-radius:0.5rem;">
+        <button id="gateSignInMethodPass" type="button" style="flex:1; padding:0.45rem; font-size:0.75rem; font-weight:700; border-radius:0.4rem; border:none; background:var(--accent-indigo); color:white; cursor:pointer;" onclick="switchSignInMethod('pass')">🔑 Password Login</button>
+        <button id="gateSignInMethodOtp" type="button" style="flex:1; padding:0.45rem; font-size:0.75rem; font-weight:700; border-radius:0.4rem; border:none; background:transparent; color:var(--text-sub); cursor:pointer;" onclick="switchSignInMethod('otp')">📲 Mobile OTP Login</button>
       </div>
-      <div style="margin-bottom:0.6rem;">
-        <label style="font-size:0.75rem; color:var(--text-sub); display:block; margin-bottom:0.2rem;">Security PIN / Password</label>
-        <input type="password" id="gateSignInPassword" value="123456" placeholder="Enter Password">
+
+      <!-- Password Login Form (Mail + Password or Mobile + Password) -->
+      <form id="gateSignInPassForm">
+        <div style="margin-bottom:0.6rem;">
+          <label style="font-size:0.75rem; color:var(--text-sub); display:block; margin-bottom:0.2rem;">Gmail ID or Mobile Number</label>
+          <input type="text" id="gateSignInLogin" placeholder="Email or Mobile Number" required>
+        </div>
+        <div style="margin-bottom:0.6rem;">
+          <label style="font-size:0.75rem; color:var(--text-sub); display:block; margin-bottom:0.2rem;">Security Password / PIN</label>
+          <input type="password" id="gateSignInPassword" placeholder="Enter Password" required>
+        </div>
+        <div style="text-align:right; margin-bottom:0.8rem;">
+          <button type="button" style="background:none; border:none; color:var(--accent-cyan); font-size:0.75rem; cursor:pointer; text-decoration:underline;" onclick="switchGateMode('forgot')">Forgot Password?</button>
+        </div>
+        <button type="submit" class="m-btn" style="padding:0.75rem; background:linear-gradient(135deg, var(--accent-indigo), var(--accent-purple)); color:white; font-weight:700; font-size:0.9rem; margin-bottom:0.5rem;">🔑 Sign In with Password</button>
+      </form>
+
+      <!-- OTP Login Form (Mobile Number + OTP Verification) -->
+      <div id="gateSignInOtpForm" style="display:none;">
+        <div style="margin-bottom:0.6rem;">
+          <label style="font-size:0.75rem; color:var(--text-sub); display:block; margin-bottom:0.2rem;">Registered Mobile Number</label>
+          <div style="display:flex; gap:0.4rem;">
+            <input type="tel" id="gateOtpMobile" placeholder="+91 9876543210" style="margin-bottom:0; flex:1;">
+            <button type="button" id="gateSendOtpBtn" onclick="requestGateOtp()" style="padding:0.6rem 0.8rem; background:var(--accent-cyan); color:#0b0f19; font-weight:700; border:none; border-radius:0.5rem; font-size:0.75rem; cursor:pointer;">📩 Send OTP</button>
+          </div>
+        </div>
+
+        <div id="gateOtpInputGroup" style="display:none; margin-bottom:0.8rem;">
+          <div style="padding:0.5rem; background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.3); border-radius:0.5rem; font-size:0.75rem; color:var(--accent-green); margin-bottom:0.6rem; text-align:center;">
+            ✅ OTP Code: <b id="gateDisplayedOtp" style="font-size:1.1rem; color:var(--accent-gold); letter-spacing:2px;"></b>
+          </div>
+          <label style="font-size:0.75rem; color:var(--text-sub); display:block; margin-bottom:0.2rem;">Enter 6-Digit OTP</label>
+          <input type="text" id="gateOtpCode" placeholder="Enter OTP code" maxlength="6" style="text-align:center; font-size:1.1rem; letter-spacing:4px; font-weight:800;">
+          <button type="button" onclick="verifyGateOtp()" class="m-btn" style="padding:0.75rem; background:linear-gradient(135deg, #10b981, #059669); color:white; font-weight:700; font-size:0.9rem; margin-top:0.6rem;">✅ Verify OTP &amp; Sign In</button>
+        </div>
       </div>
-      <div style="text-align:right; margin-bottom:0.8rem;">
-        <button type="button" style="background:none; border:none; color:var(--accent-cyan); font-size:0.75rem; cursor:pointer; text-decoration:underline;" onclick="switchGateMode('forgot')">Forgot Username or Password?</button>
-      </div>
-      <button type="submit" class="m-btn" style="padding:0.75rem; background:linear-gradient(135deg, var(--accent-indigo), var(--accent-purple)); color:white; font-weight:700; font-size:0.95rem; margin-bottom:0.5rem;">🔑 Sign In to LifeOS</button>
-      <button type="button" class="m-btn-sm" style="width:100%; padding:0.5rem; background:rgba(255,255,255,0.08); border:1px solid var(--accent-indigo); color:var(--accent-cyan); font-size:0.8rem;" onclick="performQuickAdminSignIn()">⚡ Quick 1-Tap Sign In (Siddhartha)</button>
-    </form>
+
+      <button type="button" class="m-btn-sm" style="width:100%; padding:0.5rem; background:rgba(255,255,255,0.08); border:1px solid var(--accent-indigo); color:var(--accent-cyan); font-size:0.8rem; margin-top:0.5rem;" onclick="performQuickAdminSignIn()">⚡ Quick 1-Tap Sign In (Siddhartha)</button>
+    </div>
 
     <!-- 3. FORGOT USERNAME & PASSWORD RECOVERY FORM -->
     <form id="gateForgotForm" style="display:none;">
@@ -270,6 +301,10 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent-indigo); 
       </div>
       <button type="button" class="m-btn" style="padding:0.65rem; background:var(--accent-purple); color:white; font-weight:700;" onclick="switchGateMode('signin')">🔑 Go to Sign In</button>
     </form>
+
+    <div style="text-align:center; margin-top:1rem;">
+      <button type="button" onclick="skipAuthAsGuest()" style="background:none; border:none; color:var(--text-sub); font-size:0.75rem; cursor:pointer; text-decoration:underline;">Continue as Guest / Skip Sign In</button>
+    </div>
 
   </div>
 </div>
@@ -4460,12 +4495,20 @@ function renderBillsList(filter) {
 
 const usersDatabase = JSON.parse(localStorage.getItem('m_users_db') || '[]');
 let currentUser = JSON.parse(localStorage.getItem('m_account') || 'null');
+let _currentGeneratedOtp = null;
 
 function checkWelcomeAuthGateway() {
   const overlay = document.getElementById('welcomeAuthOverlay');
   if (!overlay) return;
-  // Disabled for now — app accesses Drive Live Server directly
-  overlay.style.display = 'none';
+  
+  const storedAccount = JSON.parse(localStorage.getItem('m_account') || 'null');
+  if (storedAccount && storedAccount.isLoggedIn) {
+    currentUser = storedAccount;
+    overlay.style.display = 'none';
+  } else {
+    overlay.style.display = 'flex';
+    switchGateMode('signup');
+  }
 }
 
 function switchGateMode(mode) {
@@ -4489,7 +4532,7 @@ function switchGateMode(mode) {
     gateSignInForm.style.display = 'block';
     gateBtnSignIn.style.background = 'linear-gradient(135deg, var(--accent-indigo), var(--accent-purple))';
     gateBtnSignIn.style.color = 'white';
-    subtext.textContent = 'Welcome back! Sign in with your registered Email or Mobile.';
+    subtext.textContent = 'Welcome back! Sign in via Password or Mobile OTP.';
   } else if (mode === 'forgot') {
     gateForgotForm.style.display = 'block';
     gateBtnForgot.style.background = 'var(--accent-cyan)';
@@ -4501,6 +4544,82 @@ function switchGateMode(mode) {
     gateBtnSignUp.style.color = 'white';
     subtext.textContent = 'First time using LifeOS? Register below to unlock your workspace.';
   }
+}
+
+function switchSignInMethod(method) {
+  const passForm = document.getElementById('gateSignInPassForm');
+  const otpForm  = document.getElementById('gateSignInOtpForm');
+  const btnPass  = document.getElementById('gateSignInMethodPass');
+  const btnOtp   = document.getElementById('gateSignInMethodOtp');
+
+  if (method === 'otp') {
+    if (passForm) passForm.style.display = 'none';
+    if (otpForm)  otpForm.style.display = 'block';
+    if (btnPass) { btnPass.style.background = 'transparent'; btnPass.style.color = 'var(--text-sub)'; }
+    if (btnOtp)  { btnOtp.style.background  = 'var(--accent-cyan)'; btnOtp.style.color = '#0b0f19'; }
+  } else {
+    if (passForm) passForm.style.display = 'block';
+    if (otpForm)  otpForm.style.display = 'none';
+    if (btnPass) { btnPass.style.background = 'var(--accent-indigo)'; btnPass.style.color = 'white'; }
+    if (btnOtp)  { btnOtp.style.background  = 'transparent'; btnOtp.style.color = 'var(--text-sub)'; }
+  }
+}
+
+function requestGateOtp() {
+  const mobileInput = document.getElementById('gateOtpMobile');
+  const mobile = mobileInput ? mobileInput.value.trim() : '';
+  if (!mobile || mobile.replace(/\D/g, '').length < 7) {
+    alert('Please enter a valid mobile number.');
+    return;
+  }
+  
+  _currentGeneratedOtp = String(Math.floor(100000 + Math.random() * 900000));
+  
+  const group = document.getElementById('gateOtpInputGroup');
+  const codeEl = document.getElementById('gateDisplayedOtp');
+  if (group) group.style.display = 'block';
+  if (codeEl) codeEl.textContent = _currentGeneratedOtp;
+  
+  alert(`📩 LifeOS Verification OTP Code: ${_currentGeneratedOtp}\n\nMobile: ${mobile}\nEnter ${_currentGeneratedOtp} below to sign in.`);
+}
+
+function verifyGateOtp() {
+  const enteredEl = document.getElementById('gateOtpCode');
+  const mobileEl  = document.getElementById('gateOtpMobile');
+  const entered   = enteredEl ? enteredEl.value.trim() : '';
+  const mobile    = mobileEl ? mobileEl.value.trim() : '';
+  const digits    = mobile.replace(/\D/g, '');
+
+  if (!entered || entered !== _currentGeneratedOtp) {
+    alert('❌ Invalid OTP code! Please enter the 6-digit code displayed above.');
+    return;
+  }
+
+  let matchedUser = usersDatabase.find(u => u.mobile && u.mobile.replace(/\D/g, '') === digits);
+  if (!matchedUser) {
+    matchedUser = {
+      name: "User " + (digits.slice(-4) || 'Mobile'),
+      email: `${digits || 'user'}@lifeos.app`,
+      mobile: mobile,
+      isLoggedIn: true
+    };
+    usersDatabase.push(matchedUser);
+    localStorage.setItem('m_users_db', JSON.stringify(usersDatabase));
+  }
+
+  currentUser = matchedUser;
+  currentUser.isLoggedIn = true;
+  localStorage.setItem('m_account', JSON.stringify(currentUser));
+  renderUserAccountUI();
+  document.getElementById('welcomeAuthOverlay').style.display = 'none';
+  alert(`✅ OTP Verified Successfully!\nWelcome back ${currentUser.name}!`);
+}
+
+function skipAuthAsGuest() {
+  currentUser = { name: "Guest User", email: "guest@lifeos.app", mobile: "", isLoggedIn: true };
+  localStorage.setItem('m_account', JSON.stringify(currentUser));
+  renderUserAccountUI();
+  document.getElementById('welcomeAuthOverlay').style.display = 'none';
 }
 
 function switchAuthMode(mode) {
@@ -4735,13 +4854,23 @@ function processUserSignIn(loginInput, passInput) {
   }
 }
 
-// 2. GATE SIGN IN SUBMISSION — Drive Backend
-document.getElementById('gateSignInForm').onsubmit = e => {
-  e.preventDefault();
-  const loginInput = document.getElementById('gateSignInLogin').value.trim();
-  const passInput  = document.getElementById('gateSignInPassword').value.trim();
-  driveSignIn(loginInput, passInput, 'gate');
-};
+// 2. GATE SIGN IN SUBMISSION (PASSWORD AUTH)
+if (document.getElementById('gateSignInPassForm')) {
+  document.getElementById('gateSignInPassForm').onsubmit = e => {
+    e.preventDefault();
+    const loginInput = document.getElementById('gateSignInLogin').value.trim();
+    const passInput  = document.getElementById('gateSignInPassword').value.trim();
+    driveSignIn(loginInput, passInput, 'gate');
+  };
+}
+if (document.getElementById('gateSignInForm')) {
+  document.getElementById('gateSignInForm').onsubmit = e => {
+    e.preventDefault();
+    const loginInput = document.getElementById('gateSignInLogin')?.value.trim() || '';
+    const passInput  = document.getElementById('gateSignInPassword')?.value.trim() || '';
+    driveSignIn(loginInput, passInput, 'gate');
+  };
+}
 
 // 3. ACCOUNT TAB SIGN IN SUBMISSION — Drive Backend
 document.getElementById('acctSignInForm').onsubmit = e => {
@@ -4851,6 +4980,7 @@ try {
   if (liveDateEl) liveDateEl.textContent = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   if (typeof renderUserAccountUI === 'function') renderUserAccountUI();
   if (typeof renderApp === 'function') renderApp();
+  if (typeof checkWelcomeAuthGateway === 'function') checkWelcomeAuthGateway();
 } catch(err) {
   console.warn("LifeOS Initialization note:", err);
 }
