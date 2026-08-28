@@ -559,7 +559,9 @@
 </div>
 
 <script>
-  const API = 'https://lifeos-backend-zzqm.onrender.com';
+  const API = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+    ? window.location.origin 
+    : 'https://lifeos-backend-zzqm.onrender.com';
 
   /* ─── Show toast ─── */
   function toast(msg) {
