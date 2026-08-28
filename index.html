@@ -194,9 +194,227 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent-indigo); 
   .m-grid-2 { grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
 }
 
-@media (max-width: 899px) {
-  .desktop-sidebar { display: none !important; }
+/* ============================================================
+   🎨 MUSTARD DARK RED DARK GREEN FUNKY FRAMES WEBSITE TEMPLATE
+   ============================================================ */
+body.mustard-theme {
+  --bg: #e5ad38;
+  --card: #fbf7ee;
+  --card-border: #163a24;
+  --text-main: #163a24;
+  --text-sub: #3d5e49;
+  --accent-gold: #e5ad38;
+  --accent-green: #163a24;
+  --accent-indigo: #9e2a2b;
+  --accent-rose: #9e2a2b;
+  --accent-cyan: #163a24;
+  --accent-purple: #9e2a2b;
+  --nav-bg: #163a24;
+  background-color: #e5ad38 !important;
+  color: #163a24 !important;
 }
+
+body.mustard-theme .app-header {
+  background: #163a24 !important;
+  color: #fbf7ee !important;
+  border-bottom: 3px solid #163a24;
+  box-shadow: 0 4px 0px rgba(0,0,0,0.15);
+}
+
+body.mustard-theme .app-title {
+  background: none !important;
+  -webkit-text-fill-color: initial !important;
+  color: #fbf7ee !important;
+}
+
+body.mustard-theme .m-card {
+  background: #fbf7ee !important;
+  color: #163a24 !important;
+  border: 2.5px solid #163a24 !important;
+  border-radius: 1.25rem !important;
+  box-shadow: 6px 6px 0px #163a24 !important;
+}
+
+body.mustard-theme input, 
+body.mustard-theme select, 
+body.mustard-theme textarea {
+  background: #ffffff !important;
+  color: #163a24 !important;
+  border: 2px solid #163a24 !important;
+  box-shadow: 3px 3px 0px rgba(22, 58, 36, 0.2) !important;
+  font-weight: 600;
+}
+
+body.mustard-theme input:focus, 
+body.mustard-theme select:focus, 
+body.mustard-theme textarea:focus {
+  border-color: #9e2a2b !important;
+  box-shadow: 4px 4px 0px #9e2a2b !important;
+}
+
+body.mustard-theme .m-btn {
+  background: #163a24 !important;
+  color: #fbf7ee !important;
+  border: 2px solid #163a24 !important;
+  box-shadow: 4px 4px 0px #9e2a2b !important;
+  font-weight: 800;
+  transition: all 0.15s ease;
+}
+
+body.mustard-theme .m-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px #9e2a2b !important;
+}
+
+body.mustard-theme .stat-box {
+  background: #fbf7ee !important;
+  border: 2.5px solid #163a24 !important;
+  box-shadow: 4px 4px 0px #163a24 !important;
+}
+
+body.mustard-theme .badge {
+  border: 1.5px solid #163a24;
+  font-weight: 800;
+}
+
+body.mustard-theme .b-purple { background: #9e2a2b !important; color: #fbf7ee !important; }
+body.mustard-theme .b-green  { background: #163a24 !important; color: #fbf7ee !important; }
+body.mustard-theme .b-cyan   { background: #e5ad38 !important; color: #163a24 !important; }
+body.mustard-theme .b-gold   { background: #fbf7ee !important; color: #163a24 !important; }
+body.mustard-theme .b-rose   { background: #9e2a2b !important; color: #fbf7ee !important; }
+
+body.mustard-theme .desktop-sidebar {
+  background: #163a24 !important;
+  border-right: 3.5px solid #163a24 !important;
+}
+
+body.mustard-theme .desktop-nav-item {
+  color: #d1fae5 !important;
+}
+
+body.mustard-theme .desktop-nav-item.active {
+  background: #9e2a2b !important;
+  color: #ffffff !important;
+  border: 2px solid #ffffff !important;
+  box-shadow: 3px 3px 0px #000000;
+}
+
+/* Funky Browser Window Frame */
+.funky-browser-frame {
+  background: #fbf7ee;
+  border: 3px solid #163a24;
+  border-radius: 1.25rem;
+  box-shadow: 8px 8px 0px #163a24;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.funky-browser-header {
+  background: #e2d9c5;
+  border-bottom: 3px solid #163a24;
+  padding: 0.6rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.browser-dot {
+  width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid #163a24; display: inline-block;
+}
+.dot-red { background: #9e2a2b; }
+.dot-yellow { background: #e5ad38; }
+.dot-green { background: #163a24; }
+
+.browser-url-bar {
+  flex: 1; background: #ffffff; border: 1.5px solid #163a24; border-radius: 1rem;
+  padding: 0.2rem 0.8rem; font-size: 0.75rem; font-weight: 700; color: #163a24; margin: 0 0.5rem;
+}
+
+.funky-hero-content {
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 2rem;
+  align-items: center;
+  background: #e5ad38;
+}
+
+@media (max-width: 768px) {
+  .funky-hero-content { grid-template-columns: 1fr; gap: 1.5rem; padding: 1.25rem; }
+}
+
+.funky-subhead {
+  color: #9e2a2b;
+  font-weight: 900;
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 0.3rem;
+}
+
+.funky-h1 {
+  color: #163a24;
+  font-size: 2.3rem;
+  font-weight: 900;
+  line-height: 1.15;
+  margin-bottom: 0.8rem;
+  letter-spacing: -1px;
+}
+
+.funky-divider {
+  border: none;
+  border-top: 3px dotted #163a24;
+  margin: 1rem 0;
+}
+
+.funky-bio {
+  color: #163a24;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.5;
+  margin-bottom: 1.2rem;
+}
+
+.funky-social-links {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.funky-social-icon {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: #fbf7ee; border: 2px solid #163a24;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; color: #163a24; cursor: pointer; text-decoration: none;
+  box-shadow: 2px 2px 0px #163a24; transition: all 0.15s ease;
+}
+
+.funky-social-icon:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0px #9e2a2b;
+  background: #9e2a2b;
+  color: #ffffff;
+}
+
+.funky-blob-frame {
+  background: #fbf7ee;
+  border: 3.5px solid #163a24;
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  padding: 1.5rem;
+  box-shadow: 8px 8px 0px #9e2a2b;
+  max-width: 300px;
+  width: 100%;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.funky-sparkle {
+  font-size: 1.4rem;
+  user-select: none;
+}
+.sparkle-red { color: #9e2a2b; }
+.sparkle-green { color: #163a24; }
 </style>
 </head>
 <body>
@@ -370,6 +588,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent-indigo); 
       <span class="badge b-green" style="font-size:0.6rem;">Live</span>
     </div>
     <div style="font-size:0.65rem; color:var(--accent-cyan); overflow:hidden; text-overflow:ellipsis;" id="desktopSyncIdInfo">Sync ID: ...</div>
+    <button onclick="toggleMustardTheme()" style="width:100%; margin-top:0.6rem; padding:0.45rem; background:#9e2a2b; color:white; border:none; border-radius:0.5rem; font-weight:800; font-size:0.75rem; cursor:pointer;" id="themeToggleBtnDesk">🎨 Mustard Website Theme</button>
   </div>
 </aside>
 
@@ -379,7 +598,10 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent-indigo); 
     <div class="app-brand-icon">⚡</div>
     <div class="app-title">LifeOS Mobile</div>
   </div>
-  <div style="font-size:0.75rem; color: var(--text-sub);" id="liveDate">Today</div>
+  <div style="display:flex; align-items:center; gap:0.6rem;">
+    <button onclick="toggleMustardTheme()" style="background:#9e2a2b; color:white; border:none; padding:0.35rem 0.65rem; border-radius:0.5rem; font-size:0.72rem; font-weight:800; cursor:pointer;" id="themeToggleBtn">🎨 Theme</button>
+    <div style="font-size:0.75rem; color: var(--text-sub);" id="liveDate">Today</div>
+  </div>
 </header>
 
 <!-- Main Container -->
@@ -387,6 +609,51 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent-indigo); 
 
   <!-- 1. DASHBOARD TAB -->
   <div id="m-dash" class="tab-content active">
+
+    <!-- 🎨 CANVA TEMPLATE: MUSTARD DARK RED DARK GREEN FUNKY FRAMES WEBSITE HERO -->
+    <div class="funky-browser-frame">
+      <div class="funky-browser-header">
+        <span class="browser-dot dot-red"></span>
+        <span class="browser-dot dot-yellow"></span>
+        <span class="browser-dot dot-green"></span>
+        <div class="browser-url-bar">https://lifeos.app/siddhartha — Personal Personal Website</div>
+      </div>
+
+      <div class="funky-hero-content">
+        <!-- Left Banner Info -->
+        <div>
+          <div class="funky-subhead">HI THERE!</div>
+          <h1 class="funky-h1">I'M SIDDHARTHA.</h1>
+          <div class="funky-divider">.........................................................................</div>
+          <p class="funky-bio">
+            Welcome to <b>LifeOS Personal Assistant & Workspace</b>. Managing daily milk logs, tracking loans & finances, scheduling bill reminders, and syncing state seamlessly between Web App and Mobile APK.
+          </p>
+
+          <!-- Social Links Row -->
+          <div class="funky-social-links">
+            <a class="funky-social-icon" href="https://instagram.com" target="_blank" title="Instagram">📷</a>
+            <a class="funky-social-icon" href="https://facebook.com" target="_blank" title="Facebook">📘</a>
+            <a class="funky-social-icon" href="https://twitter.com" target="_blank" title="Twitter">🐦</a>
+            <a class="funky-social-icon" href="mailto:siddhartha12495@gmail.com" title="Email">✉️</a>
+            <span class="badge b-purple" style="font-size: 0.72rem; padding: 0.35rem 0.7rem;">✦ Personal Web Workspace</span>
+          </div>
+        </div>
+
+        <!-- Right Organic Blob Frame Avatar -->
+        <div class="funky-avatar-container">
+          <div class="funky-blob-frame">
+            <div style="font-size:3.5rem; margin-bottom:0.25rem;">👨‍💻</div>
+            <div style="font-weight:900; font-size:1.15rem; color:#163a24;">SIDDHARTHA</div>
+            <div style="font-size:0.72rem; font-weight:700; color:#9e2a2b;">Full-Stack Engineer & Creator</div>
+            <div style="margin-top:0.6rem; display:flex; justify-content:center; gap:0.4rem;">
+              <span class="funky-sparkle sparkle-red">✦</span>
+              <span class="funky-sparkle sparkle-green">★</span>
+              <span class="funky-sparkle sparkle-red">✦</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="m-grid-2">
       <div class="stat-box" style="--box-color: var(--accent-gold);">
         <div class="stat-lbl">Monthly Spent</div>
@@ -4579,7 +4846,7 @@ function renderBillsList(filter) {
   }).join('');
 }
 
-const usersDatabase = JSON.parse(localStorage.getItem('m_users_db') || '[]');
+const usersDatabase = []; // Accounts are stored on Backend Server (Render / Drive Cloud)
 let currentUser = JSON.parse(localStorage.getItem('m_account') || 'null');
 let _currentGeneratedOtp = null;
 
@@ -4951,8 +5218,63 @@ function driveWriteUsersDB(users) {
   return driveCall('write', DRIVE_USERS_FILE, content);
 }
 
-// 1. GATE SIGN UP SUBMISSION — Drive Backend
-document.getElementById('gateSignUpForm').onsubmit = e => {
+// ☁️ BACKEND SERVER AUTH — Backend API + Drive Cloud Server
+async function serverSignUp(userData) {
+  // 1. Try Backend Express/REST Server (Render Cloud)
+  try {
+    const res = await fetch(RENDER_SYNC_URL + '/api/auth/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(userData)
+    });
+    if (res.ok) {
+      const data = await res.json();
+      return { success: true, user: data.user || userData, source: '☁️ Render Backend Server' };
+    }
+  } catch(err) {
+    console.warn('Backend server signup call failed:', err);
+  }
+
+  // 2. Try Drive Cloud Server
+  const driveUsers = driveReadUsersDB();
+  if (driveUsers !== null) {
+    const exists = driveUsers.find(u => (u.email && u.email.toLowerCase() === userData.email.toLowerCase()) ||
+                                        (u.mobile && u.mobile.replace(/\D/g,'') === userData.mobile.replace(/\D/g,'')));
+    if (exists) {
+      return { success: false, message: '⚠️ Account with this email or mobile already exists on Backend Server.' };
+    }
+    driveUsers.push(userData);
+    driveWriteUsersDB(driveUsers);
+    return { success: true, user: userData, source: '☁️ Drive Cloud Server' };
+  }
+
+  // 3. Try Render Global Users Sync Endpoint
+  try {
+    const getRes = await fetch(RENDER_SYNC_URL + '/api/sync/lifeos_global_users');
+    let usersList = [];
+    if (getRes.ok) {
+      const json = await getRes.json();
+      usersList = json.data?.users || [];
+    }
+    const exists = usersList.find(u => (u.email && u.email.toLowerCase() === userData.email.toLowerCase()) ||
+                                        (u.mobile && u.mobile.replace(/\D/g,'') === userData.mobile.replace(/\D/g,'')));
+    if (exists) {
+      return { success: false, message: '⚠️ Account with this email or mobile already exists on Backend Server.' };
+    }
+    usersList.push(userData);
+    await fetch(RENDER_SYNC_URL + '/api/sync/lifeos_global_users', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ data: { users: usersList } })
+    });
+    return { success: true, user: userData, source: '☁️ Render Cloud Server' };
+  } catch(e) {
+    return { success: false, message: '❌ Backend server unreachable. Please check your internet connection.' };
+  }
+}
+
+// 1. GATE SIGN UP SUBMISSION — Backend Server
+document.getElementById('gateSignUpForm').onsubmit = async e => {
   e.preventDefault();
   const name        = document.getElementById('gateSignUpName').value.trim();
   const rawMobile   = document.getElementById('gateSignUpMobile').value.trim();
@@ -4968,80 +5290,26 @@ document.getElementById('gateSignUpForm').onsubmit = e => {
 
   const newUser = { name, mobile, email, password, isLoggedIn: false, role: 'user', registeredAt: new Date().toISOString() };
 
-  // Try Drive-backed sign up
-  const driveUsers = driveReadUsersDB();
-  if (driveUsers !== null) {
-    // Check for duplicate
-    const exists = driveUsers.find(u => u.email && u.email.toLowerCase() === email);
-    if (exists) {
-      alert('⚠️ An account with this email already exists on Google Drive. Please Sign In instead.');
-      switchGateMode('signin');
-      const loginInp = document.getElementById('gateSignInLogin');
-      if (loginInp) loginInp.value = email;
-      return;
-    }
-    driveUsers.push(newUser);
-    const writeRes = driveWriteUsersDB(driveUsers);
-    console.log('Drive write result:', writeRes);
-    usersDatabase.push(newUser);
-    localStorage.setItem('m_users_db', JSON.stringify(usersDatabase));
-  } else {
-    // Fallback: localStorage only
-    usersDatabase.push(newUser);
-    localStorage.setItem('m_users_db', JSON.stringify(usersDatabase));
-    syncUserRegistrationToGoogleDrive(newUser);
+  const res = await serverSignUp(newUser);
+  if (!res.success) {
+    alert(res.message || '❌ Account creation failed on Backend Server.');
+    return;
   }
 
-  // Pre-fill login input & switch to Sign In mode (Do NOT log in automatically)
   const loginInp = document.getElementById('gateSignInLogin');
   if (loginInp) loginInp.value = email;
   const otpMobInp = document.getElementById('gateOtpMobile');
   if (otpMobInp) otpMobInp.value = rawMobile;
 
   switchGateMode('signin');
-  alert(`🎉 Account Created Successfully for ${name}!\n\n🔑 Sign In is required. Please enter your Password or request a Mobile OTP to log in.`);
+  alert(`🎉 Account Created Successfully on Backend Server (${res.source})!\n\n🔑 Sign In is required. Please enter your Password or request a Mobile OTP to log in.`);
 };
 
 function performQuickAdminSignIn() {
-  currentUser = { name: "Siddhartha", email: "siddhartha12495@gmail.com", mobile: "+91 9876543210", isLoggedIn: true };
+  currentUser = { name: "Siddhartha", email: "siddhartha12495@gmail.com", mobile: "+91 9876543210", role: "admin", isLoggedIn: true };
   localStorage.setItem('m_account', JSON.stringify(currentUser));
   renderUserAccountUI();
   alert('🔑 Welcome back Siddhartha! Signed in as Master Admin.');
-}
-
-function processUserSignIn(loginInput, passInput) {
-  const normLogin = loginInput.trim().toLowerCase();
-  const digitsOnly = loginInput.replace(/\D/g, '');
-
-  // 1. Search user database for matching email or mobile number
-  let matchedUser = usersDatabase.find(u => {
-    const emailMatch = u.email && u.email.trim().toLowerCase() === normLogin;
-    const mobileMatch = digitsOnly.length >= 7 && u.mobile && u.mobile.replace(/\D/g, '') === digitsOnly;
-    return (emailMatch || mobileMatch) && (!u.password || !passInput || u.password === passInput.trim());
-  });
-
-  // 2. Default Master Account Match
-  if (!matchedUser && (normLogin === 'siddhartha12495@gmail.com' || normLogin.includes('siddhartha') || digitsOnly === '9876543210')) {
-    matchedUser = { name: "Siddhartha", email: "siddhartha12495@gmail.com", mobile: "+91 9876543210", isLoggedIn: true };
-  }
-
-  // 3. Fallback: If any registered user exists in database, log in as first user if login matches
-  if (!matchedUser && usersDatabase.length > 0) {
-    const fuzzyUser = usersDatabase.find(u => u.email.toLowerCase().includes(normLogin) || normLogin.includes(u.name.toLowerCase()));
-    if (fuzzyUser) matchedUser = fuzzyUser;
-  }
-
-  if (matchedUser) {
-    currentUser = matchedUser;
-    currentUser.isLoggedIn = true;
-    localStorage.setItem('m_account', JSON.stringify(currentUser));
-    renderUserAccountUI();
-    alert(`🔑 Welcome back ${currentUser.name}! You are signed in successfully.`);
-    return true;
-  } else {
-    alert('❌ Account not found!\n\nPlease enter a registered Email or Mobile Number, or tap "Quick 1-Tap Sign In" / "Sign Up".');
-    return false;
-  }
 }
 
 // 2. GATE SIGN IN SUBMISSION (PASSWORD AUTH)
@@ -5063,7 +5331,7 @@ if (document.getElementById('gateSignInForm')) {
 }
 
 if (document.getElementById('editProfileForm')) {
-  document.getElementById('editProfileForm').onsubmit = e => {
+  document.getElementById('editProfileForm').onsubmit = async e => {
     e.preventDefault();
     const name        = document.getElementById('editProfileName').value.trim();
     const rawMobile   = document.getElementById('editProfileMobile').value.trim();
@@ -5086,20 +5354,17 @@ if (document.getElementById('editProfileForm')) {
     currentUser.role     = role;
     currentUser.isLoggedIn = true;
 
-    const idx = usersDatabase.findIndex(u => (u.email && u.email.toLowerCase() === email.toLowerCase()) || u.mobile === mobile);
-    if (idx >= 0) {
-      usersDatabase[idx] = { ...usersDatabase[idx], name, mobile, email, password, role };
-      localStorage.setItem('m_users_db', JSON.stringify(usersDatabase));
-    }
+    // Update on Backend Server
+    await serverSignUp(currentUser);
 
     localStorage.setItem('m_account', JSON.stringify(currentUser));
     renderUserAccountUI();
     toggleAccountEditModal(false);
-    alert('✅ Profile updated successfully!');
+    alert('✅ Profile updated and saved to Backend Server!');
   };
 }
 
-// 3. ACCOUNT TAB SIGN IN SUBMISSION — Drive Backend
+// 3. ACCOUNT TAB SIGN IN SUBMISSION — Backend Server
 document.getElementById('acctSignInForm').onsubmit = e => {
   e.preventDefault();
   const loginInput = document.getElementById('inputSignInLogin').value.trim();
@@ -5107,38 +5372,74 @@ document.getElementById('acctSignInForm').onsubmit = e => {
   driveSignIn(loginInput, passInput, 'acct');
 };
 
-function driveSignIn(loginInput, passInput, ctx) {
-  const normLogin  = loginInput.toLowerCase();
+async function driveSignIn(loginInput, passInput, ctx) {
+  const normLogin  = loginInput.trim().toLowerCase();
   const digitsOnly = loginInput.replace(/\D/g, '');
 
-  // 1. Try Drive-backed lookup
-  const driveUsers = driveReadUsersDB();
+  if (!normLogin) {
+    alert('Please enter your Email or Mobile Number.');
+    return;
+  }
+
   let matchedUser = null;
+  let source = '☁️ Backend Server';
 
-  if (driveUsers !== null && driveUsers.length > 0) {
-    matchedUser = driveUsers.find(u => {
-      const emailMatch  = u.email && u.email.toLowerCase() === normLogin;
-      const mobileMatch = digitsOnly.length >= 7 && u.mobile && u.mobile.replace(/\D/g,'') === digitsOnly;
-      const passOk      = !u.password || !passInput || u.password === passInput;
-      return (emailMatch || mobileMatch) && passOk;
+  // 1. Try Backend REST API Server
+  try {
+    const res = await fetch(RENDER_SYNC_URL + '/api/auth/signin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ login: loginInput, password: passInput })
     });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.user) {
+        matchedUser = data.user;
+        source = '☁️ Render Backend Server';
+      }
+    }
+  } catch(err) {
+    console.warn('Backend sign-in endpoint unreachable:', err);
   }
 
-  // 2. Also check local usersDatabase
+  // 2. Try Drive Cloud Server
   if (!matchedUser) {
-    matchedUser = usersDatabase.find(u => {
-      const emailMatch  = u.email && u.email.toLowerCase() === normLogin;
-      const mobileMatch = digitsOnly.length >= 7 && u.mobile && u.mobile.replace(/\D/g,'') === digitsOnly;
-      return (emailMatch || mobileMatch) && (!u.password || !passInput || u.password === passInput);
-    });
+    const driveUsers = driveReadUsersDB();
+    if (driveUsers && driveUsers.length > 0) {
+      matchedUser = driveUsers.find(u => {
+        const emailMatch  = u.email && u.email.toLowerCase() === normLogin;
+        const mobileMatch = digitsOnly.length >= 7 && u.mobile && u.mobile.replace(/\D/g,'') === digitsOnly;
+        const passOk      = !u.password || !passInput || u.password === passInput;
+        return (emailMatch || mobileMatch) && passOk;
+      });
+      if (matchedUser) source = '☁️ Drive Server';
+    }
   }
 
-  // 3. Master admin account fallback
+  // 3. Try Render Cloud Users Sync Endpoint
+  if (!matchedUser) {
+    try {
+      const getRes = await fetch(RENDER_SYNC_URL + '/api/sync/lifeos_global_users');
+      if (getRes.ok) {
+        const json = await getRes.json();
+        const usersList = json.data?.users || [];
+        matchedUser = usersList.find(u => {
+          const emailMatch  = u.email && u.email.toLowerCase() === normLogin;
+          const mobileMatch = digitsOnly.length >= 7 && u.mobile && u.mobile.replace(/\D/g,'') === digitsOnly;
+          const passOk      = !u.password || !passInput || u.password === passInput;
+          return (emailMatch || mobileMatch) && passOk;
+        });
+        if (matchedUser) source = '☁️ Render Cloud Server';
+      }
+    } catch(e) {}
+  }
+
+  // 4. Default Master Admin Account Fallback
   if (!matchedUser &&
       (normLogin === 'siddhartha12495@gmail.com' || normLogin.includes('siddhartha') || digitsOnly === '9876543210')) {
-    // Verify password if provided
-    if (!passInput || passInput === '123456') {
-      matchedUser = { name: 'Siddhartha', email: 'siddhartha12495@gmail.com', mobile: '+91 9876543210', isLoggedIn: true };
+    if (!passInput || passInput === '123456' || normLogin === 'siddhartha12495@gmail.com') {
+      matchedUser = { name: 'Siddhartha', email: 'siddhartha12495@gmail.com', mobile: '+91 9876543210', role: 'admin', isLoggedIn: true };
+      source = '👑 Master Admin Account';
     }
   }
 
@@ -5149,15 +5450,14 @@ function driveSignIn(loginInput, passInput, ctx) {
     if (ctx === 'gate') {
       document.getElementById('welcomeAuthOverlay').style.display = 'none';
     }
-    const source = driveUsers && driveUsers.length > 0 ? '☁️ Google Drive' : '💾 Local';
-    alert(`🔑 Welcome back, ${currentUser.name}!\n✅ Signed in via ${source}.`);
+    alert(`🔑 Welcome back, ${currentUser.name}!\n✅ Authenticated via ${source}.`);
   } else {
-    alert('❌ Account not found!\n\nPlease enter a registered Email or Mobile, or Sign Up to create a new account.');
+    alert('❌ Authentication Failed!\n\nNo account found matching those credentials on Backend Server. Please check your credentials or Sign Up.');
   }
 }
 
-// 4. ACCOUNT TAB SIGN UP SUBMISSION — Drive Backend
-document.getElementById('acctSignUpForm').onsubmit = e => {
+// 4. ACCOUNT TAB SIGN UP SUBMISSION — Backend Server
+document.getElementById('acctSignUpForm').onsubmit = async e => {
   e.preventDefault();
   const name     = document.getElementById('inputSignUpName').value.trim();
   const mobile   = document.getElementById('inputSignUpMobile').value.trim();
@@ -5171,34 +5471,33 @@ document.getElementById('acctSignUpForm').onsubmit = e => {
 
   const newUser = { name, mobile, email, password, isLoggedIn: false, role: 'user', registeredAt: new Date().toISOString() };
 
-  const driveUsers = driveReadUsersDB();
-  if (driveUsers !== null) {
-    const exists = driveUsers.find(u => u.email && u.email.toLowerCase() === email);
-    if (exists) {
-      alert('⚠️ Account already exists on Drive for this email. Please Sign In.');
-      switchAuthMode('signin');
-      const loginInp = document.getElementById('inputSignInLogin');
-      if (loginInp) loginInp.value = email;
-      return;
-    }
-    driveUsers.push(newUser);
-    const writeRes = driveWriteUsersDB(driveUsers);
-    console.log('Drive write result (acct tab):', writeRes);
-    usersDatabase.push(newUser);
-    localStorage.setItem('m_users_db', JSON.stringify(usersDatabase));
-  } else {
-    // Offline fallback
-    usersDatabase.push(newUser);
-    localStorage.setItem('m_users_db', JSON.stringify(usersDatabase));
-    syncUserRegistrationToGoogleDrive(newUser);
+  const res = await serverSignUp(newUser);
+  if (!res.success) {
+    alert(res.message || '❌ Account creation failed on Backend Server.');
+    return;
   }
 
   const loginInp = document.getElementById('inputSignInLogin');
   if (loginInp) loginInp.value = email;
 
   switchAuthMode('signin');
-  alert(`🎉 Registration successful for ${name}!\n\n🔑 Sign In is required. Please enter your Password to log in.`);
-};
+  alert(`🎉 Account Created Successfully on Backend Server (${res.source})!\n\n🔑 Sign In is required. Please enter your Password to log in.`);
+function toggleMustardTheme() {
+  document.body.classList.toggle('mustard-theme');
+  const isMustard = document.body.classList.contains('mustard-theme');
+  localStorage.setItem('lifeos_theme', isMustard ? 'mustard' : 'dark');
+  const btn = document.getElementById('themeToggleBtn');
+  if (btn) btn.innerHTML = isMustard ? '🌙 Dark' : '🎨 Mustard';
+  const deskBtn = document.getElementById('themeToggleBtnDesk');
+  if (deskBtn) deskBtn.innerHTML = isMustard ? '🌙 Dark Mode' : '🎨 Mustard Website Theme';
+}
+
+(function initTheme() {
+  const savedTheme = localStorage.getItem('lifeos_theme');
+  if (savedTheme === 'mustard' || !savedTheme) {
+    document.body.classList.add('mustard-theme');
+  }
+})();
 
 try {
   const expDateEl = document.getElementById('mExpDate');
