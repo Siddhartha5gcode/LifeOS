@@ -530,6 +530,17 @@
       setTimeout(() => toast.remove(), 3500);
     }
 
+    function saveUserSessionLocally(userData) {
+      const session = { success: true, user: userData };
+      localStorage.setItem('lifeos_user_session', JSON.stringify(session));
+      localStorage.setItem('m_account', JSON.stringify({
+        isLoggedIn: true,
+        name: userData.name || 'Siddhartha',
+        email: userData.email || 'siddhartha12495@gmail.com',
+        mobile: userData.mobile || ''
+      }));
+    }
+
     async function handleLogin(e) {
       e.preventDefault();
       const email = document.getElementById('loginEmail').value.trim();
@@ -542,8 +553,8 @@
           body: JSON.stringify({ email, password })
         });
         const data = await res.json();
-        if (res.ok && data.success) {
-          localStorage.setItem('lifeos_user_session', JSON.stringify(data));
+        if (res.ok && data.success && data.user) {
+          saveUserSessionLocally(data.user);
           showToast('✅ Logged in successfully!');
           setTimeout(() => {
             const params = new URLSearchParams(window.location.search);
@@ -553,12 +564,8 @@
         }
       } catch(err) {}
 
-      // Fallback local check
-      const session = {
-        success: true,
-        user: { name: email.split('@')[0] || 'Siddhartha', email: email }
-      };
-      localStorage.setItem('lifeos_user_session', JSON.stringify(session));
+      // Fallback local login
+      saveUserSessionLocally({ name: email.split('@')[0] || 'Siddhartha', email: email });
       showToast('✅ Logged in successfully!');
       setTimeout(() => {
         const params = new URLSearchParams(window.location.search);
@@ -589,29 +596,24 @@
           body: JSON.stringify({ name: fullName, email, mobile, password: pass })
         });
         const data = await res.json();
-        if (res.ok && data.success) {
-          localStorage.setItem('lifeos_user_session', JSON.stringify(data));
+        if (res.ok && data.success && data.user) {
+          saveUserSessionLocally(data.user);
           showToast('🎉 Account registered successfully!');
           setTimeout(() => window.location.href = 'index.html', 1000);
           return;
         }
       } catch(err) {}
 
-      const session = {
-        success: true,
-        user: { name: fullName, email: email, mobile: mobile }
-      };
-      localStorage.setItem('lifeos_user_session', JSON.stringify(session));
+      saveUserSessionLocally({ name: fullName, email: email, mobile: mobile });
       showToast('🎉 Account registered successfully!');
       setTimeout(() => window.location.href = 'index.html', 1000);
     }
 
     function socialLogin(provider) {
-      const session = {
-        success: true,
-        user: { name: `Siddhartha (${provider})`, email: `siddhartha_${provider.toLowerCase()}@gmail.com` }
-      };
-      localStorage.setItem('lifeos_user_session', JSON.stringify(session));
+      saveUserSessionLocally({
+        name: `Siddhartha (${provider})`,
+        email: `siddhartha_${provider.toLowerCase()}@gmail.com`
+      });
       showToast(`✅ Logged in with ${provider}!`);
       setTimeout(() => window.location.href = 'index.html', 1000);
     }
@@ -623,5 +625,6 @@
       }
     }
   </script>
+
 </body>
 </html>

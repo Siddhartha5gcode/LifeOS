@@ -5012,17 +5012,27 @@ let _currentGeneratedOtp = null;
 
 function checkWelcomeAuthGateway() {
   const overlay = document.getElementById('welcomeAuthOverlay');
-  if (!overlay) return;
   
+  const session = JSON.parse(localStorage.getItem('lifeos_user_session') || 'null');
   const storedAccount = JSON.parse(localStorage.getItem('m_account') || 'null');
-  if (storedAccount && storedAccount.isLoggedIn) {
-    currentUser = storedAccount;
-    overlay.style.display = 'none';
+
+  if ((session && session.user) || (storedAccount && storedAccount.isLoggedIn)) {
+    const user = (session && session.user) ? session.user : storedAccount;
+    currentUser = { isLoggedIn: true, name: user.name, email: user.email, mobile: user.mobile || '' };
+    localStorage.setItem('m_account', JSON.stringify(currentUser));
+    if (overlay) overlay.style.display = 'none';
+
+    // Update Dashboard UI profile display
+    const dashName = document.getElementById('dashProfileName');
+    const dashMail = document.getElementById('dashProfileEmail');
+    if (dashName) dashName.innerText = currentUser.name || 'Siddhartha';
+    if (dashMail) dashMail.innerText = currentUser.email || 'siddhartha12495@gmail.com';
   } else {
-    overlay.style.display = 'flex';
-    switchGateMode('signup');
+    // If not authenticated, open the standalone Blogchatter login.html page directly!
+    window.location.href = 'login.html';
   }
 }
+
 
 function switchGateMode(mode) {
   const gateSignUpForm = document.getElementById('gateSignUpForm');
