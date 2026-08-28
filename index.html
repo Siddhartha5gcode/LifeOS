@@ -598,15 +598,19 @@ body.mustard-theme .desktop-nav-item.active {
 
 <!-- Header -->
 <header class="app-header">
-  <div class="app-brand">
+  <!-- Principle 1: Easy Access to Homepage -->
+  <div class="app-brand" onclick="switchWorkspaceMode('private')" style="cursor:pointer;" title="Click to return to Homepage">
     <div class="app-brand-icon">⚡</div>
-    <div class="app-title">LifeOS</div>
+    <div>
+      <div class="app-title" style="margin:0; line-height:1.1;">LifeOS</div>
+      <div style="font-size:0.62rem; color:var(--text-sub); font-weight:700;">🏠 Home</div>
+    </div>
   </div>
 
   <!-- Workspace Selector Pills -->
   <div style="display:flex; background:rgba(0,0,0,0.25); padding:0.25rem; border-radius:0.6rem; border:1px solid var(--card-border); gap:0.25rem;">
-    <button id="wsModePrivateBtn" onclick="switchWorkspaceMode('private')" class="badge b-gold" style="border:none; cursor:pointer; padding:0.3rem 0.6rem; font-size:0.72rem;">🔒 Personal</button>
-    <button id="wsModePublicBtn" onclick="switchWorkspaceMode('public')" class="badge b-rose" style="border:none; cursor:pointer; opacity:0.6; padding:0.3rem 0.6rem; font-size:0.72rem;">📰 Public Blogs</button>
+    <button id="wsModePrivateBtn" onclick="switchWorkspaceMode('private')" class="badge b-gold" style="border:none; cursor:pointer; padding:0.3rem 0.65rem; font-size:0.72rem;">🔒 Personal Space</button>
+    <button id="wsModePublicBtn" onclick="switchWorkspaceMode('public')" class="badge b-rose" style="border:none; cursor:pointer; opacity:0.6; padding:0.3rem 0.65rem; font-size:0.72rem;">📰 Public Blogs</button>
   </div>
 
   <div style="display:flex; align-items:center; gap:0.6rem;">
@@ -618,35 +622,42 @@ body.mustard-theme .desktop-nav-item.active {
 <!-- Main Container -->
 <main class="main-view">
 
-  <!-- 1. DASHBOARD TAB -->
+  <!-- 1. DASHBOARD TAB (HOMEPAGE) -->
   <div id="m-dash" class="tab-content active">
 
-    <!-- 🎨 CANVA TEMPLATE: MUSTARD DARK RED DARK GREEN FUNKY FRAMES WEBSITE HERO -->
+    <!-- 🎨 HOMEPAGE USABILITY HERO BANNER -->
     <div class="funky-browser-frame">
       <div class="funky-browser-header">
         <span class="browser-dot dot-red"></span>
         <span class="browser-dot dot-yellow"></span>
         <span class="browser-dot dot-green"></span>
-        <div class="browser-url-bar">https://lifeos.app/siddhartha — Personal Personal Website</div>
+        <div class="browser-url-bar">https://lifeos.app/siddhartha — Official Homepage & Personal Assistant</div>
       </div>
 
       <div class="funky-hero-content">
-        <!-- Left Banner Info -->
+        <!-- Left Banner Info — Principle 2: Communicate Who You Are & What You Do -->
         <div>
-          <div class="funky-subhead">HI THERE!</div>
+          <div class="funky-subhead">HI THERE! WELCOME TO LIFEOS</div>
           <h1 class="funky-h1">I'M SIDDHARTHA.</h1>
           <div class="funky-divider">.........................................................................</div>
           <p class="funky-bio">
-            Welcome to <b>LifeOS Personal Assistant & Workspace</b>. Managing daily milk logs, tracking loans & finances, scheduling bill reminders, and syncing state seamlessly between Web App and Mobile APK.
+            <b>Who I Am & What I Do:</b> Full-Stack Engineer & Creator. <b>LifeOS</b> is my unified <b>Personal Productivity Workspace</b> and <b>Public Tech Publishing Platform</b>. Track daily milk logs, manage personal expenses & loans, schedule bill payment reminders, and read or publish engineering blog articles.
           </p>
 
-          <!-- Social Links Row -->
-          <div class="funky-social-links">
-            <a class="funky-social-icon" href="https://instagram.com" target="_blank" title="Instagram">📷</a>
-            <a class="funky-social-icon" href="https://facebook.com" target="_blank" title="Facebook">📘</a>
-            <a class="funky-social-icon" href="https://twitter.com" target="_blank" title="Twitter">🐦</a>
-            <a class="funky-social-icon" href="mailto:siddhartha12495@gmail.com" title="Email">✉️</a>
-            <span class="badge b-purple" style="font-size: 0.72rem; padding: 0.35rem 0.7rem;">✦ Personal Web Workspace</span>
+          <!-- Purpose Badges -->
+          <div style="display:flex; flex-wrap:wrap; gap:0.4rem; margin-bottom:1rem;">
+            <span class="badge b-gold" style="font-size:0.7rem; font-weight:800;">🥛 Milk Tracker</span>
+            <span class="badge b-green" style="font-size:0.7rem; font-weight:800;">💰 Expense & Loan Ledger</span>
+            <span class="badge b-rose" style="font-size:0.7rem; font-weight:800;">📑 Bill Payment Reminders</span>
+            <span class="badge b-purple" style="font-size:0.7rem; font-weight:800;">📰 Public Blogs</span>
+            <span class="badge b-cyan" style="font-size:0.7rem; font-weight:800;">☁️ Direct Cloud Sync</span>
+          </div>
+
+          <!-- Principle 4: Prompt Actions and Navigations (CTAs) -->
+          <div style="display:flex; flex-wrap:wrap; gap:0.6rem; margin-top:0.75rem;">
+            <button onclick="switchWorkspaceMode('private')" class="m-btn" style="width:auto; padding:0.55rem 1.1rem; background:#163a24; color:white; font-weight:800; font-size:0.78rem; border:2px solid #163a24; box-shadow:3px 3px 0px #163a24; cursor:pointer;">🚀 Explore Personal Workspace</button>
+            <button onclick="switchWorkspaceMode('public')" class="m-btn" style="width:auto; padding:0.55rem 1.1rem; background:#9e2a2b; color:white; font-weight:800; font-size:0.78rem; border:2px solid #163a24; box-shadow:3px 3px 0px #163a24; cursor:pointer;">📰 Read Public Blogs</button>
+            <button onclick="openCreateBlogModal()" class="m-btn" style="width:auto; padding:0.55rem 1.1rem; background:#e5ad38; color:#163a24; font-weight:900; font-size:0.78rem; border:2px solid #163a24; box-shadow:3px 3px 0px #163a24; cursor:pointer;">✍️ Publish Story</button>
           </div>
         </div>
 
@@ -663,6 +674,50 @@ body.mustard-theme .desktop-nav-item.active {
             </div>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- Principle 3: Reveal Content Through Examples (Live Content Snippet Cards) -->
+    <div style="margin-top:1.25rem; margin-bottom:1.25rem;">
+      <div style="font-size:0.72rem; font-weight:900; color:#9e2a2b; letter-spacing:1px; text-transform:uppercase; margin-bottom:0.4rem;">LIVE EXAMPLES & QUICK ACCESS</div>
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:0.85rem;">
+        
+        <!-- Live Example 1: Milk Record Snippet -->
+        <div class="m-card" style="padding:0.9rem; background:#fbf7ee; border:2px solid #163a24; box-shadow:4px 4px 0px #163a24; cursor:pointer;" onclick="switchNav(null, 'm-milk')">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
+            <span style="font-size:0.8rem; font-weight:900; color:#163a24;">🥛 Daily Milk Log</span>
+            <span class="badge b-green">Live Example</span>
+          </div>
+          <div style="font-size:0.78rem; color:var(--text-sub); line-height:1.4;">Track daily deliveries (Cow / Buffalo), price rate, and monthly billing totals.</div>
+          <div style="font-size:0.72rem; font-weight:800; color:#9e2a2b; margin-top:0.5rem; display:flex; align-items:center; gap:0.3rem;">
+            <span>⚡ Open Milk Tracker →</span>
+          </div>
+        </div>
+
+        <!-- Live Example 2: Finance & Bill Payment Snippet -->
+        <div class="m-card" style="padding:0.9rem; background:#fbf7ee; border:2.5px solid #163a24; box-shadow:4px 4px 0px #163a24; cursor:pointer;" onclick="switchNav(null, 'm-bills')">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
+            <span style="font-size:0.8rem; font-weight:900; color:#163a24;">📑 Bill Reminders & Loans</span>
+            <span class="badge b-rose">Live Example</span>
+          </div>
+          <div style="font-size:0.78rem; color:var(--text-sub); line-height:1.4;">Automated due date alerts, partial pay ledger, WhatsApp & Gmail notifications.</div>
+          <div style="font-size:0.72rem; font-weight:800; color:#9e2a2b; margin-top:0.5rem; display:flex; align-items:center; gap:0.3rem;">
+            <span>⚡ View Due Bills →</span>
+          </div>
+        </div>
+
+        <!-- Live Example 3: Public Blog Platform Snippet -->
+        <div class="m-card" style="padding:0.9rem; background:#fbf7ee; border:2.5px solid #163a24; box-shadow:4px 4px 0px #163a24; cursor:pointer;" onclick="switchWorkspaceMode('public')">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
+            <span style="font-size:0.8rem; font-weight:900; color:#163a24;">📰 Public Engineering Blogs</span>
+            <span class="badge b-purple">Live Example</span>
+          </div>
+          <div style="font-size:0.78rem; color:var(--text-sub); line-height:1.4;">Public community blog platform with likes, comments, and real-time cloud sync.</div>
+          <div style="font-size:0.72rem; font-weight:800; color:#9e2a2b; margin-top:0.5rem; display:flex; align-items:center; gap:0.3rem;">
+            <span>⚡ Read Community Blogs →</span>
+          </div>
+        </div>
+
       </div>
     </div>
     <div class="m-grid-2">
