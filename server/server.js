@@ -6,9 +6,20 @@ const app  = express();
 const PORT = process.env.PORT || 10000;
 
 // ─── Supabase Config (set these in Render Environment Variables) ──────────────
-const SUPABASE_URL = process.env.SUPABASE_URL;   // e.g. https://gntketyyavoukxrcqezb.supabase.co
-const SUPABASE_KEY = process.env.SUPABASE_KEY;   // Service Role Key (from API settings)
+const SUPABASE_URL = (process.env.SUPABASE_URL || '').trim().replace(/\/$/, '');
+const SUPABASE_KEY = (process.env.SUPABASE_KEY || '').trim();
 const TABLE        = 'lifeos_sync';
+
+// ─── Validate Env Vars ────────────────────────────────────────────────────────
+console.log('SUPABASE_URL set:', !!SUPABASE_URL, SUPABASE_URL ? '→ ' + SUPABASE_URL : '← MISSING!');
+console.log('SUPABASE_KEY set:', !!SUPABASE_KEY, SUPABASE_KEY ? '→ [hidden]' : '← MISSING!');
+
+if (!SUPABASE_URL || !SUPABASE_KEY) {
+  console.error('❌ Missing required environment variables: SUPABASE_URL and/or SUPABASE_KEY');
+  console.error('   Set them in Render → Environment tab');
+  process.exit(1);
+}
+
 
 // ─── Middleware ───────────────────────────────────────────────────────────────
 app.use(cors({ origin: '*' }));
