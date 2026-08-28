@@ -6084,6 +6084,7 @@ try {
     const params = new URLSearchParams(window.location.search);
     if (!params.get('authed')) {
       window.location.replace('login-signup.html?redirect=index.html');
+      throw new Error('REDIRECT_TO_LOGIN'); // Stop all further JS execution
     } else {
       // Came back from login but session still not set — show public as fallback
       switchWorkspaceMode('public');
@@ -6105,8 +6106,9 @@ try {
   if (typeof renderApp === 'function') renderApp();
   if (typeof checkWelcomeAuthGateway === 'function') checkWelcomeAuthGateway();
 } catch(err) {
-  console.warn("LifeOS Initialization note:", err);
-
+  if (err && err.message !== 'REDIRECT_TO_LOGIN') {
+    console.warn("LifeOS Initialization note:", err);
+  }
 }
 </script>
 </body>
