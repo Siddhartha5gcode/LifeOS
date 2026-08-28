@@ -570,17 +570,17 @@ body.mustard-theme .desktop-nav-item.active {
   </div>
 
   <div class="desktop-nav-menu">
-    <div style="font-size:0.65rem; font-weight:800; color:var(--text-sub); letter-spacing:1px; margin:0.4rem 0.5rem 0.2rem; text-transform:uppercase;">🔒 Personal Space</div>
-    <div class="desktop-nav-item active" data-tab="m-dash" onclick="switchNav(this, 'm-dash')"><span>⚡</span> Dashboard</div>
-    <div class="desktop-nav-item" data-tab="m-finance" onclick="switchNav(this, 'm-finance')"><span>💰</span> Finance</div>
-    <div class="desktop-nav-item" data-tab="m-habits" onclick="switchNav(this, 'm-habits')"><span>🔥</span> Habits</div>
-    <div class="desktop-nav-item" data-tab="m-notes" onclick="switchNav(this, 'm-notes')"><span>📝</span> Notes & Journal</div>
-    <div class="desktop-nav-item" data-tab="m-bills" onclick="switchNav(this, 'm-bills')"><span>📑</span> Bills &amp; Reminders <span id="billNavBadgeDesktop" class="badge b-rose" style="display:none; margin-left:0.4rem; font-size:0.65rem; padding:0.1rem 0.4rem;"></span></div>
-    <div class="desktop-nav-item" data-tab="m-milk" onclick="switchNav(this, 'm-milk')"><span>🥛</span> Milk Tracker</div>
-    <div class="desktop-nav-item" data-tab="m-lend" onclick="switchNav(this, 'm-lend')"><span>💸</span> Borrow & Lend</div>
-    <div class="desktop-nav-item" data-tab="m-calculators" onclick="switchNav(this, 'm-calculators')"><span>🧮</span> Calculators</div>
-    <div class="desktop-nav-item" data-tab="m-backup" onclick="switchNav(this, 'm-backup')"><span>☁️</span> Cloud Backup & Sync</div>
-    <div class="desktop-nav-item" data-tab="m-account" onclick="switchNav(this, 'm-account')"><span>👤</span> Account</div>
+    <div id="personalNavSectionHeader" style="font-size:0.65rem; font-weight:800; color:var(--text-sub); letter-spacing:1px; margin:0.4rem 0.5rem 0.2rem; text-transform:uppercase;">🔒 Personal Space</div>
+    <div class="desktop-nav-item personal-nav-item active" data-tab="m-dash" onclick="switchNav(this, 'm-dash')"><span>⚡</span> Dashboard</div>
+    <div class="desktop-nav-item personal-nav-item" data-tab="m-finance" onclick="switchNav(this, 'm-finance')"><span>💰</span> Finance</div>
+    <div class="desktop-nav-item personal-nav-item" data-tab="m-habits" onclick="switchNav(this, 'm-habits')"><span>🔥</span> Habits</div>
+    <div class="desktop-nav-item personal-nav-item" data-tab="m-notes" onclick="switchNav(this, 'm-notes')"><span>📝</span> Notes & Journal</div>
+    <div class="desktop-nav-item personal-nav-item" data-tab="m-bills" onclick="switchNav(this, 'm-bills')"><span>📑</span> Bills &amp; Reminders <span id="billNavBadgeDesktop" class="badge b-rose" style="display:none; margin-left:0.4rem; font-size:0.65rem; padding:0.1rem 0.4rem;"></span></div>
+    <div class="desktop-nav-item personal-nav-item" data-tab="m-milk" onclick="switchNav(this, 'm-milk')"><span>🥛</span> Milk Tracker</div>
+    <div class="desktop-nav-item personal-nav-item" data-tab="m-lend" onclick="switchNav(this, 'm-lend')"><span>💸</span> Borrow & Lend</div>
+    <div class="desktop-nav-item personal-nav-item" data-tab="m-calculators" onclick="switchNav(this, 'm-calculators')"><span>🧮</span> Calculators</div>
+    <div class="desktop-nav-item personal-nav-item" data-tab="m-backup" onclick="switchNav(this, 'm-backup')"><span>☁️</span> Cloud Backup & Sync</div>
+    <div class="desktop-nav-item personal-nav-item" data-tab="m-account" onclick="switchNav(this, 'm-account')"><span>👤</span> Account</div>
 
     <div style="font-size:0.65rem; font-weight:800; color:var(--accent-rose); letter-spacing:1px; margin:1rem 0.5rem 0.2rem; text-transform:uppercase;">🌍 Public Community</div>
     <div class="desktop-nav-item" data-tab="m-blog" onclick="switchNav(this, 'm-blog')" style="background:rgba(158,42,43,0.15); border:1px solid rgba(158,42,43,0.4); color:var(--text-main);"><span>📰</span> Public Blogs</div>
@@ -5651,16 +5651,48 @@ const DEFAULT_SAMPLE_BLOGS = [
 function switchWorkspaceMode(mode) {
   const pBtn = document.getElementById('wsModePrivateBtn');
   const bBtn = document.getElementById('wsModePublicBtn');
+  const personalNavs = document.querySelectorAll('.personal-nav-item');
+  const pNavSection = document.getElementById('personalNavSectionHeader');
+  const bottomNavTabs = document.querySelectorAll('.bottom-nav .nav-tab');
+
   if (mode === 'public') {
-    if (pBtn) pBtn.style.opacity = '0.6';
+    // 📰 PUBLIC BLOG MODE — Hide all personal space UI elements
+    if (pBtn) pBtn.style.opacity = '0.5';
     if (bBtn) bBtn.style.opacity = '1';
-    const deskItem = document.querySelector('.desktop-nav-item[data-tab="m-blog"]');
-    if (deskItem) switchNav(deskItem, 'm-blog');
+
+    personalNavs.forEach(el => el.style.display = 'none');
+    if (pNavSection) pNavSection.style.display = 'none';
+
+    bottomNavTabs.forEach(tab => {
+      const onclickAttr = tab.getAttribute('onclick') || '';
+      const isPublicTab = onclickAttr.includes('m-blog') || onclickAttr.includes('m-account');
+      tab.style.display = isPublicTab ? 'flex' : 'none';
+    });
+
+    const deskBlogItem = document.querySelector('.desktop-nav-item[data-tab="m-blog"]');
+    if (deskBlogItem) switchNav(deskBlogItem, 'm-blog');
+
+    localStorage.setItem('lifeos_active_workspace', 'public');
   } else {
+    // 🔒 PERSONAL SPACE MODE — Show personal UI elements
     if (pBtn) pBtn.style.opacity = '1';
-    if (bBtn) bBtn.style.opacity = '0.6';
-    const deskItem = document.querySelector('.desktop-nav-item[data-tab="m-dash"]');
-    if (deskItem) switchNav(deskItem, 'm-dash');
+    if (bBtn) bBtn.style.opacity = '0.5';
+
+    // Enforce authentication gate if user is not signed in
+    if (!currentUser || !currentUser.isLoggedIn) {
+      const gateOverlay = document.getElementById('welcomeAuthOverlay');
+      if (gateOverlay) gateOverlay.style.display = 'flex';
+    }
+
+    personalNavs.forEach(el => el.style.display = 'flex');
+    if (pNavSection) pNavSection.style.display = 'block';
+
+    bottomNavTabs.forEach(tab => tab.style.display = 'flex');
+
+    const deskDashItem = document.querySelector('.desktop-nav-item[data-tab="m-dash"]');
+    if (deskDashItem) switchNav(deskDashItem, 'm-dash');
+
+    localStorage.setItem('lifeos_active_workspace', 'private');
   }
 }
 
@@ -5898,6 +5930,13 @@ function addBlogComment(blogId) {
 
 try {
   loadPublicBlogs();
+  const savedWs = localStorage.getItem('lifeos_active_workspace');
+  if (savedWs === 'public' || (!currentUser || !currentUser.isLoggedIn)) {
+    switchWorkspaceMode('public');
+  } else {
+    switchWorkspaceMode('private');
+  }
+
   const expDateEl = document.getElementById('mExpDate');
   if (expDateEl) expDateEl.valueAsDate = new Date();
   const liveDateEl = document.getElementById('liveDate');
