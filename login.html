@@ -646,17 +646,10 @@
 
   /* ─── SOCIAL LOGIN (GOOGLE / FACEBOOK) ─── */
   function socialLogin(provider) {
-    let email = 'siddharthasingh12495@gmail.com';
-    let name = 'Siddhartha Singh';
+    const email = 'siddharthasingh12495@gmail.com';
+    const name  = 'Siddhartha Singh';
 
-    if (provider === 'Google') {
-      const inputEmail = prompt('Google Sign-In Account:', email);
-      if (inputEmail === null) return; // User cancelled
-      if (inputEmail.trim()) email = inputEmail.trim();
-      name = email.split('@')[0].replace(/[._-]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-    }
-
-    toast(`🔄 Connecting to backend for ${provider} authentication...`);
+    toast(`🔄 Signing in with ${provider}...`);
 
     fetch(API + '/api/auth/google', {
       method: 'POST',
@@ -672,13 +665,12 @@
       if (d && d.success && d.user) {
         saveSession(d.user);
         toast(d.message || `✅ Logged in with ${provider}!`);
-        setTimeout(() => { window.location.href = redirectTarget(); }, 1000);
+        setTimeout(() => { window.location.href = redirectTarget(); }, 800);
       } else {
-        toast('❌ Google Sign-In failed.');
+        toast(`❌ ${provider} Sign-In failed.`);
       }
     })
     .catch(err => {
-      // Offline / fallback save
       saveSession({ name: name, email: email, provider: provider });
       toast(`✅ Logged in with ${provider}!`);
       setTimeout(() => { window.location.href = redirectTarget(); }, 800);
