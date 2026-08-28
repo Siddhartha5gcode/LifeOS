@@ -289,7 +289,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent-indigo); 
     <div class="desktop-nav-item" data-tab="m-finance" onclick="switchNav(this, 'm-finance')"><span>💰</span> Finance</div>
     <div class="desktop-nav-item" data-tab="m-habits" onclick="switchNav(this, 'm-habits')"><span>🔥</span> Habits</div>
     <div class="desktop-nav-item" data-tab="m-notes" onclick="switchNav(this, 'm-notes')"><span>📝</span> Notes & Journal</div>
-    <div class="desktop-nav-item" data-tab="m-bills" onclick="switchNav(this, 'm-bills')"><span>📑</span> Bills & Reminders</div>
+    <div class="desktop-nav-item" data-tab="m-bills" onclick="switchNav(this, 'm-bills')"><span>📑</span> Bills &amp; Reminders <span id="billNavBadgeDesktop" class="badge b-rose" style="display:none; margin-left:0.4rem; font-size:0.65rem; padding:0.1rem 0.4rem;"></span></div>
     <div class="desktop-nav-item" data-tab="m-milk" onclick="switchNav(this, 'm-milk')"><span>🥛</span> Milk Tracker</div>
     <div class="desktop-nav-item" data-tab="m-lend" onclick="switchNav(this, 'm-lend')"><span>💸</span> Borrow & Lend</div>
     <div class="desktop-nav-item" data-tab="m-calculators" onclick="switchNav(this, 'm-calculators')"><span>🧮</span> Calculators</div>
@@ -436,20 +436,76 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent-indigo); 
   </div>
 
   <!-- 5. BILLS TAB -->
+  <!-- 5. BILLS & REMINDERS TAB -->
   <div id="m-bills" class="tab-content">
+    
+    <!-- Module Banner & Live Notification Card -->
+    <div id="billNotificationBanner" class="m-card" style="background:linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(245, 158, 11, 0.15)); border:1px solid rgba(239, 68, 68, 0.3); display:none;">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div style="display:flex; align-items:center; gap:0.5rem;">
+          <span style="font-size:1.5rem;">🔔</span>
+          <div>
+            <div style="font-weight:800; font-size:0.88rem; color:var(--accent-rose);" id="billBannerTitle">Bills Due Alert</div>
+            <div style="font-size:0.72rem; color:var(--text-sub);" id="billBannerSubtitle">You have upcoming/overdue bills.</div>
+          </div>
+        </div>
+        <button onclick="requestBrowserNotifications()" style="padding:0.35rem 0.65rem; background:var(--accent-cyan); color:#0b0f19; font-weight:700; border:none; border-radius:0.5rem; font-size:0.72rem; cursor:pointer;">🔔 Enable Push</button>
+      </div>
+    </div>
+
+    <!-- Add / Edit Bill Card -->
     <div class="m-card">
-      <div class="m-title"><div class="m-title-text">📅 Add Bill / Reminder</div></div>
-      <form id="mBillForm">
-        <input type="text" id="mBillName" placeholder="Bill Name (e.g. Internet)" required>
-        <input type="number" id="mBillAmt" placeholder="Amount (₹)" required>
-        <input type="date" id="mBillDue" required>
-        <button class="m-btn" type="submit">Save Bill</button>
+      <div class="m-title">
+        <div class="m-title-text" id="mBillFormTitle">📅 Add Bill & Reminder</div>
+        <span class="badge b-cyan" id="mBillFormBadge">New</span>
+      </div>
+      <form id="mBillForm" style="display:flex; flex-direction:column; gap:0.6rem;">
+        <input type="hidden" id="mBillEditId" value="">
+        <input type="text" id="mBillName" placeholder="Bill Name (e.g. Electricity, WiFi, Rent)" required>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.5rem;">
+          <input type="number" id="mBillAmt" placeholder="Amount (₹)" required style="margin-bottom:0;">
+          <input type="date" id="mBillDue" required style="margin-bottom:0;">
+        </div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.5rem;">
+          <div>
+            <label style="font-size:0.7rem; color:var(--text-sub);">Frequency</label>
+            <select id="mBillFreq" style="width:100%; padding:0.6rem; background:rgba(255,255,255,0.05); border:1px solid var(--card-border); border-radius:0.5rem; color:var(--text-main); font-size:0.8rem;">
+              <option value="monthly">🔄 Monthly (Recurring)</option>
+              <option value="quarterly">🔄 Quarterly (3 Months)</option>
+              <option value="yearly">🔄 Yearly (Annual)</option>
+              <option value="onetime">📌 One-Time</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:0.7rem; color:var(--text-sub);">Mobile / WA Number</label>
+            <input type="tel" id="mBillPhone" placeholder="e.g. 919876543210" style="margin-bottom:0;">
+          </div>
+        </div>
+        <input type="email" id="mBillEmail" placeholder="Registered Email (optional for mail alert)">
+        <div style="display:flex; gap:0.5rem;">
+          <button class="m-btn" type="submit" id="mBillSubmitBtn" style="flex:1;">💾 Save Bill & Reminder</button>
+          <button type="button" id="mBillCancelEditBtn" onclick="resetBillForm()" style="display:none; padding:0.65rem 1rem; background:rgba(255,255,255,0.08); color:var(--text-sub); border:1px solid var(--card-border); border-radius:0.65rem; font-weight:700; cursor:pointer;">Cancel</button>
+        </div>
       </form>
     </div>
 
+    <!-- Bills List & Filters -->
     <div class="m-card">
-      <div class="m-title"><div class="m-title-text">🔔 Pending Bills</div></div>
-      <div id="mBillsList"></div>
+      <div class="m-title">
+        <div class="m-title-text">📑 My Bills & Subscriptions</div>
+        <span class="badge b-gold" id="mBillsCountBadge">0</span>
+      </div>
+
+      <!-- Filters -->
+      <div style="display:flex; gap:0.35rem; margin-bottom:0.75rem; overflow-x:auto; padding-bottom:0.2rem;">
+        <button id="billFilterAll" onclick="renderBillsList('all')" style="padding:0.35rem 0.75rem; border-radius:0.5rem; font-size:0.72rem; font-weight:700; border:none; cursor:pointer; background:linear-gradient(135deg,#8b5cf6,#6366f1); color:white;">All</button>
+        <button id="billFilterPending" onclick="renderBillsList('pending')" style="padding:0.35rem 0.75rem; border-radius:0.5rem; font-size:0.72rem; font-weight:700; border:1px solid rgba(255,255,255,0.12); cursor:pointer; background:rgba(255,255,255,0.06); color:var(--text-sub);">⏳ Pending</button>
+        <button id="billFilterOverdue" onclick="renderBillsList('overdue')" style="padding:0.35rem 0.75rem; border-radius:0.5rem; font-size:0.72rem; font-weight:700; border:1px solid rgba(239,68,68,0.3); cursor:pointer; background:rgba(239,68,68,0.15); color:#f87171;">⚠️ Overdue</button>
+        <button id="billFilterPaid" onclick="renderBillsList('paid')" style="padding:0.35rem 0.75rem; border-radius:0.5rem; font-size:0.72rem; font-weight:700; border:1px solid rgba(16,185,129,0.3); cursor:pointer; background:rgba(16,185,129,0.15); color:var(--accent-green);">✅ Paid</button>
+      </div>
+
+      <div id="mBillsList" style="display:flex; flex-direction:column; gap:0.6rem;"></div>
+      <div id="mBillsEmpty" style="text-align:center; padding:1.5rem; font-size:0.8rem; color:var(--text-sub); display:none;">No bills found in this view.</div>
     </div>
   </div>
 
@@ -1651,7 +1707,10 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent-indigo); 
     <span>Notes</span>
   </div>
   <div class="nav-tab" onclick="switchNav(this, 'm-bills')">
-    <div class="nav-icon">📅</div>
+    <div class="nav-icon" style="position:relative;">
+      📅
+      <span id="billNavBadge" style="display:none; position:absolute; top:-4px; right:-8px; background:var(--accent-rose); color:white; font-size:0.55rem; font-weight:800; padding:0.1rem 0.3rem; border-radius:1rem;"></span>
+    </div>
     <span>Bills</span>
   </div>
   <div class="nav-tab" onclick="switchNav(this, 'm-meals')">
@@ -2998,15 +3057,21 @@ function renderMilkSummary() {
 function addMilkPayment() {
   const amount = parseFloat(document.getElementById('milkPayInput').value);
   if (!amount || amount <= 0) { alert('Please enter a valid payment amount.'); return; }
+  
+  const defaultDate = new Date().toLocaleDateString('en-IN', {day:'numeric', month:'short', year:'numeric'});
+  const dateInput = prompt('📅 Enter payment date (for reference):', defaultDate);
+  if (dateInput === null) return;
+  const payDate = dateInput.trim() || defaultDate;
+
   const db = _getMilkDB();
   const select = document.getElementById('milkMonthSelect');
   const month  = select ? select.value : new Date().toISOString().substring(0, 7);
   if (!db.payments[month]) db.payments[month] = [];
-  db.payments[month].push({ date: new Date().toLocaleDateString('en-IN'), amount });
+  db.payments[month].push({ date: payDate, amount });
   _saveMilkDB(db);
   document.getElementById('milkPayInput').value = '';
   renderMilkSummary();
-  alert('✅ Payment of ₹' + amount + ' recorded!');
+  alert('✅ Payment of ₹' + amount + ' recorded for ' + payDate + '!');
 }
 
 function renderMilkRecords() {
@@ -3143,12 +3208,17 @@ function partialSettleLendRecord(id) {
   if (isNaN(amt) || amt <= 0) { alert('Please enter a valid amount.'); return; }
   if (amt > remaining) { alert(`Payment cannot exceed remaining balance of ₹${remaining}`); return; }
 
+  const defaultDate = new Date().toLocaleDateString('en-IN', {day:'numeric', month:'short', year:'numeric'});
+  const dateInput = prompt(`📅 Enter Payment Date (for reference):`, defaultDate);
+  if (dateInput === null) return;
+  const payDate = dateInput.trim() || defaultDate;
+
   const note = (prompt('Optional payment note (e.g. GPay, Cash):', 'Partial Payment') || '').trim();
 
   rec.payments.push({
     id: Date.now(),
     amount: amt,
-    date: new Date().toLocaleDateString('en-IN', {day:'numeric', month:'short', year:'numeric'}),
+    date: payDate,
     note: note || 'Partial Payment'
   });
 
@@ -3163,7 +3233,7 @@ function partialSettleLendRecord(id) {
   _saveLendDB(db);
   renderLendRecords();
   renderLendSummary();
-  alert(`✅ Recorded ₹${amt} payment from/to ${rec.person}.\nRemaining Balance: ₹${rec.amount - newTotalPaid}`);
+  alert(`✅ Recorded ₹${amt} payment on ${payDate} for ${rec.person}.\nRemaining Balance: ₹${rec.amount - newTotalPaid}`);
 }
 
 function settleLendRecord(id) {
@@ -3177,11 +3247,15 @@ function settleLendRecord(id) {
 
   if (!confirm(`Mark as Fully Settled?\n${rec.person} — Remaining: ₹${remaining}`)) return;
 
+  const defaultDate = new Date().toLocaleDateString('en-IN', {day:'numeric', month:'short', year:'numeric'});
+  const dateInput = prompt(`📅 Enter Settlement Date:`, defaultDate);
+  const payDate = (dateInput && dateInput.trim()) ? dateInput.trim() : defaultDate;
+
   if (remaining > 0) {
     rec.payments.push({
       id: Date.now(),
       amount: remaining,
-      date: new Date().toLocaleDateString('en-IN', {day:'numeric', month:'short', year:'numeric'}),
+      date: payDate,
       note: 'Full Settlement'
     });
   }
@@ -4021,13 +4095,9 @@ function renderApp() {
     </div>
   `).join('');
 
-  // Bills
-  document.getElementById('mBillsList').innerHTML = db.bills.map((b,i) => `
-    <div class="list-item">
-      <div><b>${b.name}</b><br><small style="color:var(--text-sub)">Due: ${b.due}</small></div>
-      <span style="color:var(--accent-rose); font-weight:700;">₹${b.amt}</span>
-    </div>
-  `).join('');
+  // Bills & Reminders
+  renderBillsList();
+  checkBillAlerts();
 
   // Groceries
   document.getElementById('mGrocList').innerHTML = db.groceries.map((g,i) => `
@@ -4072,11 +4142,321 @@ document.getElementById('mNoteForm').onsubmit = e => {
   e.target.reset(); saveAll();
 };
 
-document.getElementById('mBillForm').onsubmit = e => {
+if (document.getElementById('mBillForm')) {
+  document.getElementById('mBillForm').onsubmit = saveBillForm;
+}
+
+// ==========================================
+// 📑 BILLS, REMINDERS & RECURRING SUBSCRIPTIONS ENGINE
+// ==========================================
+
+let _billCurrentFilter = 'all';
+
+function getNextBillDueDate(currentDueDate, freq) {
+  const d = new Date(currentDueDate + 'T00:00:00');
+  if (isNaN(d.getTime())) return currentDueDate;
+  if (freq === 'monthly') d.setMonth(d.getMonth() + 1);
+  else if (freq === 'quarterly') d.setMonth(d.getMonth() + 3);
+  else if (freq === 'yearly') d.setFullYear(d.getFullYear() + 1);
+  const yr = d.getFullYear();
+  const mo = String(d.getMonth() + 1).padStart(2, '0');
+  const dy = String(d.getDate()).padStart(2, '0');
+  return `${yr}-${mo}-${dy}`;
+}
+
+function saveBillForm(e) {
   e.preventDefault();
-  db.bills.push({ name: document.getElementById('mBillName').value, amt: Number(document.getElementById('mBillAmt').value), due: document.getElementById('mBillDue').value });
-  e.target.reset(); saveAll();
-};
+  const editId = document.getElementById('mBillEditId').value;
+  const name   = document.getElementById('mBillName').value.trim();
+  const amt    = parseFloat(document.getElementById('mBillAmt').value);
+  const due    = document.getElementById('mBillDue').value;
+  const freq   = document.getElementById('mBillFreq').value;
+  const phone  = document.getElementById('mBillPhone').value.trim();
+  const email  = document.getElementById('mBillEmail').value.trim();
+
+  if (!name || !amt || !due) { alert('Please fill in name, amount, and due date.'); return; }
+
+  db.bills = db.bills || [];
+
+  if (editId) {
+    const idx = db.bills.findIndex(b => String(b.id || b.due + b.name) === editId);
+    if (idx >= 0) {
+      db.bills[idx] = { ...db.bills[idx], name, amt, due, freq, phone, email };
+    }
+  } else {
+    db.bills.push({
+      id: Date.now(),
+      name, amt, due, freq, phone, email,
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+      paidHistory: []
+    });
+  }
+
+  saveAll();
+  resetBillForm();
+  renderBillsList();
+  checkBillAlerts();
+  alert('✅ Bill reminder saved!');
+}
+
+function resetBillForm() {
+  document.getElementById('mBillForm').reset();
+  document.getElementById('mBillEditId').value = '';
+  document.getElementById('mBillFormTitle').textContent = '📅 Add Bill & Reminder';
+  document.getElementById('mBillFormBadge').textContent = 'New';
+  document.getElementById('mBillFormBadge').className = 'badge b-cyan';
+  document.getElementById('mBillSubmitBtn').textContent = '💾 Save Bill & Reminder';
+  document.getElementById('mBillCancelEditBtn').style.display = 'none';
+}
+
+function editBill(idStr) {
+  const bill = db.bills.find(b => String(b.id || b.due + b.name) === idStr);
+  if (!bill) return;
+
+  document.getElementById('mBillEditId').value = idStr;
+  document.getElementById('mBillName').value   = bill.name;
+  document.getElementById('mBillAmt').value    = bill.amt;
+  document.getElementById('mBillDue').value    = bill.due;
+  document.getElementById('mBillFreq').value   = bill.freq || 'monthly';
+  document.getElementById('mBillPhone').value  = bill.phone || '';
+  document.getElementById('mBillEmail').value  = bill.email || '';
+
+  document.getElementById('mBillFormTitle').textContent = '✏️ Edit Bill & Reminder';
+  document.getElementById('mBillFormBadge').textContent = 'Editing';
+  document.getElementById('mBillFormBadge').className = 'badge b-gold';
+  document.getElementById('mBillSubmitBtn').textContent = '💾 Update Bill';
+  document.getElementById('mBillCancelEditBtn').style.display = 'block';
+
+  document.getElementById('mBillForm')?.scrollIntoView({ behavior: 'smooth' });
+}
+
+function toggleBillPaid(idStr) {
+  const bill = db.bills.find(b => String(b.id || b.due + b.name) === idStr);
+  if (!bill) return;
+
+  const isPaid = bill.status === 'paid';
+  if (isPaid) {
+    if (confirm(`Re-open "${bill.name}" as Pending?`)) {
+      bill.status = 'pending';
+    }
+  } else {
+    const defaultDate = new Date().toLocaleDateString('en-IN', {day:'numeric', month:'short', year:'numeric'});
+    bill.status = 'paid';
+    bill.paidAt = new Date().toISOString();
+    bill.paidHistory = bill.paidHistory || [];
+    bill.paidHistory.push({ paidAt: defaultDate, amt: bill.amt });
+
+    if (bill.freq && bill.freq !== 'onetime') {
+      const nextDue = getNextBillDueDate(bill.due, bill.freq);
+      if (confirm(`✅ "${bill.name}" marked as Paid!\n\nThis is a ${bill.freq} recurring bill. Do you want to automatically set the next due date to ${nextDue}?`)) {
+        bill.due = nextDue;
+        bill.status = 'pending';
+      }
+    }
+  }
+
+  saveAll();
+  renderBillsList();
+  checkBillAlerts();
+}
+
+function deleteBill(idStr) {
+  const bill = db.bills.find(b => String(b.id || b.due + b.name) === idStr);
+  if (!bill) return;
+  if (!confirm(`Delete bill "${bill.name}"?`)) return;
+
+  db.bills = db.bills.filter(b => String(b.id || b.due + b.name) !== idStr);
+  saveAll();
+  renderBillsList();
+  checkBillAlerts();
+}
+
+function sendWhatsAppReminder(idStr) {
+  const bill = db.bills.find(b => String(b.id || b.due + b.name) === idStr);
+  if (!bill) return;
+
+  let phone = (bill.phone || '').replace(/\D/g, '');
+  if (!phone) {
+    phone = prompt('Enter WhatsApp mobile number (with country code, e.g. 919876543210):', '91');
+    if (!phone) return;
+    phone = phone.replace(/\D/g, '');
+  }
+
+  const msg = `🔔 *LifeOS Bill Payment Reminder*\n\nHello! Your bill for *${bill.name}* of *₹${bill.amt.toLocaleString('en-IN')}* is due on *${bill.due}*.\nStatus: ${bill.status === 'paid' ? '✅ Paid' : '⏳ Pending Payment'}.\n\nPlease ensure payment on time.`;
+  const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+}
+
+function sendSMSReminder(idStr) {
+  const bill = db.bills.find(b => String(b.id || b.due + b.name) === idStr);
+  if (!bill) return;
+  let phone = (bill.phone || '').replace(/\D/g, '');
+  if (!phone) {
+    phone = prompt('Enter mobile number for SMS:', '');
+    if (!phone) return;
+  }
+  const msg = `LifeOS Bill Reminder: ${bill.name} of ₹${bill.amt} is due on ${bill.due}.`;
+  window.open(`sms:${phone}?body=${encodeURIComponent(msg)}`, '_self');
+}
+
+function sendEmailReminder(idStr) {
+  const bill = db.bills.find(b => String(b.id || b.due + b.name) === idStr);
+  if (!bill) return;
+  let email = bill.email || '';
+  if (!email) {
+    email = prompt('Enter email address for reminder:', '');
+    if (!email) return;
+  }
+  const subject = `Bill Payment Reminder: ${bill.name} (Due: ${bill.due})`;
+  const body = `Hi,\n\nThis is a reminder for your bill payment:\n\nBill: ${bill.name}\nAmount: ₹${bill.amt}\nDue Date: ${bill.due}\nStatus: ${bill.status || 'Pending'}\n\nThank you,\nLifeOS Assistant`;
+  window.open(`mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`, '_self');
+}
+
+function requestBrowserNotifications() {
+  if (!("Notification" in window)) {
+    alert("⚠️ Web notifications are not supported in your browser.");
+    return;
+  }
+  Notification.requestPermission().then(permission => {
+    if (permission === "granted") {
+      alert("✅ Web notifications enabled! You will get bill due alerts.");
+      checkBillAlerts(true);
+    } else {
+      alert("⚠️ Notification permission was denied.");
+    }
+  });
+}
+
+function checkBillAlerts(forceNotify) {
+  const today = new Date().toISOString().split('T')[0];
+  db.bills = db.bills || [];
+
+  const overdue = db.bills.filter(b => b.status !== 'paid' && b.due < today);
+  const dueSoon = db.bills.filter(b => b.status !== 'paid' && b.due >= today && b.due <= getNextBillDueDate(today, 'onetime'));
+
+  const banner = document.getElementById('billNotificationBanner');
+  const title  = document.getElementById('billBannerTitle');
+  const sub    = document.getElementById('billBannerSubtitle');
+
+  const pendingCount = overdue.length + dueSoon.length;
+
+  if (banner) {
+    if (pendingCount > 0) {
+      banner.style.display = 'block';
+      title.textContent = overdue.length > 0 ? `⚠️ ${overdue.length} Overdue Bill(s)` : `🔔 ${dueSoon.length} Bill(s) Due Soon`;
+      sub.textContent = overdue.length > 0 
+        ? `Overdue: ${overdue.map(b => b.name + ' (₹' + b.amt + ')').join(', ')}`
+        : `Due soon: ${dueSoon.map(b => b.name + ' (' + b.due + ')').join(', ')}`;
+    } else {
+      banner.style.display = 'none';
+    }
+  }
+
+  const navBadge = document.getElementById('billNavBadge');
+  if (navBadge) {
+    navBadge.textContent = pendingCount > 0 ? pendingCount : '';
+    navBadge.style.display = pendingCount > 0 ? 'inline-block' : 'none';
+  }
+  const deskBadge = document.getElementById('billNavBadgeDesktop');
+  if (deskBadge) {
+    deskBadge.textContent = pendingCount > 0 ? pendingCount + ' Due' : '';
+    deskBadge.style.display = pendingCount > 0 ? 'inline-block' : 'none';
+  }
+
+  if ((forceNotify || overdue.length > 0) && "Notification" in window && Notification.permission === "granted") {
+    if (overdue.length > 0) {
+      new Notification("⚠️ LifeOS Overdue Bill Alert", {
+        body: `${overdue.length} bill(s) overdue! ${overdue[0].name} - ₹${overdue[0].amt} (Due: ${overdue[0].due})`,
+        icon: "⚡"
+      });
+    }
+  }
+}
+
+function renderBillsList(filter) {
+  _billCurrentFilter = filter || _billCurrentFilter;
+  const list  = document.getElementById('mBillsList');
+  const empty = document.getElementById('mBillsEmpty');
+  const badge = document.getElementById('mBillsCountBadge');
+  if (!list) return;
+
+  const today = new Date().toISOString().split('T')[0];
+  db.bills = db.bills || [];
+
+  ['All','Pending','Overdue','Paid'].forEach(f => {
+    const btn = document.getElementById('billFilter' + f);
+    if (btn) {
+      const active = _billCurrentFilter === f.toLowerCase();
+      btn.style.background = active ? 'linear-gradient(135deg,#8b5cf6,#6366f1)' : 'rgba(255,255,255,0.06)';
+      btn.style.color = active ? 'white' : 'var(--text-sub)';
+    }
+  });
+
+  let bills = db.bills;
+  if (_billCurrentFilter === 'pending')  bills = bills.filter(b => b.status !== 'paid');
+  if (_billCurrentFilter === 'overdue')  bills = bills.filter(b => b.status !== 'paid' && b.due < today);
+  if (_billCurrentFilter === 'paid')     bills = bills.filter(b => b.status === 'paid');
+
+  if (badge) badge.textContent = bills.length;
+
+  if (bills.length === 0) {
+    list.innerHTML = '';
+    if (empty) empty.style.display = 'block';
+    return;
+  }
+  if (empty) empty.style.display = 'none';
+
+  list.innerHTML = bills.map(b => {
+    const idStr     = String(b.id || b.due + b.name);
+    const isPaid    = b.status === 'paid';
+    const isOverdue = !isPaid && b.due < today;
+    const isDueToday= !isPaid && b.due === today;
+
+    const freqLabel = {
+      monthly: '🔄 Monthly',
+      quarterly: '🔄 Quarterly',
+      yearly: '🔄 Yearly',
+      onetime: '📌 One-Time'
+    }[b.freq || 'monthly'];
+
+    const statusBadge = isPaid
+      ? '<span style="font-size:0.62rem; padding:0.1rem 0.4rem; background:rgba(16,185,129,0.2); color:var(--accent-green); border-radius:0.3rem; font-weight:700;">✅ Paid</span>'
+      : isOverdue
+      ? '<span style="font-size:0.62rem; padding:0.1rem 0.4rem; background:rgba(239,68,68,0.2); color:#f87171; border-radius:0.3rem; font-weight:700;">⚠️ Overdue</span>'
+      : isDueToday
+      ? '<span style="font-size:0.62rem; padding:0.1rem 0.4rem; background:rgba(245,158,11,0.2); color:var(--accent-gold); border-radius:0.3rem; font-weight:700;">🔔 Due Today</span>'
+      : '<span style="font-size:0.62rem; padding:0.1rem 0.4rem; background:rgba(6,182,212,0.2); color:var(--accent-cyan); border-radius:0.3rem; font-weight:700;">⏳ Upcoming</span>';
+
+    return `<div style="background:${isPaid ? 'rgba(16,185,129,0.04)' : isOverdue ? 'rgba(239,68,68,0.05)' : 'rgba(255,255,255,0.03)'}; border:1px solid ${isPaid ? 'rgba(16,185,129,0.2)' : isOverdue ? 'rgba(239,68,68,0.25)' : 'var(--card-border)'}; border-radius:0.75rem; padding:0.75rem;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.3rem;">
+        <div>
+          <span style="font-size:0.85rem; font-weight:800; color:var(--text-main); ${isPaid ? 'text-decoration:line-through; opacity:0.8;' : ''}">${b.name}</span>
+          <span style="margin-left:0.3rem; font-size:0.62rem; padding:0.1rem 0.35rem; background:rgba(255,255,255,0.08); color:var(--text-sub); border-radius:0.3rem;">${freqLabel}</span>
+          <span style="margin-left:0.25rem;">${statusBadge}</span>
+        </div>
+        <span style="font-size:0.95rem; font-weight:800; color:${isPaid ? 'var(--accent-green)' : isOverdue ? '#f87171' : 'var(--accent-gold)'};">₹ ${b.amt.toLocaleString('en-IN')}</span>
+      </div>
+
+      <div style="font-size:0.68rem; color:var(--text-sub); margin-bottom:0.5rem;">
+        📅 Due: <b>${b.due}</b> ${b.phone ? ' · 📱 ' + b.phone : ''} ${b.email ? ' · ✉️ ' + b.email : ''}
+      </div>
+
+      <div style="display:flex; gap:0.3rem; flex-wrap:wrap;">
+        <button onclick="toggleBillPaid('${idStr}')" style="flex:1; min-width:90px; padding:0.35rem; background:${isPaid ? 'rgba(255,255,255,0.08)' : 'rgba(16,185,129,0.2)'}; border:1px solid ${isPaid ? 'rgba(255,255,255,0.15)' : 'rgba(16,185,129,0.35)'}; color:${isPaid ? 'var(--text-sub)' : 'var(--accent-green)'}; font-weight:700; border-radius:0.4rem; cursor:pointer; font-size:0.72rem;">
+          ${isPaid ? '🔄 Mark Pending' : '✅ Mark as Paid'}
+        </button>
+        
+        <button onclick="sendWhatsAppReminder('${idStr}')" style="padding:0.35rem 0.5rem; background:rgba(34,197,94,0.15); border:1px solid rgba(34,197,94,0.3); color:#4ade80; font-weight:700; border-radius:0.4rem; cursor:pointer; font-size:0.7rem;" title="Send WhatsApp Reminder">📲 WA</button>
+        <button onclick="sendSMSReminder('${idStr}')" style="padding:0.35rem 0.5rem; background:rgba(6,182,212,0.15); border:1px solid rgba(6,182,212,0.3); color:var(--accent-cyan); font-weight:700; border-radius:0.4rem; cursor:pointer; font-size:0.7rem;" title="Send SMS Reminder">💬 SMS</button>
+        <button onclick="sendEmailReminder('${idStr}')" style="padding:0.35rem 0.5rem; background:rgba(168,85,247,0.15); border:1px solid rgba(168,85,247,0.3); color:var(--accent-purple); font-weight:700; border-radius:0.4rem; cursor:pointer; font-size:0.7rem;" title="Send Email Reminder">✉️ Mail</button>
+        
+        <button onclick="editBill('${idStr}')" style="padding:0.35rem 0.5rem; background:rgba(99,102,241,0.15); border:1px solid rgba(99,102,241,0.3); color:var(--accent-indigo); font-weight:700; border-radius:0.4rem; cursor:pointer; font-size:0.7rem;">✏️ Edit</button>
+        <button onclick="deleteBill('${idStr}')" style="padding:0.35rem 0.5rem; background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.3); color:#f87171; font-weight:700; border-radius:0.4rem; cursor:pointer; font-size:0.7rem;">🗑️</button>
+      </div>
+    </div>`;
+  }).join('');
+}
 
 const usersDatabase = JSON.parse(localStorage.getItem('m_users_db') || '[]');
 let currentUser = JSON.parse(localStorage.getItem('m_account') || 'null');
