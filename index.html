@@ -618,7 +618,7 @@ body.mustard-theme .desktop-nav-item.active {
     <a href="blogs.html" class="badge b-purple" style="text-decoration:none; padding:0.3rem 0.6rem; font-size:0.7rem;">📰 Blogs</a>
     <a href="about.html" class="badge b-cyan" style="text-decoration:none; padding:0.3rem 0.6rem; font-size:0.7rem;">👤 About Us</a>
     <a href="privacy.html" class="badge b-green" style="text-decoration:none; padding:0.3rem 0.6rem; font-size:0.7rem;">🛡️ Privacy</a>
-    <a href="login.html" class="badge" style="text-decoration:none; padding:0.3rem 0.75rem; font-size:0.72rem; background:linear-gradient(135deg, #6366f1, #ec4899); color:white; border:none; box-shadow:0 2px 8px rgba(99,102,241,0.4); font-weight:800;">🔑 Log In / Register</a>
+    <a href="login-signup.html" class="badge" style="text-decoration:none; padding:0.3rem 0.75rem; font-size:0.72rem; background:linear-gradient(135deg, #6366f1, #ec4899); color:white; border:none; box-shadow:0 2px 8px rgba(99,102,241,0.4); font-weight:800;">🔑 Log In / Register</a>
   </div>
 
   <div style="display:flex; align-items:center; gap:0.6rem;">
@@ -5028,8 +5028,8 @@ function checkWelcomeAuthGateway() {
     if (dashName) dashName.innerText = currentUser.name || 'Siddhartha';
     if (dashMail) dashMail.innerText = currentUser.email || 'siddhartha12495@gmail.com';
   } else {
-    // If not authenticated, open the standalone Blogchatter login.html page directly!
-    window.location.href = 'login.html';
+    // If not authenticated, open the standalone Blogchatter login-signup.html page directly!
+    window.location.href = 'login-signup.html';
   }
 }
 
