@@ -554,12 +554,7 @@
 
     function getRedirectTarget() {
       const params = new URLSearchParams(window.location.search);
-      let target = params.get('redirect') || 'index.html';
-      // Append ?authed=1 so index.html knows login succeeded and won't loop back
-      if (target.startsWith('index.html') || target === 'index.html') {
-        target = 'index.html?authed=1';
-      }
-      return target;
+      return params.get('redirect') || 'index.html';
     }
 
     function handleLoginSubmit(e) {

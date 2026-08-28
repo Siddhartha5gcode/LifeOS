@@ -1,6 +1,7 @@
 const express = require('express');
 const cors    = require('cors');
 const https   = require('https');
+const path    = require('path');
 
 const app  = express();
 const PORT = process.env.PORT || 10000;
@@ -15,9 +16,7 @@ console.log('SUPABASE_URL set:', !!SUPABASE_URL, SUPABASE_URL ? '→ ' + SUPABAS
 console.log('SUPABASE_KEY set:', !!SUPABASE_KEY, SUPABASE_KEY ? '→ [hidden]' : '← MISSING!');
 
 if (!SUPABASE_URL || !SUPABASE_KEY) {
-  console.error('❌ Missing required environment variables: SUPABASE_URL and/or SUPABASE_KEY');
-  console.error('   Set them in Render → Environment tab');
-  process.exit(1);
+  console.warn('⚠️  Supabase env vars missing — running in offline/fallback mode only.');
 }
 
 
@@ -25,10 +24,23 @@ if (!SUPABASE_URL || !SUPABASE_KEY) {
 app.use(cors({ origin: '*' }));
 app.use(express.json({ limit: '10mb' }));
 
+// ─── Serve static HTML files from project root ─────────────────────────────
+const ROOT = path.join(__dirname, '..');
+app.use(express.static(ROOT));
+
+// Named HTML page routes so navigation works cleanly
+const HTML_PAGES = ['index','login','login-signup','blogs','about','privacy','coming-soon','accessibility','community'];
+HTML_PAGES.forEach(page => {
+  app.get(`/${page}`, (req, res) => res.sendFile(path.join(ROOT, `${page}.html`)));
+});
+
+// Root → login-signup (unauthenticated landing)
+app.get('/', (req, res) => res.sendFile(path.join(ROOT, 'login-signup.html')));
+
 // ─── Supabase REST Helper ─────────────────────────────────────────────────────
-function supabase(method, path, body) {
+function supabase(method, apiPath, body) {
   return new Promise((resolve, reject) => {
-    const url  = new URL(SUPABASE_URL + '/rest/v1/' + path);
+    const url  = new URL(SUPABASE_URL + '/rest/v1/' + apiPath);
     const data = body ? JSON.stringify(body) : null;
     const opts = {
       hostname: url.hostname,
@@ -51,6 +63,7 @@ function supabase(method, path, body) {
         catch(e) { resolve({ status: res.statusCode, data: raw }); }
       });
     });
+
     req.on('error', reject);
     if (data) req.write(data);
     req.end();
@@ -320,4 +333,8 @@ app.post('/api/auth/verify-otp', async (req, res) => {
 
 initDB()
   .then(() => app.listen(PORT, () => console.log(`🚀 LifeOS Sync Server running on port ${PORT}`)))
-  .catch(err => { console.error('❌ Failed to initialise:', err.message); process.exit(1); });
+  .catch(err => {
+    // If Supabase is unavailable, still start the server to serve HTML + fallback APIs
+    console.warn('⚠️  DB init failed, starting anyway:', err.message);
+    app.listen(PORT, () => console.log(`🚀 LifeOS Server (offline mode) running on port ${PORT}`));
+  });
