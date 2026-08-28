@@ -430,7 +430,7 @@
           <span>Or</span>
         </div>
 
-        <form id="formLogin" onsubmit="handleLoginSubmit(event)">
+        <form id="formLogin" onsubmit="return handleLoginSubmit(event)">
           <div class="form-group">
             <input type="email" id="loginEmail" class="input-field" placeholder="Email*" required>
           </div>
@@ -474,7 +474,7 @@
           <span>Or</span>
         </div>
 
-        <form id="formRegister" onsubmit="handleRegisterSubmit(event)">
+        <form id="formRegister" onsubmit="return handleRegisterSubmit(event)">
           <div class="form-group form-row-2">
             <input type="text" id="regFirstName" class="input-field" placeholder="First Name*" required>
             <input type="text" id="regLastName" class="input-field" placeholder="Last Name*" required>
@@ -552,39 +552,37 @@
       localStorage.setItem('lifeos_active_workspace', 'private');
     }
 
-    async function handleLoginSubmit(e) {
-      e.preventDefault();
+    function handleLoginSubmit(e) {
+      if (e) e.preventDefault();
       const email = document.getElementById('loginEmail').value.trim();
       const password = document.getElementById('loginPassword').value;
 
-      try {
-        const res = await fetch(RENDER_SYNC_URL + '/api/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ login: email, email: email, password: password })
-        });
-        const data = await res.json();
-        if (res.ok && data.success && data.user) {
-          saveUserSession(data.user);
-          showToast('✅ Logged in successfully!');
-          setTimeout(() => {
-            const params = new URLSearchParams(window.location.search);
-            window.location.href = params.get('redirect') || 'index.html';
-          }, 800);
-          return;
-        }
-      } catch(err) {}
+      if (!email || !password) {
+        showToast('⚠️ Please enter both Email and Password.');
+        return false;
+      }
 
-      saveUserSession({ name: email.split('@')[0] || 'Siddhartha', email: email });
+      const userName = email.split('@')[0] || 'Siddhartha';
+      saveUserSession({ name: userName.charAt(0).toUpperCase() + userName.slice(1), email: email });
       showToast('✅ Logged in successfully!');
-      setTimeout(() => {
-        const params = new URLSearchParams(window.location.search);
-        window.location.href = params.get('redirect') || 'index.html';
-      }, 800);
+
+      // Async sync with Render backend
+      fetch(RENDER_SYNC_URL + '/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ login: email, email: email, password: password })
+      }).then(res => res.json()).then(data => {
+        if (data && data.success && data.user) saveUserSession(data.user);
+      }).catch(() => {});
+
+      const params = new URLSearchParams(window.location.search);
+      const targetUrl = params.get('redirect') || 'index.html';
+      setTimeout(() => { window.location.href = targetUrl; }, 600);
+      return false;
     }
 
-    async function handleRegisterSubmit(e) {
-      e.preventDefault();
+    function handleRegisterSubmit(e) {
+      if (e) e.preventDefault();
       const firstName = document.getElementById('regFirstName').value.trim();
       const lastName  = document.getElementById('regLastName').value.trim();
       const mobile    = document.getElementById('regMobile').value.trim();
@@ -594,29 +592,25 @@
 
       if (pass !== confirmPass) {
         showToast('❌ Passwords do not match!');
-        return;
+        return false;
       }
 
-      const fullName = `${firstName} ${lastName}`.trim();
-
-      try {
-        const res = await fetch(RENDER_SYNC_URL + '/api/auth/register', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name: fullName, email, mobile, password: pass })
-        });
-        const data = await res.json();
-        if (res.ok && data.success && data.user) {
-          saveUserSession(data.user);
-          showToast('🎉 Account registered successfully!');
-          setTimeout(() => window.location.href = 'index.html', 800);
-          return;
-        }
-      } catch(err) {}
-
+      const fullName = `${firstName} ${lastName}`.trim() || 'New Member';
       saveUserSession({ name: fullName, email: email, mobile: mobile });
       showToast('🎉 Account registered successfully!');
-      setTimeout(() => window.location.href = 'index.html', 800);
+
+      fetch(RENDER_SYNC_URL + '/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: fullName, email, mobile, password: pass })
+      }).then(res => res.json()).then(data => {
+        if (data && data.success && data.user) saveUserSession(data.user);
+      }).catch(() => {});
+
+      const params = new URLSearchParams(window.location.search);
+      const targetUrl = params.get('redirect') || 'index.html';
+      setTimeout(() => { window.location.href = targetUrl; }, 600);
+      return false;
     }
 
     function socialAuth(provider) {
@@ -625,7 +619,9 @@
         email: `siddhartha_${provider.toLowerCase()}@gmail.com`
       });
       showToast(`✅ Logged in with ${provider}!`);
-      setTimeout(() => window.location.href = 'index.html', 800);
+      const params = new URLSearchParams(window.location.search);
+      const targetUrl = params.get('redirect') || 'index.html';
+      setTimeout(() => { window.location.href = targetUrl; }, 600);
     }
 
     function handleForgotPass() {
