@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Public Blogs Platform — Sync & LifeOS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Inter:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+    body {
+      background: #e5ad38;
+      color: #163a24;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Navigation Header */
+    header.app-header {
+      background: #fbf7ee;
+      border-bottom: 3px solid #163a24;
+      padding: 0.9rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 0px #163a24;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+      color: #163a24;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 900;
+      font-size: 1.4rem;
+    }
+    .brand-icon {
+      background: #9e2a2b;
+      color: white;
+      padding: 0.3rem 0.6rem;
+      border-radius: 0.5rem;
+      border: 2px solid #163a24;
+    }
+    nav.top-nav {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    nav.top-nav a {
+      color: #163a24;
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 0.85rem;
+      padding: 0.4rem 0.8rem;
+      border-radius: 0.5rem;
+      border: 2px solid transparent;
+    }
+    nav.top-nav a:hover, nav.top-nav a.active {
+      background: #163a24;
+      color: white;
+      border-color: #163a24;
+    }
+
+    /* Main Container */
+    main {
+      flex: 1;
+      max-width: 1100px;
+      width: 100%;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.65rem;
+      border-radius: 2rem;
+      font-size: 0.72rem;
+      font-weight: 800;
+      border: 1.5px solid #163a24;
+    }
+    .b-purple { background: rgba(168, 85, 247, 0.2); color: #6b21a8; }
+    .b-green { background: rgba(34, 197, 94, 0.2); color: #15803d; }
+    .b-gold { background: rgba(234, 179, 8, 0.2); color: #a16207; }
+    .b-cyan { background: rgba(6, 182, 212, 0.2); color: #0e7490; }
+    .b-rose { background: rgba(244, 63, 94, 0.2); color: #be123c; }
+
+    .m-card {
+      background: #fbf7ee;
+      border: 3px solid #163a24;
+      box-shadow: 6px 6px 0px #163a24;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 0.65rem 0.9rem;
+      background: #ffffff;
+      border: 2px solid #163a24;
+      border-radius: 0.6rem;
+      font-size: 0.88rem;
+      color: #163a24;
+      outline: none;
+    }
+
+    .m-btn {
+      padding: 0.65rem 1.25rem;
+      background: #9e2a2b;
+      color: white;
+      font-weight: 800;
+      font-size: 0.85rem;
+      border: 2px solid #163a24;
+      box-shadow: 3px 3px 0px #163a24;
+      border-radius: 0.6rem;
+      cursor: pointer;
+    }
+
+    footer {
+      background: #163a24;
+      color: white;
+      padding: 1.5rem;
+      text-align: center;
+      font-size: 0.8rem;
+      margin-top: 3rem;
+    }
+    footer a { color: #e5ad38; text-decoration: underline; margin: 0 0.5rem; }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header -->
+  <header class="app-header">
+    <a href="index.html" class="brand">
+      <span class="brand-icon">⚡</span>
+      <span>LifeOS & Sync</span>
+    </a>
+    <nav class="top-nav">
+      <a href="index.html">🏠 Home</a>
+      <a href="blogs.html" class="active">📰 Public Blogs</a>
+      <a href="coming-soon.html">🚀 Coming Soon</a>
+      <a href="privacy.html">🛡️ Privacy</a>
+    </nav>
+  </header>
+
+  <!-- Main Feed -->
+  <main>
+    <div class="m-card" style="background: linear-gradient(135deg, rgba(158,42,43,0.1), rgba(22,58,36,0.1));">
+      <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:1rem;">
+        <div>
+          <div style="font-size:0.75rem; font-weight:900; color:#9e2a2b; letter-spacing:1px; text-transform:uppercase;">PUBLIC COMMUNITY PLATFORM</div>
+          <h1 style="font-family:'Outfit',sans-serif; font-size:2rem; font-weight:900; color:#163a24; margin:0.2rem 0;">📰 Public Community Blogs</h1>
+          <p style="font-size:0.85rem; color:rgba(22,58,36,0.85);">Explore stories, tech updates, engineering notes, and lifestyle reflections published by Siddhartha & community members.</p>
+        </div>
+        <button onclick="openCreateBlogModal()" class="m-btn">✍️ Publish New Blog Post</button>
+      </div>
+
+      <!-- Filters -->
+      <div style="margin-top:1.25rem; display:flex; flex-wrap:wrap; gap:0.6rem; align-items:center;">
+        <input type="text" id="blogSearchInput" placeholder="🔍 Search public blogs by title or keyword..." oninput="renderPublicBlogs()" style="flex:1; min-width:240px;">
+        <div style="display:flex; gap:0.4rem; overflow-x:auto;" id="blogCategoryPills">
+          <button class="badge b-green active" onclick="setBlogFilter('all', this)" style="cursor:pointer; padding:0.4rem 0.8rem;">All Posts</button>
+          <button class="badge b-purple" onclick="setBlogFilter('Tech', this)" style="cursor:pointer; padding:0.4rem 0.8rem;">Tech</button>
+          <button class="badge b-cyan" onclick="setBlogFilter('Finance', this)" style="cursor:pointer; padding:0.4rem 0.8rem;">Finance</button>
+          <button class="badge b-gold" onclick="setBlogFilter('Lifestyle', this)" style="cursor:pointer; padding:0.4rem 0.8rem;">Lifestyle</button>
+          <button class="badge b-rose" onclick="setBlogFilter('Personal', this)" style="cursor:pointer; padding:0.4rem 0.8rem;">Personal</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Blog Posts Grid Feed -->
+    <div id="publicBlogFeed" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap:1.25rem;">
+      <!-- Dynamically rendered blog posts -->
+    </div>
+  </main>
+
+  <!-- Create Blog Modal -->
+  <div id="createBlogModal" style="position:fixed; top:0; left:0; right:0; bottom:0; z-index:99999; background:rgba(0,0,0,0.85); backdrop-filter:blur(10px); display:none; align-items:center; justify-content:center; padding:1rem; overflow-y:auto;">
+    <div class="m-card" style="width:100%; max-width:650px; background:#fbf7ee; border:3.5px solid #163a24; box-shadow:8px 8px 0px #163a24; color:#163a24;">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #163a24; padding-bottom:0.75rem; margin-bottom:1rem;">
+        <h3 style="font-size:1.3rem; font-weight:900; color:#163a24;">✍️ Publish Public Blog Post</h3>
+        <button onclick="closeCreateBlogModal()" style="background:none; border:none; font-size:1.5rem; cursor:pointer; color:#163a24;">✖</button>
+      </div>
+
+      <form id="createBlogForm">
+        <div style="margin-bottom:0.8rem;">
+          <label style="font-size:0.8rem; font-weight:700; color:#163a24; display:block; margin-bottom:0.25rem;">Blog Title *</label>
+          <input type="text" id="blogInputTitle" placeholder="e.g. Building LifeOS: Direct Cloud Synchronization" required>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.75rem; margin-bottom:0.8rem;">
+          <div>
+            <label style="font-size:0.8rem; font-weight:700; color:#163a24; display:block; margin-bottom:0.25rem;">Category *</label>
+            <select id="blogInputCategory" required>
+              <option value="Tech">Tech & Engineering</option>
+              <option value="Finance">Finance & Money</option>
+              <option value="Lifestyle">Lifestyle & Habits</option>
+              <option value="Personal">Personal Stories</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:0.8rem; font-weight:700; color:#163a24; display:block; margin-bottom:0.25rem;">Cover Image URL (Optional)</label>
+            <input type="url" id="blogInputImage" placeholder="https://images.unsplash.com/...">
+          </div>
+        </div>
+
+        <div style="margin-bottom:0.8rem;">
+          <label style="font-size:0.8rem; font-weight:700; color:#163a24; display:block; margin-bottom:0.25rem;">Short Excerpt / Teaser *</label>
+          <input type="text" id="blogInputExcerpt" placeholder="A short 1-2 line summary of your blog post..." required>
+        </div>
+
+        <div style="margin-bottom:1rem;">
+          <label style="font-size:0.8rem; font-weight:700; color:#163a24; display:block; margin-bottom:0.25rem;">Full Story / Content *</label>
+          <textarea id="blogInputContent" rows="7" placeholder="Write your full article story here..." required style="resize:vertical;"></textarea>
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:0.75rem;">
+          <button type="button" onclick="closeCreateBlogModal()" style="padding:0.75rem 1.25rem; background:transparent; border:2px solid #163a24; color:#163a24; font-weight:700; border-radius:0.6rem; cursor:pointer;">Cancel</button>
+          <button type="submit" class="m-btn">🚀 Publish to Public Blog</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Read Blog Modal -->
+  <div id="readBlogModal" style="position:fixed; top:0; left:0; right:0; bottom:0; z-index:99999; background:rgba(0,0,0,0.85); backdrop-filter:blur(10px); display:none; align-items:center; justify-content:center; padding:1rem; overflow-y:auto;">
+    <div class="m-card" style="width:100%; max-width:750px; background:#fbf7ee; border:3.5px solid #163a24; box-shadow:8px 8px 0px #163a24; color:#163a24; max-height:90vh; overflow-y:auto;" id="readBlogContent">
+      <!-- Content rendered dynamically -->
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <a href="index.html">Home</a> | 
+    <a href="blogs.html">Blogs</a> | 
+    <a href="coming-soon.html">Coming Soon</a> | 
+    <a href="privacy.html">Privacy Policy</a> | 
+    <a href="accessibility.html">Accessibility Statement</a>
+    <div style="margin-top: 0.5rem;">© 2026 LifeOS & Sync. Powered and secured by Render & Drive.</div>
+  </footer>
+
+  <script>
+    const RENDER_SYNC_URL = "https://lifeos-backend-zzqm.onrender.com";
+    let _currentBlogFilter = 'all';
+    let publicBlogs = [];
+
+    const DEFAULT_SAMPLE_BLOGS = [
+      {
+        id: "blog_101",
+        title: "Building LifeOS: Direct Cloud Synchronization with Render & Drive",
+        category: "Tech",
+        author: "Siddhartha",
+        excerpt: "How we architected a REST API server and Google Drive integration to keep personal tracking data synchronized across Android APK and Web.",
+        content: "When developing personal productivity tools, offline availability combined with reliable cloud sync is essential. LifeOS solves this by using local storage for instant responsiveness while maintaining real-time background sync with a Render Express backend and Google Drive storage.\n\nKey Highlights:\n1. Zero-latency UI updates.\n2. Automated 15-minute background sync.\n3. Multi-tier backend cloud fallbacks.",
+        imageUrl: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600&auto=format&fit=crop&q=80",
+        createdAt: "2026-08-28T10:00:00.000Z",
+        likes: 18,
+        comments: [{ author: "Rahul M.", text: "Awesome architecture! The sync speed is super smooth.", date: "2026-08-28T11:15:00.000Z" }]
+      },
+      {
+        id: "blog_102",
+        title: "5 Financial Tracker Habits Every Engineer Should Master in 2026",
+        category: "Finance",
+        author: "Siddhartha",
+        excerpt: "Practical tips on loan amortization, tracking monthly milk/grocery expenses, and maintaining automated bill payment reminders.",
+        content: "Managing personal cash flow doesn't require complex spreadsheet software. By categorizing daily expenses into fixed bills, variable daily logs, and long-term liabilities, you gain full clarity over your savings.\n\nTips:\n- Always track micro-expenses (like daily milk deliveries).\n- Maintain partial payment histories for clear ledger reconciliation.",
+        imageUrl: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=600&auto=format&fit=crop&q=80",
+        createdAt: "2026-08-27T14:30:00.000Z",
+        likes: 24,
+        comments: []
+      },
+      {
+        id: "blog_103",
+        title: "Why Simple Daily Record Logs Keep Life Organized & Stress-Free",
+        category: "Lifestyle",
+        author: "Siddhartha",
+        excerpt: "A reflection on daily habits, journal notes, and how micro-logging keeps daily routines seamless.",
+        content: "Consistency beats intensity. Spending 30 seconds every evening reviewing habits and logging daily entries keeps your mind clear and focused on what matters most.",
+        imageUrl: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=600&auto=format&fit=crop&q=80",
+        createdAt: "2026-08-26T09:00:00.000Z",
+        likes: 15,
+        comments: []
+      }
+    ];
+
+    async function loadPublicBlogs() {
+      try {
+        const res = await fetch(RENDER_SYNC_URL + '/api/sync/lifeos_public_blogs');
+        if (res.ok) {
+          const json = await res.json();
+          if (json.data && Array.isArray(json.data.blogs) && json.data.blogs.length > 0) {
+            publicBlogs = json.data.blogs;
+            renderPublicBlogs();
+            return;
+          }
+        }
+      } catch(e) {}
+
+      const localBlogs = localStorage.getItem('lifeos_public_blogs');
+      if (localBlogs) {
+        try { publicBlogs = JSON.parse(localBlogs); } catch(e) { publicBlogs = DEFAULT_SAMPLE_BLOGS; }
+      } else {
+        publicBlogs = DEFAULT_SAMPLE_BLOGS;
+        localStorage.setItem('lifeos_public_blogs', JSON.stringify(publicBlogs));
+      }
+      renderPublicBlogs();
+    }
+
+    async function savePublicBlogsToServer() {
+      localStorage.setItem('lifeos_public_blogs', JSON.stringify(publicBlogs));
+      try {
+        await fetch(RENDER_SYNC_URL + '/api/sync/lifeos_public_blogs', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ data: { blogs: publicBlogs } })
+        });
+      } catch(e) {}
+    }
+
+    function setBlogFilter(cat, btnEl) {
+      _currentBlogFilter = cat;
+      const container = document.getElementById('blogCategoryPills');
+      if (container) {
+        container.querySelectorAll('button').forEach(btn => btn.style.opacity = '0.6');
+        if (btnEl) btnEl.style.opacity = '1';
+      }
+      renderPublicBlogs();
+    }
+
+    function renderPublicBlogs() {
+      const feed = document.getElementById('publicBlogFeed');
+      if (!feed) return;
+      const query = (document.getElementById('blogSearchInput')?.value || '').toLowerCase().trim();
+
+      let filtered = publicBlogs.filter(b => {
+        const matchCat = _currentBlogFilter === 'all' || (b.category && b.category.toLowerCase() === _currentBlogFilter.toLowerCase());
+        const matchQuery = !query || b.title.toLowerCase().includes(query) || b.excerpt.toLowerCase().includes(query) || (b.author && b.author.toLowerCase().includes(query));
+        return matchCat && matchQuery;
+      });
+
+      if (filtered.length === 0) {
+        feed.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:3rem; background:#fbf7ee; border:2.5px dashed #163a24; border-radius:1rem; color:#163a24;">
+          <div style="font-size:2.5rem; margin-bottom:0.5rem;">📝</div>
+          <h3 style="font-weight:900;">No Public Blogs Found</h3>
+          <p style="font-size:0.85rem;">Be the first to publish a blog post for the community!</p>
+          <button onclick="openCreateBlogModal()" class="m-btn" style="margin-top:1rem;">✍️ Publish Blog</button>
+        </div>`;
+        return;
+      }
+
+      feed.innerHTML = filtered.map(b => {
+        const dateStr = new Date(b.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        const imgHtml = b.imageUrl ? `<div style="height:170px; overflow:hidden; border-bottom:2.5px solid #163a24;"><img src="${b.imageUrl}" style="width:100%; height:100%; object-fit:cover;" alt="Cover"></div>` : '';
+        const readTime = Math.max(1, Math.ceil((b.content || '').split(' ').length / 150));
+
+        return `<div class="m-card" style="padding:0; overflow:hidden; display:flex; flex-direction:column;">
+          ${imgHtml}
+          <div style="padding:1.2rem; display:flex; flex-direction:column; flex:1;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.6rem;">
+              <span class="badge b-purple">${b.category || 'General'}</span>
+              <span style="font-size:0.7rem; font-weight:800;">⏱️ ${readTime} min read</span>
+            </div>
+            <h3 style="font-size:1.15rem; font-weight:900; color:#163a24; margin-bottom:0.5rem; line-height:1.3;">${b.title}</h3>
+            <p style="font-size:0.82rem; line-height:1.45; margin-bottom:1rem; flex:1;">${b.excerpt}</p>
+            
+            <div style="font-size:0.75rem; color:#163a24; font-weight:800; border-top:1.5px solid rgba(22,58,36,0.2); padding-top:0.6rem; display:flex; justify-content:space-between; align-items:center;">
+              <span>👤 ${b.author || 'Siddhartha'} · 📅 ${dateStr}</span>
+            </div>
+
+            <div style="display:flex; gap:0.5rem; margin-top:0.8rem; border-top:1.5px solid rgba(22,58,36,0.2); padding-top:0.8rem;">
+              <button onclick="likePublicBlog('${b.id}')" style="flex:1; padding:0.5rem; background:rgba(158,42,43,0.1); border:2px solid #9e2a2b; color:#9e2a2b; font-weight:800; border-radius:0.5rem; cursor:pointer; font-size:0.75rem;">❤️ ${b.likes || 0} Likes</button>
+              <button onclick="openReadBlogModal('${b.id}')" style="flex:1.5; padding:0.5rem; background:#163a24; color:white; font-weight:800; border:2px solid #163a24; border-radius:0.5rem; cursor:pointer; font-size:0.75rem;">📖 Read Story</button>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    function likePublicBlog(id) {
+      const blog = publicBlogs.find(b => b.id === id);
+      if (blog) {
+        blog.likes = (blog.likes || 0) + 1;
+        savePublicBlogsToServer();
+        renderPublicBlogs();
+      }
+    }
+
+    function openCreateBlogModal() { document.getElementById('createBlogModal').style.display = 'flex'; }
+    function closeCreateBlogModal() { document.getElementById('createBlogModal').style.display = 'none'; }
+
+    document.getElementById('createBlogForm').onsubmit = async e => {
+      e.preventDefault();
+      const title    = document.getElementById('blogInputTitle').value.trim();
+      const category = document.getElementById('blogInputCategory').value;
+      const imageUrl = document.getElementById('blogInputImage').value.trim();
+      const excerpt  = document.getElementById('blogInputExcerpt').value.trim();
+      const content  = document.getElementById('blogInputContent').value.trim();
+
+      if (!title || !excerpt || !content) { alert('Please fill in Title, Excerpt, and Content.'); return; }
+
+      const newBlog = {
+        id: 'blog_' + Date.now(),
+        title,
+        category,
+        author: 'Siddhartha',
+        excerpt,
+        content,
+        imageUrl: imageUrl || '',
+        createdAt: new Date().toISOString(),
+        likes: 1,
+        comments: []
+      };
+
+      publicBlogs.unshift(newBlog);
+      await savePublicBlogsToServer();
+      closeCreateBlogModal();
+      document.getElementById('createBlogForm').reset();
+      renderPublicBlogs();
+      alert('🎉 Public Blog Published Successfully!');
+    };
+
+    function openReadBlogModal(id) {
+      const blog = publicBlogs.find(b => b.id === id);
+      if (!blog) return;
+      const modal = document.getElementById('readBlogModal');
+      const container = document.getElementById('readBlogContent');
+      if (!modal || !container) return;
+
+      const dateStr = new Date(blog.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+      const imgHtml = blog.imageUrl ? `<img src="${blog.imageUrl}" style="width:100%; max-height:300px; object-fit:cover; border-radius:0.8rem; margin-bottom:1rem; border:2.5px solid #163a24;" alt="Cover">` : '';
+
+      const commentsHtml = (blog.comments || []).map(c => `
+        <div style="background:rgba(22,58,36,0.06); border:2px solid #163a24; padding:0.7rem 0.9rem; border-radius:0.6rem; margin-bottom:0.6rem;">
+          <div style="font-size:0.78rem; font-weight:900; color:#163a24; display:flex; justify-content:space-between;">
+            <span>👤 ${c.author}</span>
+            <span style="font-weight:600;">${new Date(c.date).toLocaleDateString()}</span>
+          </div>
+          <div style="font-size:0.85rem; color:#163a24; margin-top:0.25rem;">${c.text}</div>
+        </div>
+      `).join('');
+
+      container.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2.5px solid #163a24; padding-bottom:0.75rem; margin-bottom:1rem;">
+          <span class="badge b-purple">${blog.category}</span>
+          <button onclick="closeReadBlogModal()" style="background:none; border:none; font-size:1.6rem; cursor:pointer; color:#163a24;">✖</button>
+        </div>
+        ${imgHtml}
+        <h1 style="font-size:1.8rem; font-weight:900; color:#163a24; margin-bottom:0.5rem; line-height:1.2;">${blog.title}</h1>
+        <div style="font-size:0.82rem; font-weight:800; color:#9e2a2b; margin-bottom:1.25rem;">👤 Written by ${blog.author} · 📅 Published on ${dateStr}</div>
+        <div style="font-size:0.95rem; line-height:1.7; color:#163a24; white-space:pre-line; border-bottom:2.5px solid #163a24; padding-bottom:1.5rem; margin-bottom:1.5rem;">${blog.content}</div>
+        <div>
+          <h3 style="font-size:1.1rem; font-weight:900; color:#163a24; margin-bottom:0.8rem;">💬 Community Comments (${(blog.comments || []).length})</h3>
+          ${commentsHtml || '<div style="font-size:0.8rem; margin-bottom:1rem;">No comments yet. Leave a thought below!</div>'}
+          <div style="display:flex; gap:0.5rem; margin-top:1rem;">
+            <input type="text" id="blogCommentInput" placeholder="Write a public comment..." style="flex:1;">
+            <button onclick="addBlogComment('${blog.id}')" class="m-btn" style="width:auto;">💬 Post</button>
+          </div>
+        </div>
+      `;
+
+      modal.style.display = 'flex';
+    }
+
+    function closeReadBlogModal() { document.getElementById('readBlogModal').style.display = 'none'; }
+
+    function addBlogComment(blogId) {
+      const input = document.getElementById('blogCommentInput');
+      if (!input) return;
+      const text = input.value.trim();
+      if (!text) return;
+      const blog = publicBlogs.find(b => b.id === blogId);
+      if (blog) {
+        blog.comments = blog.comments || [];
+        blog.comments.push({ author: 'Guest Reader', text, date: new Date().toISOString() });
+        savePublicBlogsToServer();
+        openReadBlogModal(blogId);
+        renderPublicBlogs();
+      }
+    }
+
+    loadPublicBlogs();
+  </script>
+</body>
+</html>

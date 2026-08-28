@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sync — Coming Soon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+    body {
+      background: #090e17;
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow-x: hidden;
+    }
+    
+    /* Top Header Bar */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.8rem 4rem;
+      z-index: 10;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #ffffff;
+      text-decoration: none;
+    }
+    .brand-icon {
+      width: 24px;
+      height: 24px;
+      background: #ffffff;
+      clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+    }
+    nav a {
+      color: rgba(255, 255, 255, 0.85);
+      text-decoration: none;
+      font-size: 0.75rem;
+      letter-spacing: 1.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      transition: color 0.2s ease;
+      margin-left: 1.5rem;
+    }
+    nav a:hover { color: #ffffff; text-decoration: underline; }
+
+    /* Hero Section */
+    .hero-container {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 2rem 4rem;
+      background: radial-gradient(circle at 10% 80%, #0e744a 0%, #073824 35%, #080f19 80%);
+      overflow: hidden;
+    }
+
+    .hero-content {
+      max-width: 620px;
+      z-index: 2;
+    }
+
+    .sub-head {
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 0.95rem;
+      font-weight: 400;
+      margin-bottom: 1rem;
+      letter-spacing: 0.5px;
+    }
+
+    .main-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 5rem;
+      line-height: 1.05;
+      font-weight: 400;
+      letter-spacing: -1.5px;
+      margin-bottom: 1.8rem;
+    }
+
+    .description {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.92rem;
+      line-height: 1.6;
+      max-width: 440px;
+      margin-bottom: 2.2rem;
+    }
+
+    /* Newsletter Form */
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      max-width: 340px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    label {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    input[type="email"] {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: 2rem;
+      padding: 0.75rem 1.2rem;
+      color: #ffffff;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+    input[type="email"]:focus {
+      border-color: #ffffff;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.4;
+      cursor: pointer;
+    }
+    .checkbox-group input {
+      margin-top: 2px;
+      accent-color: #ffffff;
+    }
+
+    .btn-submit {
+      background: #ffffff;
+      color: #090e17;
+      border: none;
+      border-radius: 2rem;
+      padding: 0.7rem 1.8rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      width: fit-content;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+      margin-top: 0.4rem;
+    }
+    .btn-submit:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    /* Footer */
+    footer {
+      background: #05080e;
+      padding: 1.5rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: underline;
+      margin-right: 1.5rem;
+    }
+    .footer-links a:hover { color: #ffffff; }
+
+    @media (max-width: 768px) {
+      header, .hero-container, footer { padding: 1.5rem; }
+      .main-title { font-size: 3.5rem; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header -->
+  <header>
+    <a href="index.html" class="brand">
+      <div class="brand-icon"></div>
+      <span>Sync</span>
+    </a>
+    <nav>
+      <a href="index.html">HOME</a>
+      <a href="blogs.html">BLOGS</a>
+      <a href="privacy.html">PRIVACY</a>
+    </nav>
+  </header>
+
+  <!-- Hero Content -->
+  <main class="hero-container">
+    <div class="hero-content">
+      <div class="sub-head">We're almost there</div>
+      <h1 class="main-title">Coming<br>Soon</h1>
+      <p class="description">
+        Join our newsletter to be the first to know when Sync launches and receive updates on the latest in technology and AI.
+      </p>
+
+      <form id="subscribeForm" onsubmit="event.preventDefault(); alert('🎉 Thank you for subscribing to Sync Newsletter updates!'); this.reset();">
+        <div class="form-group">
+          <label for="email">Email *</label>
+          <input type="email" id="email" required placeholder="Enter your email address">
+        </div>
+
+        <label class="checkbox-group">
+          <input type="checkbox" required>
+          <span>Yes, subscribe me to your newsletter. *</span>
+        </label>
+
+        <button type="submit" class="btn-submit">Sign Up</button>
+      </form>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-links">
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="accessibility.html">Accessibility Statement</a>
+    </div>
+    <div>
+      © 2026 by Sync. Powered and secured by Render & Drive
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -599,18 +599,20 @@ body.mustard-theme .desktop-nav-item.active {
 <!-- Header -->
 <header class="app-header">
   <!-- Principle 1: Easy Access to Homepage -->
-  <div class="app-brand" onclick="switchWorkspaceMode('private')" style="cursor:pointer;" title="Click to return to Homepage">
+  <a href="index.html" class="app-brand" style="cursor:pointer; text-decoration:none;" title="Click to return to Homepage">
     <div class="app-brand-icon">⚡</div>
     <div>
       <div class="app-title" style="margin:0; line-height:1.1;">LifeOS</div>
       <div style="font-size:0.62rem; color:var(--text-sub); font-weight:700;">🏠 Home</div>
     </div>
-  </div>
+  </a>
 
-  <!-- Workspace Selector Pills -->
-  <div style="display:flex; background:rgba(0,0,0,0.25); padding:0.25rem; border-radius:0.6rem; border:1px solid var(--card-border); gap:0.25rem;">
-    <button id="wsModePrivateBtn" onclick="switchWorkspaceMode('private')" class="badge b-gold" style="border:none; cursor:pointer; padding:0.3rem 0.65rem; font-size:0.72rem;">🔒 Personal Space</button>
-    <button id="wsModePublicBtn" onclick="switchWorkspaceMode('public')" class="badge b-rose" style="border:none; cursor:pointer; opacity:0.6; padding:0.3rem 0.65rem; font-size:0.72rem;">📰 Public Blogs</button>
+  <!-- Multi-Webpage Navigation Bar -->
+  <div style="display:flex; align-items:center; gap:0.4rem; overflow-x:auto;">
+    <a href="index.html" class="badge b-gold" style="text-decoration:none; padding:0.35rem 0.65rem; font-size:0.72rem; cursor:pointer;">🏠 Home</a>
+    <a href="blogs.html" class="badge b-purple" style="text-decoration:none; padding:0.35rem 0.65rem; font-size:0.72rem; cursor:pointer;">📰 Blogs</a>
+    <a href="coming-soon.html" class="badge b-green" style="text-decoration:none; padding:0.35rem 0.65rem; font-size:0.72rem; cursor:pointer;">🚀 Coming Soon</a>
+    <a href="privacy.html" class="badge b-cyan" style="text-decoration:none; padding:0.35rem 0.65rem; font-size:0.72rem; cursor:pointer;">🛡️ Privacy</a>
   </div>
 
   <div style="display:flex; align-items:center; gap:0.6rem;">
@@ -655,9 +657,9 @@ body.mustard-theme .desktop-nav-item.active {
 
           <!-- Principle 4: Prompt Actions and Navigations (CTAs) -->
           <div style="display:flex; flex-wrap:wrap; gap:0.6rem; margin-top:0.75rem;">
-            <button onclick="switchWorkspaceMode('private')" class="m-btn" style="width:auto; padding:0.55rem 1.1rem; background:#163a24; color:white; font-weight:800; font-size:0.78rem; border:2px solid #163a24; box-shadow:3px 3px 0px #163a24; cursor:pointer;">🚀 Explore Personal Workspace</button>
-            <button onclick="switchWorkspaceMode('public')" class="m-btn" style="width:auto; padding:0.55rem 1.1rem; background:#9e2a2b; color:white; font-weight:800; font-size:0.78rem; border:2px solid #163a24; box-shadow:3px 3px 0px #163a24; cursor:pointer;">📰 Read Public Blogs</button>
-            <button onclick="openCreateBlogModal()" class="m-btn" style="width:auto; padding:0.55rem 1.1rem; background:#e5ad38; color:#163a24; font-weight:900; font-size:0.78rem; border:2px solid #163a24; box-shadow:3px 3px 0px #163a24; cursor:pointer;">✍️ Publish Story</button>
+            <button onclick="switchWorkspaceMode('private')" class="m-btn" style="width:auto; padding:0.55rem 1.1rem; background:#163a24; color:white; font-weight:800; font-size:0.78rem; border:2px solid #163a24; box-shadow:3px 3px 0px #163a24; cursor:pointer;">🚀 Open Personal Space</button>
+            <a href="blogs.html" class="m-btn" style="text-decoration:none; display:inline-block; width:auto; padding:0.55rem 1.1rem; background:#9e2a2b; color:white; font-weight:800; font-size:0.78rem; border:2px solid #163a24; box-shadow:3px 3px 0px #163a24; cursor:pointer;">📰 Public Blog Page</a>
+            <a href="coming-soon.html" class="m-btn" style="text-decoration:none; display:inline-block; width:auto; padding:0.55rem 1.1rem; background:#e5ad38; color:#163a24; font-weight:900; font-size:0.78rem; border:2px solid #163a24; box-shadow:3px 3px 0px #163a24; cursor:pointer;">🚀 Sync Launch Page</a>
           </div>
         </div>
 
