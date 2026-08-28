@@ -5482,6 +5482,8 @@ document.getElementById('acctSignUpForm').onsubmit = async e => {
 
   switchAuthMode('signin');
   alert(`🎉 Account Created Successfully on Backend Server (${res.source})!\n\n🔑 Sign In is required. Please enter your Password to log in.`);
+};
+
 function toggleMustardTheme() {
   document.body.classList.toggle('mustard-theme');
   const isMustard = document.body.classList.contains('mustard-theme');
