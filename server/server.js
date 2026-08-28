@@ -301,6 +301,60 @@ app.post('/api/auth/login', async (req, res) => {
   });
 });
 
+app.post('/api/auth/google', async (req, res) => {
+  const email = (req.body.email || 'siddharthasingh12495@gmail.com').toLowerCase().trim();
+  const name = req.body.name || req.body.displayName || email.split('@')[0];
+  const googleId = req.body.google_id || req.body.sub || 'g_' + Date.now();
+  const avatar = req.body.avatar || req.body.picture || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(name)}`;
+
+  // Check Supabase
+  try {
+    const sbRes = await supabase('GET', `${USERS_TABLE}?email=eq.${encodeURIComponent(email)}`, null);
+    if (sbRes.data && sbRes.data.length > 0) {
+      const u = sbRes.data[0];
+      return res.json({
+        success: true, matched: true, isNewUser: false,
+        message: `Welcome back, ${u.name}! Account matched in backend database.`,
+        user: { id: u.id, name: u.name, email: u.email, mobile: u.mobile, avatar: u.avatar, provider: u.provider },
+        token: 'jwt_g_' + u.id
+      });
+    }
+  } catch(e) {}
+
+  // Check memory / fallback map
+  const local = mockUsers.get(email);
+  if (local) {
+    return res.json({
+      success: true, matched: true, isNewUser: false,
+      message: `Welcome back, ${local.name}! Account matched in backend database.`,
+      user: { id: local.id, name: local.name, email: local.email, mobile: local.mobile, avatar: local.avatar, provider: local.provider },
+      token: 'jwt_g_' + local.id
+    });
+  }
+
+  // Create new Google user
+  const newUser = {
+    id: 'usr_g_' + Date.now(),
+    google_id: googleId,
+    name, email,
+    avatar, provider: 'google',
+    created_at: new Date().toISOString()
+  };
+
+  try {
+    await supabase('POST', USERS_TABLE, newUser);
+  } catch(e) {}
+  mockUsers.set(email, newUser);
+
+  return res.json({
+    success: true, matched: false, isNewUser: true,
+    message: '🎉 Google Account registered in backend database!',
+    user: { id: newUser.id, name: newUser.name, email: newUser.email, avatar: newUser.avatar, provider: 'google' },
+    token: 'jwt_g_' + newUser.id
+  });
+});
+
+
 app.post('/api/auth/forgot-password', async (req, res) => {
   const { email } = req.body;
   if (!email) return res.status(400).json({ success: false, error: 'Registered email address is required.' });

@@ -182,6 +182,69 @@ class LifeOSHandler(http.server.SimpleHTTPRequestHandler):
                 'token': 'jwt_' + new_user['id']
             })
 
+        # API: Google OAuth / Social Login & User Comparison
+        if path == '/api/auth/google':
+            email = (body.get('email') or 'siddharthasingh12495@gmail.com').strip().lower()
+            name = body.get('name') or body.get('displayName') or email.split('@')[0].capitalize()
+            google_id = body.get('google_id') or body.get('sub') or 'g_' + str(int(time.time()))
+            avatar = body.get('avatar') or body.get('picture') or f'https://api.dicebear.com/7.x/avataaars/svg?seed={name}'
+
+            users = load_json(USERS_FILE, [])
+            existing_user = None
+            for u in users:
+                if u.get('email') == email or u.get('google_id') == google_id:
+                    existing_user = u
+                    break
+
+            if existing_user:
+                # Compare & Match existing user profile in backend database
+                return self.send_json(200, {
+                    'success': True,
+                    'matched': True,
+                    'isNewUser': False,
+                    'message': f'Welcome back, {existing_user["name"]}! Account matched in backend database.',
+                    'user': {
+                        'id': existing_user['id'],
+                        'name': existing_user['name'],
+                        'email': existing_user.get('email'),
+                        'mobile': existing_user.get('mobile'),
+                        'avatar': existing_user.get('avatar', avatar),
+                        'provider': existing_user.get('provider', 'google')
+                    },
+                    'token': 'jwt_g_' + existing_user['id']
+                })
+            else:
+                # Create & Store new Google user in backend database
+                user_id = 'usr_g_' + str(int(time.time())) + '_' + os.urandom(3).hex()
+                new_user = {
+                    'id': user_id,
+                    'google_id': google_id,
+                    'name': name,
+                    'email': email,
+                    'mobile': body.get('mobile'),
+                    'provider': 'google',
+                    'avatar': avatar,
+                    'created_at': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
+                }
+                users.append(new_user)
+                save_json(USERS_FILE, users)
+
+                return self.send_json(200, {
+                    'success': True,
+                    'matched': False,
+                    'isNewUser': True,
+                    'message': f'🎉 Google Account registered in backend database!',
+                    'user': {
+                        'id': new_user['id'],
+                        'name': new_user['name'],
+                        'email': new_user['email'],
+                        'mobile': new_user['mobile'],
+                        'avatar': new_user['avatar'],
+                        'provider': 'google'
+                    },
+                    'token': 'jwt_g_' + new_user['id']
+                })
+
         # API: Register
         if path == '/api/auth/register':
             name = body.get('name', '').strip()
@@ -241,9 +304,11 @@ class LifeOSHandler(http.server.SimpleHTTPRequestHandler):
         return self.send_json(404, {'error': 'Endpoint not found'})
 
 if __name__ == '__main__':
+    socketserver.TCPServer.allow_reuse_address = True
     with socketserver.TCPServer(('', PORT), LifeOSHandler) as httpd:
         print(f"🚀 LifeOS Full-Stack Server running on http://localhost:{PORT}")
         try:
             httpd.serve_forever()
         except KeyboardInterrupt:
             print("\nShutting down server.")
+

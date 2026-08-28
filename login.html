@@ -644,14 +644,45 @@
     return false;
   }
 
-  /* ─── SOCIAL LOGIN ─── */
+  /* ─── SOCIAL LOGIN (GOOGLE / FACEBOOK) ─── */
   function socialLogin(provider) {
-    saveSession({
-      name:  'LifeOS User',
-      email: `user_${provider.toLowerCase()}@lifeos.app`
+    let email = 'siddharthasingh12495@gmail.com';
+    let name = 'Siddhartha Singh';
+
+    if (provider === 'Google') {
+      const inputEmail = prompt('Google Sign-In Account:', email);
+      if (inputEmail === null) return; // User cancelled
+      if (inputEmail.trim()) email = inputEmail.trim();
+      name = email.split('@')[0].replace(/[._-]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    }
+
+    toast(`🔄 Connecting to backend for ${provider} authentication...`);
+
+    fetch(API + '/api/auth/google', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: email,
+        name: name,
+        provider: provider.toLowerCase()
+      })
+    })
+    .then(r => r.json())
+    .then(d => {
+      if (d && d.success && d.user) {
+        saveSession(d.user);
+        toast(d.message || `✅ Logged in with ${provider}!`);
+        setTimeout(() => { window.location.href = redirectTarget(); }, 1000);
+      } else {
+        toast('❌ Google Sign-In failed.');
+      }
+    })
+    .catch(err => {
+      // Offline / fallback save
+      saveSession({ name: name, email: email, provider: provider });
+      toast(`✅ Logged in with ${provider}!`);
+      setTimeout(() => { window.location.href = redirectTarget(); }, 800);
     });
-    toast(`✅ Logged in with ${provider}!`);
-    setTimeout(() => { window.location.href = redirectTarget(); }, 700);
   }
 
   /* ─── FORGOT PASSWORD ─── */
@@ -659,6 +690,7 @@
     const em = prompt('Enter your registered email address:');
     if (em && em.includes('@')) toast(`📩 Recovery link sent to ${em}`);
   }
+
 </script>
 </body>
 </html>
