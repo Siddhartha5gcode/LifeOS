@@ -1,32 +1,73 @@
 const express = require('express');
 const cors    = require('cors');
-const { Pool } = require('pg');
+const https   = require('https');
 
 const app  = express();
 const PORT = process.env.PORT || 10000;
 
-// ─── Database Connection ──────────────────────────────────────────────────────
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }   // Required for Supabase / Render hosted PG
-});
+// ─── Supabase Config (set these in Render Environment Variables) ──────────────
+const SUPABASE_URL = process.env.SUPABASE_URL;   // e.g. https://gntketyyavoukxrcqezb.supabase.co
+const SUPABASE_KEY = process.env.SUPABASE_KEY;   // Service Role Key (from API settings)
+const TABLE        = 'lifeos_sync';
 
 // ─── Middleware ───────────────────────────────────────────────────────────────
 app.use(cors({ origin: '*' }));
 app.use(express.json({ limit: '10mb' }));
 
-// ─── Bootstrap DB Table ───────────────────────────────────────────────────────
+// ─── Supabase REST Helper ─────────────────────────────────────────────────────
+function supabase(method, path, body) {
+  return new Promise((resolve, reject) => {
+    const url  = new URL(SUPABASE_URL + '/rest/v1/' + path);
+    const data = body ? JSON.stringify(body) : null;
+    const opts = {
+      hostname: url.hostname,
+      path:     url.pathname + url.search,
+      method,
+      headers: {
+        'apikey':         SUPABASE_KEY,
+        'Authorization':  'Bearer ' + SUPABASE_KEY,
+        'Content-Type':   'application/json',
+        'Prefer':         method === 'POST' ? 'resolution=merge-duplicates,return=representation' : 'return=representation'
+      }
+    };
+    if (data) opts.headers['Content-Length'] = Buffer.byteLength(data);
+
+    const req = https.request(opts, res => {
+      let raw = '';
+      res.on('data', c => raw += c);
+      res.on('end', () => {
+        try { resolve({ status: res.statusCode, data: raw ? JSON.parse(raw) : null }); }
+        catch(e) { resolve({ status: res.statusCode, data: raw }); }
+      });
+    });
+    req.on('error', reject);
+    if (data) req.write(data);
+    req.end();
+  });
+}
+
+// ─── Ensure Table Exists via Supabase SQL API ─────────────────────────────────
 async function initDB() {
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS lifeos_sync (
-      user_id     TEXT PRIMARY KEY,
-      data        JSONB        NOT NULL DEFAULT '{}',
-      version     TEXT         NOT NULL DEFAULT '1.0',
-      last_synced TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
-      backups     JSONB        NOT NULL DEFAULT '[]'
-    );
-  `);
-  console.log('✅ Database table ready: lifeos_sync');
+  // Try a simple select to test connection
+  const test = await supabase('GET', TABLE + '?limit=1', null);
+  if (test.status === 200 || test.status === 206) {
+    console.log('✅ Connected to Supabase. Table lifeos_sync ready.');
+  } else if (test.status === 404 || (test.data && test.data.code === '42P01')) {
+    // Table doesn't exist — create it via SQL
+    console.log('⚠️ Table not found. Creating lifeos_sync via SQL API...');
+    const sql = await supabase('POST', '../rpc/exec', {
+      sql: `CREATE TABLE IF NOT EXISTS lifeos_sync (
+        user_id     TEXT PRIMARY KEY,
+        data        JSONB NOT NULL DEFAULT '{}',
+        version     TEXT NOT NULL DEFAULT '1.0',
+        last_synced TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+        backups     JSONB NOT NULL DEFAULT '[]'
+      );`
+    });
+    console.log('Table creation result:', sql.status, JSON.stringify(sql.data));
+  } else {
+    throw new Error('Supabase connection failed: ' + JSON.stringify(test.data));
+  }
 }
 
 // ─── Routes ───────────────────────────────────────────────────────────────────
@@ -34,12 +75,12 @@ async function initDB() {
 // 1. Health check
 app.get('/health', async (req, res) => {
   try {
-    const result = await pool.query('SELECT NOW() AS db_time');
+    const test = await supabase('GET', TABLE + '?limit=1', null);
     res.json({
       status:        'ok',
       service:       'LifeOS Sync Server',
       uptimeSeconds: Math.floor(process.uptime()),
-      db_time:       result.rows[0].db_time,
+      supabase:      test.status === 200 || test.status === 206 ? 'connected' : 'error',
       timestamp:     new Date().toISOString()
     });
   } catch (err) {
@@ -51,21 +92,12 @@ app.get('/health', async (req, res) => {
 app.get('/api/sync/:userId', async (req, res) => {
   const { userId } = req.params;
   try {
-    const result = await pool.query(
-      'SELECT user_id, data, version, last_synced FROM lifeos_sync WHERE user_id = $1',
-      [userId]
-    );
-    if (result.rows.length === 0) {
+    const result = await supabase('GET', `${TABLE}?user_id=eq.${encodeURIComponent(userId)}&select=user_id,data,version,last_synced`, null);
+    if (!result.data || result.data.length === 0) {
       return res.status(404).json({ error: 'User sync data not found', userId });
     }
-    const row = result.rows[0];
-    res.json({
-      success:    true,
-      userId:     row.user_id,
-      lastSynced: row.last_synced,
-      version:    row.version,
-      data:       row.data
-    });
+    const row = result.data[0];
+    res.json({ success: true, userId: row.user_id, lastSynced: row.last_synced, version: row.version, data: row.data });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -75,72 +107,54 @@ app.get('/api/sync/:userId', async (req, res) => {
 app.post('/api/sync/:userId', async (req, res) => {
   const { userId } = req.params;
   const { data, version = '1.0' } = req.body;
-
-  if (!data || typeof data !== 'object') {
-    return res.status(400).json({ error: 'Invalid sync data payload' });
-  }
+  if (!data || typeof data !== 'object') return res.status(400).json({ error: 'Invalid sync data payload' });
 
   try {
-    // Fetch existing row to rotate backups
-    const existing = await pool.query(
-      'SELECT data, backups FROM lifeos_sync WHERE user_id = $1',
-      [userId]
-    );
-
+    // Get existing to rotate backups
+    const existing = await supabase('GET', `${TABLE}?user_id=eq.${encodeURIComponent(userId)}&select=data,backups`, null);
     let backups = [];
-    if (existing.rows.length > 0) {
-      const prev = existing.rows[0];
+    if (existing.data && existing.data.length > 0) {
+      const prev = existing.data[0];
       backups = Array.isArray(prev.backups) ? prev.backups : [];
-      // Push old data into backups (keep last 10)
       backups.unshift({ timestamp: new Date().toISOString(), data: prev.data });
       if (backups.length > 10) backups = backups.slice(0, 10);
     }
 
-    // Upsert
-    await pool.query(`
-      INSERT INTO lifeos_sync (user_id, data, version, last_synced, backups)
-      VALUES ($1, $2, $3, NOW(), $4)
-      ON CONFLICT (user_id) DO UPDATE
-        SET data        = EXCLUDED.data,
-            version     = EXCLUDED.version,
-            last_synced = NOW(),
-            backups     = EXCLUDED.backups
-    `, [userId, JSON.stringify(data), version, JSON.stringify(backups)]);
+    // Upsert via POST with Prefer: resolution=merge-duplicates
+    const upsert = await supabase('POST', TABLE, {
+      user_id: userId, data, version,
+      last_synced: new Date().toISOString(),
+      backups
+    });
 
-    const now = new Date().toISOString();
-    res.json({ success: true, userId, lastSynced: now, message: 'LifeOS data synced successfully' });
+    if (upsert.status >= 200 && upsert.status < 300) {
+      res.json({ success: true, userId, lastSynced: new Date().toISOString(), message: 'LifeOS data synced successfully' });
+    } else {
+      throw new Error('Upsert failed: ' + JSON.stringify(upsert.data));
+    }
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// 4. List historical backups for a user
+// 4. List historical backups
 app.get('/api/backups/:userId', async (req, res) => {
   const { userId } = req.params;
   try {
-    const result = await pool.query(
-      'SELECT backups FROM lifeos_sync WHERE user_id = $1',
-      [userId]
-    );
-    if (result.rows.length === 0) return res.json({ success: true, userId, backups: [] });
-
-    const backups = result.rows[0].backups || [];
-    const list = backups.map((b, idx) => ({
-      id:        idx + 1,
-      timestamp: b.timestamp,
-      sizeBytes: JSON.stringify(b.data).length
-    }));
-    res.json({ success: true, userId, backups: list });
+    const result = await supabase('GET', `${TABLE}?user_id=eq.${encodeURIComponent(userId)}&select=backups`, null);
+    if (!result.data || result.data.length === 0) return res.json({ success: true, userId, backups: [] });
+    const backups = result.data[0].backups || [];
+    res.json({ success: true, userId, backups: backups.map((b, i) => ({ id: i+1, timestamp: b.timestamp, sizeBytes: JSON.stringify(b.data).length })) });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// 5. Delete sync data for a user
+// 5. Delete sync data
 app.delete('/api/sync/:userId', async (req, res) => {
   const { userId } = req.params;
   try {
-    await pool.query('DELETE FROM lifeos_sync WHERE user_id = $1', [userId]);
+    await supabase('DELETE', `${TABLE}?user_id=eq.${encodeURIComponent(userId)}`, null);
     res.json({ success: true, message: `Data cleared for ${userId}` });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -149,12 +163,5 @@ app.delete('/api/sync/:userId', async (req, res) => {
 
 // ─── Start ────────────────────────────────────────────────────────────────────
 initDB()
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`🚀 LifeOS Sync Server running on port ${PORT}`);
-    });
-  })
-  .catch(err => {
-    console.error('❌ Failed to initialise DB:', err.message);
-    process.exit(1);
-  });
+  .then(() => app.listen(PORT, () => console.log(`🚀 LifeOS Sync Server running on port ${PORT}`)))
+  .catch(err => { console.error('❌ Failed to initialise:', err.message); process.exit(1); });
