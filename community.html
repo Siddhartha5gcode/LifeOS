@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Community — LifeOS & Sync | Writers, Creators & Readers</title>
+  <meta name="description" content="Join the LifeOS & Sync community. Participate in writing challenges, weekly blog hops, book reviews, and connect with fellow creators.">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing:border-box; margin:0; padding:0; font-family:'Inter',sans-serif; }
+    :root { --mustard:#e5ad38; --green:#163a24; --red:#9e2a2b; --cream:#fbf7ee; }
+    body { background:var(--mustard); color:var(--green); min-height:100vh; }
+
+    header {
+      background:var(--cream); border-bottom:3px solid var(--green);
+      padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center;
+      position:sticky; top:0; z-index:100; box-shadow:0 4px 0 var(--green);
+    }
+    .brand { display:flex; align-items:center; gap:0.6rem; text-decoration:none; color:var(--green); font-family:'Outfit',sans-serif; font-weight:900; font-size:1.4rem; }
+    .brand-icon { background:var(--red); color:white; padding:0.3rem 0.6rem; border-radius:0.5rem; border:2px solid var(--green); }
+    nav { display:flex; gap:0.4rem; flex-wrap:wrap; }
+    nav a { color:var(--green); text-decoration:none; font-weight:700; font-size:0.82rem; padding:0.4rem 0.85rem; border-radius:2rem; border:2px solid transparent; transition:all 0.2s; }
+    nav a:hover, nav a.active { background:var(--green); color:white; }
+
+    .hero {
+      background:var(--green); color:var(--cream);
+      padding:4rem 2rem; text-align:center; position:relative; overflow:hidden;
+    }
+    .hero::before { content:''; position:absolute; bottom:-80px; left:-80px; width:250px; height:250px; background:var(--mustard); opacity:0.1; border-radius:50%; }
+    .hero-tag { font-size:0.72rem; font-weight:900; color:var(--mustard); letter-spacing:2px; text-transform:uppercase; margin-bottom:0.6rem; }
+    .hero h1 { font-family:'Outfit',sans-serif; font-size:3rem; font-weight:900; color:var(--mustard); line-height:1.1; margin-bottom:1rem; }
+    .hero p { font-size:0.95rem; color:rgba(251,247,238,0.85); max-width:580px; margin:0 auto 2rem; line-height:1.6; }
+
+    .container { max-width:1100px; margin:0 auto; padding:3rem 1.5rem; }
+
+    .card { background:var(--cream); border:2.5px solid var(--green); box-shadow:5px 5px 0 var(--green); border-radius:1rem; padding:1.5rem; transition:transform 0.18s, box-shadow 0.18s; }
+    .card:hover { transform:translate(-2px,-2px); box-shadow:7px 7px 0 var(--green); }
+
+    .grid-3 { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.25rem; }
+    .grid-2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1.25rem; }
+
+    .section-tag { font-size:0.7rem; font-weight:900; color:var(--red); letter-spacing:2px; text-transform:uppercase; margin-bottom:0.4rem; }
+    .section-title { font-family:'Outfit',sans-serif; font-size:1.9rem; font-weight:900; color:var(--green); margin-bottom:0.75rem; }
+
+    .badge { display:inline-block; padding:0.25rem 0.7rem; border-radius:2rem; font-size:0.72rem; font-weight:800; border:1.5px solid var(--green); }
+    .b-red { background:rgba(158,42,43,0.15); color:var(--red); }
+    .b-gold { background:rgba(229,173,56,0.3); color:#a16207; }
+    .b-green { background:rgba(34,197,94,0.15); color:#15803d; }
+    .b-purple { background:rgba(168,85,247,0.15); color:#6b21a8; }
+
+    .btn { display:inline-block; padding:0.75rem 1.5rem; font-weight:800; font-size:0.85rem; border-radius:0.65rem; text-decoration:none; cursor:pointer; border:2.5px solid var(--green); box-shadow:4px 4px 0 var(--green); transition:transform 0.15s, box-shadow 0.15s; }
+    .btn:hover { transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--green); }
+    .btn-gold { background:var(--mustard); color:var(--green); }
+    .btn-green { background:var(--green); color:white; }
+    .btn-red { background:var(--red); color:white; }
+
+    /* CHALLENGE CARDS */
+    .challenge-card {
+      background:var(--cream); border:2.5px solid var(--green); box-shadow:5px 5px 0 var(--green); border-radius:1rem;
+      padding:1.5rem; display:flex; flex-direction:column; gap:0.5rem;
+    }
+    .challenge-header { display:flex; justify-content:space-between; align-items:flex-start; }
+    .challenge-icon { font-size:2rem; }
+    .challenge-title { font-family:'Outfit',sans-serif; font-size:1.1rem; font-weight:900; color:var(--green); margin-top:0.5rem; }
+    .challenge-desc { font-size:0.82rem; color:rgba(22,58,36,0.78); line-height:1.5; }
+    .challenge-meta { display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:0.4rem; }
+
+    /* NEWSLETTER */
+    .newsletter-box {
+      background:var(--red); color:white; border-radius:1.25rem; padding:2.5rem;
+      border:3px solid var(--green); box-shadow:8px 8px 0 var(--green); text-align:center;
+    }
+    .newsletter-box h2 { font-family:'Outfit',sans-serif; font-size:1.8rem; font-weight:900; margin-bottom:0.5rem; color:var(--mustard); }
+    .newsletter-box p { font-size:0.88rem; opacity:0.9; margin-bottom:1.5rem; }
+    .nl-form { display:flex; gap:0.75rem; max-width:480px; margin:0 auto; flex-wrap:wrap; justify-content:center; }
+    .nl-form input { flex:1; min-width:220px; padding:0.75rem 1rem; border:2.5px solid var(--green); border-radius:0.6rem; font-size:0.9rem; background:white; color:var(--green); outline:none; }
+
+    /* BLOG HOP */
+    .hop-card { background:var(--mustard); border:2.5px solid var(--green); border-radius:1rem; padding:1.25rem; box-shadow:4px 4px 0 var(--green); }
+
+    /* LEADERBOARD */
+    .lb-row { display:flex; align-items:center; gap:1rem; padding:0.75rem 1rem; background:white; border-radius:0.6rem; border:1.5px solid rgba(22,58,36,0.2); margin-bottom:0.5rem; }
+    .lb-rank { font-family:'Outfit',sans-serif; font-size:1.5rem; font-weight:900; color:var(--red); min-width:2rem; text-align:center; }
+    .lb-name { font-weight:800; font-size:0.9rem; color:var(--green); flex:1; }
+    .lb-count { font-size:0.78rem; font-weight:700; color:var(--red); }
+
+    footer { background:var(--green); color:white; padding:2rem; text-align:center; font-size:0.8rem; }
+    footer a { color:var(--mustard); text-decoration:underline; margin:0 0.4rem; }
+
+    @media(max-width:768px) {
+      .hero h1 { font-size:2rem; }
+      header { flex-direction:column; gap:0.75rem; padding:1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="brand">
+    <span class="brand-icon">⚡</span>
+    <span>LifeOS & Sync</span>
+  </a>
+  <nav>
+    <a href="index.html">🏠 Home</a>
+    <a href="blogs.html">📰 Blogs</a>
+    <a href="community.html" class="active">🌍 Community</a>
+    <a href="about.html">👤 About Us</a>
+    <a href="coming-soon.html">🚀 Join Waitlist</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">Welcome to the Community</div>
+  <h1>Write. Connect.<br>Grow Together.</h1>
+  <p>LifeOS & Sync is a community for engineers, homemakers, writers, and readers — come share your story, join a writing challenge, and be part of something real.</p>
+  <div style="display:flex; justify-content:center; gap:1rem; flex-wrap:wrap;">
+    <a href="blogs.html" class="btn btn-gold">✍️ Start Writing</a>
+    <a href="about.html" class="btn" style="background:rgba(255,255,255,0.12); color:white; border-color:rgba(255,255,255,0.4);">📖 Our Story</a>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- COMMUNITY PROGRAMS — inspired by BlogChatter's initiatives -->
+  <div style="margin-bottom:3rem;">
+    <div class="section-tag">Community Programs</div>
+    <div class="section-title">Initiatives & Challenges</div>
+    <div class="grid-2">
+
+      <div class="challenge-card">
+        <div class="challenge-header">
+          <div class="challenge-icon">🔤</div>
+          <span class="badge b-red">Annual Challenge</span>
+        </div>
+        <div class="challenge-title">#LifeOSA2Z — Blogging A to Z</div>
+        <div class="challenge-desc">Publish 26 blog posts in 26 days — one for each letter of the alphabet. A legendary community challenge that has helped thousands of writers build the habit of consistent publishing.</div>
+        <div class="challenge-meta">
+          <span class="badge b-gold">📅 Starts Jan 2027</span>
+          <span class="badge b-green">All Categories</span>
+        </div>
+        <a href="blogs.html" class="btn btn-green" style="margin-top:0.75rem; font-size:0.78rem; padding:0.5rem 1rem; width:fit-content;">✍️ Prepare Now</a>
+      </div>
+
+      <div class="challenge-card">
+        <div class="challenge-header">
+          <div class="challenge-icon">🔁</div>
+          <span class="badge b-gold">Weekly Event</span>
+        </div>
+        <div class="challenge-title">Weekly Blog Hop</div>
+        <div class="challenge-desc">Every Monday a new theme drops. Members publish a blog post on the weekly theme, share it in comments, and discover and read each other's posts. Traffic. Community. Growth.</div>
+        <div class="challenge-meta">
+          <span class="badge b-purple">📅 Every Monday</span>
+          <span class="badge b-green">All Writers Welcome</span>
+        </div>
+        <a href="blogs.html" class="btn btn-gold" style="margin-top:0.75rem; font-size:0.78rem; padding:0.5rem 1rem; width:fit-content;">🔁 Join This Week's Hop</a>
+      </div>
+
+      <div class="challenge-card">
+        <div class="challenge-header">
+          <div class="challenge-icon">⚙️</div>
+          <span class="badge b-purple">Tech Series</span>
+        </div>
+        <div class="challenge-title">#BuildInPublic — Engineering Stories</div>
+        <div class="challenge-desc">Share what you're building, the mistakes you made, and the lessons learned. Authentic engineering stories from developers, makers, and product creators.</div>
+        <div class="challenge-meta">
+          <span class="badge b-gold">Ongoing</span>
+          <span class="badge b-purple">Tech Category</span>
+        </div>
+        <a href="blogs.html" class="btn btn-red" style="margin-top:0.75rem; font-size:0.78rem; padding:0.5rem 1rem; width:fit-content;">⚙️ Share Your Build</a>
+      </div>
+
+      <div class="challenge-card">
+        <div class="challenge-header">
+          <div class="challenge-icon">🌱</div>
+          <span class="badge b-green">Social Initiative</span>
+        </div>
+        <div class="challenge-title">Be a Voice — Write for Change</div>
+        <div class="challenge-desc">Use your blog to highlight issues that matter — personal finance struggles, daily life challenges, community stories. Your honest voice can start important conversations.</div>
+        <div class="challenge-meta">
+          <span class="badge b-gold">Always Open</span>
+          <span class="badge b-red">Personal & Lifestyle</span>
+        </div>
+        <a href="blogs.html" class="btn btn-green" style="margin-top:0.75rem; font-size:0.78rem; padding:0.5rem 1rem; width:fit-content;">🌱 Write Your Story</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- THIS WEEK'S BLOG HOP THEME -->
+  <div style="margin-bottom:3rem;">
+    <div class="section-tag">This Week's Prompt</div>
+    <div class="section-title">Weekly Blog Hop Theme</div>
+    <div class="hop-card">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem;">
+        <div>
+          <div style="font-size:0.72rem; font-weight:900; color:var(--red); margin-bottom:0.3rem;">WEEK OF AUG 28, 2026</div>
+          <h2 style="font-family:'Outfit',sans-serif; font-size:1.7rem; font-weight:900; color:var(--green); margin-bottom:0.5rem;">"The One App I Can't Live Without"</h2>
+          <p style="font-size:0.88rem; color:rgba(22,58,36,0.85); line-height:1.5; max-width:560px;">Write about a tool, app, or habit that has genuinely transformed your daily life. Honest, personal stories only — no sponsored content.</p>
+          <div style="margin-top:1rem; display:flex; gap:0.5rem; flex-wrap:wrap;">
+            <span class="badge b-green">📅 Deadline: Sunday Aug 31</span>
+            <span class="badge b-red">#LifeOSBlogHop</span>
+          </div>
+        </div>
+        <a href="blogs.html" class="btn btn-green" style="align-self:center;">✍️ Submit Post</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMMUNITY LEADERBOARD -->
+  <div style="margin-bottom:3rem;">
+    <div class="section-tag">Community</div>
+    <div class="section-title">Top Contributors This Month</div>
+    <div style="max-width:600px;">
+      <div class="lb-row"><div class="lb-rank">🥇</div><div class="lb-name">Siddhartha</div><span class="badge b-gold">Founder</span><div class="lb-count">4 Posts</div></div>
+      <div class="lb-row"><div class="lb-rank">🥈</div><div class="lb-name">Priya K.</div><span class="badge b-green">Member</span><div class="lb-count">1 Comment</div></div>
+      <div class="lb-row"><div class="lb-rank">🥉</div><div class="lb-name">Arjun Dev</div><span class="badge b-green">Member</span><div class="lb-count">1 Comment</div></div>
+      <div class="lb-row" style="opacity:0.6; border-style:dashed;"><div class="lb-rank">4</div><div class="lb-name">Your name here?</div><span class="badge b-red">Join Now</span><div class="lb-count">0 Posts</div></div>
+    </div>
+  </div>
+
+  <!-- HOW TO JOIN -->
+  <div style="margin-bottom:3rem;">
+    <div class="section-tag">Get Started</div>
+    <div class="section-title">How to Join the Community</div>
+    <div class="grid-3">
+      <div class="card" style="text-align:center;">
+        <div style="font-size:2.5rem; margin-bottom:0.5rem;">📝</div>
+        <div style="font-family:'Outfit',sans-serif; font-weight:900; font-size:1.1rem; margin-bottom:0.4rem;">1. Sign Up Free</div>
+        <p style="font-size:0.82rem; color:rgba(22,58,36,0.75);">Create your account with Name, Mobile & Gmail. It takes 30 seconds. No credit card needed.</p>
+        <a href="index.html" class="btn btn-green" style="margin-top:1rem; font-size:0.78rem; padding:0.5rem 1rem; display:inline-block;">🚀 Sign Up Now</a>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:2.5rem; margin-bottom:0.5rem;">✍️</div>
+        <div style="font-family:'Outfit',sans-serif; font-weight:900; font-size:1.1rem; margin-bottom:0.4rem;">2. Publish Your First Blog</div>
+        <p style="font-size:0.82rem; color:rgba(22,58,36,0.75);">Go to Public Blogs and hit "Publish". Write about anything — tech, life, finance, habits. Your story matters.</p>
+        <a href="blogs.html" class="btn btn-gold" style="margin-top:1rem; font-size:0.78rem; padding:0.5rem 1rem; display:inline-block;">📰 Go to Blogs</a>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:2.5rem; margin-bottom:0.5rem;">🤝</div>
+        <div style="font-family:'Outfit',sans-serif; font-weight:900; font-size:1.1rem; margin-bottom:0.4rem;">3. Engage & Connect</div>
+        <p style="font-size:0.82rem; color:rgba(22,58,36,0.75);">Like and comment on fellow members' posts. Join the weekly blog hop. Participate in challenges.</p>
+        <a href="blogs.html" class="btn btn-red" style="margin-top:1rem; font-size:0.78rem; padding:0.5rem 1rem; display:inline-block;">❤️ Read Community Posts</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEWSLETTER -->
+  <div class="newsletter-box" style="margin-bottom:2rem;">
+    <h2>📬 Stay in the Loop</h2>
+    <p>Get weekly blog hop themes, community challenge announcements, and curated post picks — delivered to your inbox.</p>
+    <div class="nl-form">
+      <input type="email" id="nlEmail" placeholder="Enter your email address...">
+      <button class="btn btn-gold" onclick="subscribeNewsletter()">Subscribe →</button>
+    </div>
+    <div id="nlMsg" style="margin-top:0.75rem; font-size:0.82rem; font-weight:700; display:none;"></div>
+  </div>
+
+</div>
+
+<footer>
+  <a href="index.html">Home</a> |
+  <a href="blogs.html">Blogs</a> |
+  <a href="community.html">Community</a> |
+  <a href="about.html">About Us</a> |
+  <a href="privacy.html">Privacy Policy</a> |
+  <a href="accessibility.html">Accessibility</a>
+  <div style="margin-top:0.5rem; color:rgba(255,255,255,0.6);">© 2026 LifeOS & Sync. Built with ❤️ by Siddhartha. Powered by Render & Drive.</div>
+</footer>
+
+<script>
+  function subscribeNewsletter() {
+    const email = document.getElementById('nlEmail').value.trim();
+    const msg = document.getElementById('nlMsg');
+    if (!email || !email.includes('@')) {
+      msg.style.display = 'block';
+      msg.style.color = '#ff9999';
+      msg.textContent = '⚠️ Please enter a valid email address.';
+      return;
+    }
+    msg.style.display = 'block';
+    msg.style.color = '#e5ad38';
+    msg.textContent = `🎉 Thank you! ${email} has been subscribed to LifeOS & Sync community updates.`;
+    document.getElementById('nlEmail').value = '';
+  }
+</script>
+
+</body>
+</html>
