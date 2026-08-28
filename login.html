@@ -5,392 +5,67 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Log in / Sign up | LifeOS Community & Blogchatter</title>
   <meta name="description" content="Access your LifeOS account or sign up for a new account.">
-  
-  <!-- Google Fonts & FontAwesome -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Open Sans', sans-serif;
-    }
-
-    body {
-      background-color: #f4f6f9;
-      color: #333333;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* Top Blogchatter Style Navigation Bar */
-    header.bc-header {
-      background: #ffffff;
-      border-bottom: 1px solid #e0e0e0;
-      padding: 0.8rem 2.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.03);
-    }
-
-    .bc-brand {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      text-decoration: none;
-      font-weight: 800;
-      font-size: 1.6rem;
-      color: #1a1a1a;
-    }
-
-    .bc-brand-badge {
-      background: linear-gradient(135deg, #0d6efd, #0056b3);
-      color: white;
-      padding: 0.3rem 0.6rem;
-      border-radius: 8px;
-      font-size: 1.1rem;
-    }
-
-    nav.bc-nav {
-      display: flex;
-      align-items: center;
-      gap: 1.4rem;
-    }
-
-    nav.bc-nav a {
-      text-decoration: none;
-      color: #555555;
-      font-weight: 700;
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
-      transition: color 0.2s ease;
-    }
-
-    nav.bc-nav a:hover, nav.bc-nav a.active {
-      color: #0d6efd;
-    }
-
-    .bc-search-btn {
-      background: #0d6efd;
-      color: white;
-      width: 34px;
-      height: 34px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 4px;
-      font-size: 0.85rem;
-      cursor: pointer;
-    }
-
-    /* Royal Blue Banner */
-    .hero-blue-banner {
-      background: #0056b3;
-      color: #ffffff;
-      padding: 1.2rem;
-      text-align: center;
-    }
-
-    .hero-blue-banner h1 {
-      font-size: 1.75rem;
-      font-weight: 700;
-      margin: 0;
-    }
-
-    /* Main Container */
-    main.main-content {
-      max-width: 1120px;
-      width: 100%;
-      margin: 2.5rem auto;
-      padding: 0 1.25rem;
-      flex: 1;
-    }
-
-    .dual-cards-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-      align-items: start;
-    }
-
-    @media (max-width: 860px) {
-      .dual-cards-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* White Card Box */
-    .card-box {
-      background: #ffffff;
-      border-radius: 8px;
-      padding: 2rem;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
-      border: 1px solid #e2e8f0;
-    }
-
-    .card-header-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.5rem;
-    }
-
-    .card-title-text {
-      font-size: 1.35rem;
-      font-weight: 700;
-      color: #2b2b2b;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
-
-    .card-title-text i {
-      color: #0d6efd;
-      font-size: 1.4rem;
-    }
-
-    .req-fields-text {
-      font-size: 0.72rem;
-      color: #888888;
-      font-style: italic;
-    }
-
-    /* Social buttons */
-    .social-btn-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
-      margin-bottom: 1.25rem;
-    }
-
-    @media (max-width: 480px) {
-      .social-btn-grid { grid-template-columns: 1fr; }
-    }
-
-    .btn-facebook {
-      background: #3b5998;
-      color: white;
-      border: none;
-      padding: 0.65rem 0.5rem;
-      border-radius: 4px;
-      font-weight: 600;
-      font-size: 0.85rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      transition: background 0.2s;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Open Sans', sans-serif; }
+    body { background-color: #f4f6f9; color: #333; min-height: 100vh; display: flex; flex-direction: column; }
+    header.bc-header { background: #fff; border-bottom: 1px solid #e0e0e0; padding: 0.8rem 2.5rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.03); }
+    .bc-brand { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; font-weight: 800; font-size: 1.6rem; color: #1a1a1a; }
+    .bc-brand-badge { background: linear-gradient(135deg, #0d6efd, #0056b3); color: white; padding: 0.3rem 0.6rem; border-radius: 8px; font-size: 1.1rem; }
+    nav.bc-nav { display: flex; align-items: center; gap: 1.4rem; }
+    nav.bc-nav a { text-decoration: none; color: #555; font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.6px; transition: color 0.2s; }
+    nav.bc-nav a:hover, nav.bc-nav a.active { color: #0d6efd; }
+    .bc-search-btn { background: #0d6efd; color: white; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 4px; font-size: 0.85rem; cursor: pointer; }
+    .hero-blue-banner { background: #0056b3; color: #fff; padding: 1.2rem; text-align: center; }
+    .hero-blue-banner h1 { font-size: 1.75rem; font-weight: 700; margin: 0; }
+    main.main-content { max-width: 1120px; width: 100%; margin: 2.5rem auto; padding: 0 1.25rem; flex: 1; }
+    .dual-cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
+    @media (max-width: 860px) { .dual-cards-grid { grid-template-columns: 1fr; } }
+    .card-box { background: #fff; border-radius: 8px; padding: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; }
+    .card-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+    .card-title-text { font-size: 1.35rem; font-weight: 700; color: #2b2b2b; display: flex; align-items: center; gap: 0.6rem; }
+    .card-title-text i { color: #0d6efd; font-size: 1.4rem; }
+    .req-fields-text { font-size: 0.72rem; color: #888; font-style: italic; }
+    .social-btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.25rem; }
+    @media (max-width: 480px) { .social-btn-grid { grid-template-columns: 1fr; } }
+    .btn-facebook { background: #3b5998; color: white; border: none; padding: 0.65rem 0.5rem; border-radius: 4px; font-weight: 600; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: background 0.2s; }
     .btn-facebook:hover { background: #2d4373; }
-
-    .btn-google {
-      background: #ffffff;
-      color: #555555;
-      border: 1px solid #cccccc;
-      padding: 0.65rem 0.5rem;
-      border-radius: 4px;
-      font-weight: 600;
-      font-size: 0.85rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      transition: background 0.2s;
-    }
-
+    .btn-google { background: #fff; color: #555; border: 1px solid #ccc; padding: 0.65rem 0.5rem; border-radius: 4px; font-weight: 600; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: background 0.2s; }
     .btn-google:hover { background: #f8f9fa; }
-
-    /* Or Divider */
-    .or-divider {
-      text-align: center;
-      position: relative;
-      margin: 1.25rem 0;
-    }
-
-    .or-divider::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: #e0e0e0;
-    }
-
-    .or-divider span {
-      position: relative;
-      background: #ffffff;
-      padding: 0 0.8rem;
-      color: #888888;
-      font-size: 0.82rem;
-      font-style: italic;
-    }
-
-    /* Form Fields */
-    .form-group {
-      margin-bottom: 1rem;
-    }
-
-    .form-row-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
-    }
-
-    input.input-field {
-      width: 100%;
-      padding: 0.65rem 0.85rem;
-      border: 1px solid #cccccc;
-      border-radius: 4px;
-      font-size: 0.88rem;
-      color: #333333;
-      outline: none;
-      transition: border 0.2s, box-shadow 0.2s;
-    }
-
-    input.input-field:focus {
-      border-color: #0d6efd;
-      box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
-    }
-
-    /* Options row */
-    .options-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.25rem;
-      font-size: 0.82rem;
-    }
-
-    .checkbox-label {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      color: #555555;
-      cursor: pointer;
-    }
-
-    .forgot-link {
-      color: #666666;
-      text-decoration: none;
-    }
-
-    .forgot-link:hover {
-      color: #0d6efd;
-      text-decoration: underline;
-    }
-
-    /* Primary submit button */
-    .btn-submit-blue {
-      width: 100%;
-      background: #0056b3;
-      color: white;
-      border: none;
-      padding: 0.75rem;
-      border-radius: 4px;
-      font-weight: 700;
-      font-size: 0.95rem;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .btn-submit-blue:hover {
-      background: #004494;
-    }
-
-    /* ReCAPTCHA Box */
-    .recaptcha-container {
-      border: 1px solid #d3d3d3;
-      background: #f9f9f9;
-      border-radius: 3px;
-      padding: 0.6rem 0.8rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.25rem;
-      max-width: 280px;
-    }
-
-    .recaptcha-left {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      font-size: 0.82rem;
-      color: #333333;
-    }
-
-    .recaptcha-right {
-      text-align: center;
-      font-size: 0.6rem;
-      color: #666666;
-    }
-
-    .recaptcha-right i {
-      font-size: 1.1rem;
-      color: #1a73e8;
-      display: block;
-    }
-
-    /* Toast */
-    .toast-box {
-      position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-      z-index: 9999;
-    }
-
-    .toast-item {
-      background: #323232;
-      color: white;
-      padding: 0.8rem 1.25rem;
-      border-radius: 4px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      margin-top: 0.5rem;
-    }
-
-    /* Back to Top Floating Button */
-    .back-to-top-btn {
-      position: fixed;
-      bottom: 1.5rem;
-      right: 1.5rem;
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      background: #555555;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
-      transition: background 0.2s;
-    }
-
-    .back-to-top-btn:hover { background: #333333; }
+    .or-divider { text-align: center; position: relative; margin: 1.25rem 0; }
+    .or-divider::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: #e0e0e0; }
+    .or-divider span { position: relative; background: #fff; padding: 0 0.8rem; color: #888; font-size: 0.82rem; font-style: italic; }
+    .form-group { margin-bottom: 1rem; }
+    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    input.input-field { width: 100%; padding: 0.65rem 0.85rem; border: 1px solid #ccc; border-radius: 4px; font-size: 0.88rem; color: #333; outline: none; transition: border 0.2s, box-shadow 0.2s; }
+    input.input-field:focus { border-color: #0d6efd; box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15); }
+    .options-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; font-size: 0.82rem; }
+    .checkbox-label { display: flex; align-items: center; gap: 0.4rem; color: #555; cursor: pointer; }
+    .forgot-link { color: #666; text-decoration: none; }
+    .forgot-link:hover { color: #0d6efd; text-decoration: underline; }
+    .btn-submit-blue { width: 100%; background: #0056b3; color: white; border: none; padding: 0.75rem; border-radius: 4px; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: background 0.2s; }
+    .btn-submit-blue:hover { background: #004494; }
+    .recaptcha-container { border: 1px solid #d3d3d3; background: #f9f9f9; border-radius: 3px; padding: 0.6rem 0.8rem; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; max-width: 280px; }
+    .recaptcha-left { display: flex; align-items: center; gap: 0.6rem; font-size: 0.82rem; color: #333; }
+    .recaptcha-right { text-align: center; font-size: 0.6rem; color: #666; }
+    .recaptcha-right i { font-size: 1.1rem; color: #1a73e8; display: block; }
+    .toast-box { position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; }
+    .toast-item { background: #323232; color: white; padding: 0.8rem 1.25rem; border-radius: 4px; font-size: 0.9rem; font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.2); margin-top: 0.5rem; }
+    .back-to-top-btn { position: fixed; bottom: 1.5rem; right: 1.5rem; width: 38px; height: 38px; border-radius: 50%; background: #555; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.25); transition: background 0.2s; }
+    .back-to-top-btn:hover { background: #333; }
   </style>
 </head>
 <body>
-
-  <!-- Blogchatter Navbar -->
   <header class="bc-header">
-    <a href="index.html" class="bc-brand">
+    <a href="index.html?authed=1" class="bc-brand">
       <span class="bc-brand-badge">⚡</span>
       <span>LifeOS</span>
     </a>
     <nav class="bc-nav">
-      <a href="index.html">HOME</a>
+      <a href="index.html?authed=1">HOME</a>
       <a href="about.html">OUR STORY</a>
       <a href="blogs.html">PUBLIC BLOGS</a>
       <a href="login-signup.html" class="active">LOGIN</a>
@@ -398,16 +73,14 @@
     </nav>
   </header>
 
-  <!-- Royal Blue Title Banner -->
   <div class="hero-blue-banner">
     <h1>Log in / Sign up</h1>
   </div>
 
-  <!-- Dual Panel Cards Container -->
   <main class="main-content">
     <div class="dual-cards-grid">
 
-      <!-- 1. LEFT CARD: Existing User -->
+      <!-- LEFT CARD: Existing User -->
       <div class="card-box">
         <div class="card-header-row">
           <div class="card-title-text">
@@ -415,8 +88,6 @@
             <span>Existing User</span>
           </div>
         </div>
-
-        <!-- Social Login Row -->
         <div class="social-btn-grid">
           <button type="button" class="btn-facebook" onclick="socialAuth('Facebook')">
             <i class="fa-brands fa-facebook-f"></i> Login with Facebook
@@ -425,11 +96,7 @@
             <svg width="16" height="16" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.74-.06-1.28-.19-1.84H9v3.34h4.96c-.1.83-.64 2.08-1.84 2.92l2.84 2.2c1.7-1.57 2.68-3.88 2.68-6.62z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.84-2.2c-.76.53-1.78.9-3.12.9-2.38 0-4.41-1.57-5.13-3.72L.97 13.06C2.45 16 5.48 18 9 18z"/><path fill="#FBBC05" d="M3.87 10.8c-.2-.59-.31-1.22-.31-1.8s.11-1.21.31-1.8L.97 4.94C.35 6.16 0 7.54 0 9s.35 2.84.97 4.06l2.9-2.26z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0 5.48 0 2.45 2 0 4.94l2.9 2.26C3.59 5.05 5.62 3.58 9 3.58z"/></svg> Login with Google
           </button>
         </div>
-
-        <div class="or-divider">
-          <span>Or</span>
-        </div>
-
+        <div class="or-divider"><span>Or</span></div>
         <form id="formLogin" onsubmit="return handleLoginSubmit(event)">
           <div class="form-group">
             <input type="email" id="loginEmail" class="input-field" placeholder="Email*" required>
@@ -437,7 +104,6 @@
           <div class="form-group">
             <input type="password" id="loginPassword" class="input-field" placeholder="Password*" required>
           </div>
-
           <div class="options-row">
             <label class="checkbox-label">
               <input type="checkbox" id="rememberMeCheck" checked>
@@ -445,12 +111,11 @@
             </label>
             <a href="javascript:void(0)" class="forgot-link" onclick="handleForgotPass()">Forgot Password?</a>
           </div>
-
           <button type="submit" class="btn-submit-blue">Log In</button>
         </form>
       </div>
 
-      <!-- 2. RIGHT CARD: New Registration -->
+      <!-- RIGHT CARD: New Registration -->
       <div class="card-box">
         <div class="card-header-row">
           <div class="card-title-text">
@@ -459,8 +124,6 @@
           </div>
           <span class="req-fields-text">* Required Fields</span>
         </div>
-
-        <!-- Social Login Row -->
         <div class="social-btn-grid">
           <button type="button" class="btn-facebook" onclick="socialAuth('Facebook')">
             <i class="fa-brands fa-facebook-f"></i> Continue with Facebook
@@ -469,41 +132,30 @@
             <svg width="16" height="16" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.74-.06-1.28-.19-1.84H9v3.34h4.96c-.1.83-.64 2.08-1.84 2.92l2.84 2.2c1.7-1.57 2.68-3.88 2.68-6.62z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.84-2.2c-.76.53-1.78.9-3.12.9-2.38 0-4.41-1.57-5.13-3.72L.97 13.06C2.45 16 5.48 18 9 18z"/><path fill="#FBBC05" d="M3.87 10.8c-.2-.59-.31-1.22-.31-1.8s.11-1.21.31-1.8L.97 4.94C.35 6.16 0 7.54 0 9s.35 2.84.97 4.06l2.9-2.26z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0 5.48 0 2.45 2 0 4.94l2.9 2.26C3.59 5.05 5.62 3.58 9 3.58z"/></svg> Continue with Google
           </button>
         </div>
-
-        <div class="or-divider">
-          <span>Or</span>
-        </div>
-
+        <div class="or-divider"><span>Or</span></div>
         <form id="formRegister" onsubmit="return handleRegisterSubmit(event)">
           <div class="form-group form-row-2">
             <input type="text" id="regFirstName" class="input-field" placeholder="First Name*" required>
             <input type="text" id="regLastName" class="input-field" placeholder="Last Name*" required>
           </div>
-
           <div class="form-group">
             <input type="tel" id="regMobile" class="input-field" placeholder="Mobile *" required>
           </div>
-
           <div class="form-group">
             <input type="email" id="regEmail" class="input-field" placeholder="Email*" required>
           </div>
-
           <div class="form-group">
             <input type="password" id="regPassword" class="input-field" placeholder="Password*" required>
           </div>
-
           <div class="form-group">
             <input type="password" id="regConfirmPassword" class="input-field" placeholder="Confirm Password*" required>
           </div>
-
           <div class="form-group" style="margin-bottom: 0.8rem;">
             <label class="checkbox-label" style="font-size:0.82rem;">
               <input type="checkbox" id="termsCheck" required>
               <span>Accept <a href="privacy.html" style="color:#0d6efd; text-decoration:none;">Terms and conditions</a></span>
             </label>
           </div>
-
-          <!-- ReCAPTCHA Box -->
           <div class="recaptcha-container">
             <div class="recaptcha-left">
               <input type="checkbox" id="recaptchaCheck" required style="width:20px; height:20px;">
@@ -514,7 +166,6 @@
               reCAPTCHA
             </div>
           </div>
-
           <button type="submit" class="btn-submit-blue">Register</button>
         </form>
       </div>
@@ -523,7 +174,6 @@
   </main>
 
   <div class="toast-box" id="toastContainer"></div>
-
   <div class="back-to-top-btn" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="Back to Top">
     <i class="fa-solid fa-angle-up"></i>
   </div>
@@ -541,8 +191,7 @@
     }
 
     function saveUserSession(userData) {
-      const session = { success: true, user: userData };
-      localStorage.setItem('lifeos_user_session', JSON.stringify(session));
+      localStorage.setItem('lifeos_user_session', JSON.stringify({ success: true, user: userData }));
       localStorage.setItem('m_account', JSON.stringify({
         isLoggedIn: true,
         name: userData.name || 'Siddhartha',
@@ -550,6 +199,16 @@
         mobile: userData.mobile || ''
       }));
       localStorage.setItem('lifeos_active_workspace', 'private');
+    }
+
+    function getRedirectTarget() {
+      const params = new URLSearchParams(window.location.search);
+      let target = params.get('redirect') || 'index.html';
+      // Append ?authed=1 so index.html knows login succeeded and won't loop back
+      if (target === 'index.html' || target.startsWith('index.html?')) {
+        target = 'index.html?authed=1';
+      }
+      return target;
     }
 
     function handleLoginSubmit(e) {
@@ -566,18 +225,15 @@
       saveUserSession({ name: userName.charAt(0).toUpperCase() + userName.slice(1), email: email });
       showToast('✅ Logged in successfully!');
 
-      // Async sync with Render backend
       fetch(RENDER_SYNC_URL + '/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ login: email, email: email, password: password })
-      }).then(res => res.json()).then(data => {
-        if (data && data.success && data.user) saveUserSession(data.user);
+      }).then(r => r.json()).then(d => {
+        if (d && d.success && d.user) saveUserSession(d.user);
       }).catch(() => {});
 
-      const params = new URLSearchParams(window.location.search);
-      const targetUrl = params.get('redirect') || 'index.html';
-      setTimeout(() => { window.location.href = targetUrl; }, 600);
+      setTimeout(() => { window.location.href = getRedirectTarget(); }, 600);
       return false;
     }
 
@@ -596,20 +252,18 @@
       }
 
       const fullName = `${firstName} ${lastName}`.trim() || 'New Member';
-      saveUserSession({ name: fullName, email: email, mobile: mobile });
+      saveUserSession({ name: fullName, email, mobile });
       showToast('🎉 Account registered successfully!');
 
       fetch(RENDER_SYNC_URL + '/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: fullName, email, mobile, password: pass })
-      }).then(res => res.json()).then(data => {
-        if (data && data.success && data.user) saveUserSession(data.user);
+      }).then(r => r.json()).then(d => {
+        if (d && d.success && d.user) saveUserSession(d.user);
       }).catch(() => {});
 
-      const params = new URLSearchParams(window.location.search);
-      const targetUrl = params.get('redirect') || 'index.html';
-      setTimeout(() => { window.location.href = targetUrl; }, 600);
+      setTimeout(() => { window.location.href = getRedirectTarget(); }, 600);
       return false;
     }
 
@@ -619,16 +273,12 @@
         email: `siddhartha_${provider.toLowerCase()}@gmail.com`
       });
       showToast(`✅ Logged in with ${provider}!`);
-      const params = new URLSearchParams(window.location.search);
-      const targetUrl = params.get('redirect') || 'index.html';
-      setTimeout(() => { window.location.href = targetUrl; }, 600);
+      setTimeout(() => { window.location.href = getRedirectTarget(); }, 600);
     }
 
     function handleForgotPass() {
       const email = prompt('Enter your registered email for password recovery:');
-      if (email) {
-        showToast(`📩 Password recovery link sent to ${email}`);
-      }
+      if (email) showToast(`📩 Password recovery link sent to ${email}`);
     }
   </script>
 </body>

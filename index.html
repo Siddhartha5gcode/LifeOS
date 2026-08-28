@@ -6077,11 +6077,24 @@ function addBlogComment(blogId) {
 
 try {
   loadPublicBlogs();
-  const savedWs = localStorage.getItem('lifeos_active_workspace');
-  if (savedWs === 'public' || (!currentUser || !currentUser.isLoggedIn)) {
-    switchWorkspaceMode('public');
+
+  // If user is not authenticated, redirect them to the login page.
+  // ?authed=1 is appended by login-signup.html after saving session so we don't loop.
+  if (!currentUser || !currentUser.isLoggedIn) {
+    const params = new URLSearchParams(window.location.search);
+    if (!params.get('authed')) {
+      window.location.replace('login-signup.html?redirect=index.html');
+    } else {
+      // Came back from login but session still not set — show public as fallback
+      switchWorkspaceMode('public');
+    }
   } else {
-    switchWorkspaceMode('private');
+    const savedWs = localStorage.getItem('lifeos_active_workspace');
+    if (savedWs === 'public') {
+      switchWorkspaceMode('public');
+    } else {
+      switchWorkspaceMode('private');
+    }
   }
 
   const expDateEl = document.getElementById('mExpDate');
@@ -6093,6 +6106,7 @@ try {
   if (typeof checkWelcomeAuthGateway === 'function') checkWelcomeAuthGateway();
 } catch(err) {
   console.warn("LifeOS Initialization note:", err);
+
 }
 </script>
 </body>

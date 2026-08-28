@@ -552,6 +552,16 @@
       localStorage.setItem('lifeos_active_workspace', 'private');
     }
 
+    function getRedirectTarget() {
+      const params = new URLSearchParams(window.location.search);
+      let target = params.get('redirect') || 'index.html';
+      // Append ?authed=1 so index.html knows login succeeded and won't loop back
+      if (target.startsWith('index.html') || target === 'index.html') {
+        target = 'index.html?authed=1';
+      }
+      return target;
+    }
+
     function handleLoginSubmit(e) {
       if (e) e.preventDefault();
       const email = document.getElementById('loginEmail').value.trim();
@@ -566,7 +576,7 @@
       saveUserSession({ name: userName.charAt(0).toUpperCase() + userName.slice(1), email: email });
       showToast('✅ Logged in successfully!');
 
-      // Async sync with Render backend
+      // Async sync with Render backend (fire and forget)
       fetch(RENDER_SYNC_URL + '/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -575,9 +585,7 @@
         if (data && data.success && data.user) saveUserSession(data.user);
       }).catch(() => {});
 
-      const params = new URLSearchParams(window.location.search);
-      const targetUrl = params.get('redirect') || 'index.html';
-      setTimeout(() => { window.location.href = targetUrl; }, 600);
+      setTimeout(() => { window.location.href = getRedirectTarget(); }, 600);
       return false;
     }
 
@@ -607,9 +615,7 @@
         if (data && data.success && data.user) saveUserSession(data.user);
       }).catch(() => {});
 
-      const params = new URLSearchParams(window.location.search);
-      const targetUrl = params.get('redirect') || 'index.html';
-      setTimeout(() => { window.location.href = targetUrl; }, 600);
+      setTimeout(() => { window.location.href = getRedirectTarget(); }, 600);
       return false;
     }
 
@@ -619,9 +625,7 @@
         email: `siddhartha_${provider.toLowerCase()}@gmail.com`
       });
       showToast(`✅ Logged in with ${provider}!`);
-      const params = new URLSearchParams(window.location.search);
-      const targetUrl = params.get('redirect') || 'index.html';
-      setTimeout(() => { window.location.href = targetUrl; }, 600);
+      setTimeout(() => { window.location.href = getRedirectTarget(); }, 600);
     }
 
     function handleForgotPass() {
