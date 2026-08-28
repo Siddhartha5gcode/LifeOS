@@ -249,6 +249,72 @@
 
     const DEFAULT_SAMPLE_BLOGS = [
       {
+        id: "blog_100",
+        title: "🚀 Introducing LifeOS & Sync — Your Personal Life OS + Public Community Platform. Join Us!",
+        category: "Personal",
+        author: "Siddhartha",
+        excerpt: "I built LifeOS to solve a real problem: managing finances, daily records, bill reminders, and personal habits — all in one place, synced to the cloud. Now I'm opening it to you. Here's the full story and an invitation to join the community.",
+        content: `Hey everyone! 👋 I'm Siddhartha, a Full-Stack Engineer from India. Over the past few months I've been building something I truly believe in — and today I want to share it with the world.
+
+🌟 What is LifeOS?
+
+LifeOS is a personal productivity web app + mobile APK I built entirely from scratch. It solves a collection of everyday frustrations I was facing as someone who tracks finances carefully:
+
+• I track daily milk deliveries (Cow / Buffalo) from my local vendor — amounts, rates, and monthly billing.
+• I manage personal loans, home EMI calculations, and expense tracking.
+• I needed automated bill due-date reminders sent to my WhatsApp and Gmail.
+• I wanted to log habits daily and maintain journal notes in one place.
+• I wanted full cloud backup across devices — without trusting any third-party app.
+
+So I built it myself. 💪
+
+🔒 Two Modes — Personal & Public
+
+LifeOS has two completely separate workspaces:
+
+1. 🔒 Personal Space — Private tools only visible after signing in with your account. Your milk logs, finances, loans, bill reminders, cloud backup — all completely private.
+
+2. 🌍 Public Blog Platform — A community publishing platform where you can read and write engineering articles, personal stories, finance tips, and lifestyle reflections. Fully public, visible to anyone visiting.
+
+☁️ Cloud Sync Architecture
+
+One feature I'm really proud of is the backend sync system. LifeOS syncs your personal data in real-time to:
+• A Node.js + Express REST API deployed on Render Cloud
+• Google Drive (as a secondary JSON backup)
+
+Every 15 minutes your app data auto-backs up without you doing anything. Restore anytime from any device.
+
+📱 Android APK
+
+Yes, it works as a native Android app too! I built and deployed a signed APK using a Gradle build pipeline with automated Google Drive upload on CI.
+
+💌 Join the Community — Here's My Invitation
+
+If you're someone who:
+✅ Wants a clean, private personal tracker (not Google Sheets, not Notion — something truly yours)
+✅ Loves reading engineering and lifestyle articles
+✅ Wants to publish your own blog articles to a real community
+✅ Values direct cloud sync with zero third-party data sharing
+
+Then LifeOS & Sync is built for you.
+
+👉 Sign Up at: https://siddhartha12495.github.io/personal/
+• Create your free account with Name, Mobile & Gmail
+• Start tracking your personal data immediately
+• Read & publish community blogs
+
+I'd love for you to try it and tell me what features you'd like to see next. Drop a comment below or reach me at siddhartha12495@gmail.com. Let's build this community together! 🙌
+
+— Siddhartha`,
+        imageUrl: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&auto=format&fit=crop&q=80",
+        createdAt: "2026-08-28T17:24:00.000Z",
+        likes: 1,
+        comments: [
+          { author: "Priya K.", text: "This is exactly what I've been looking for! Signing up right now. The milk tracker feature is brilliant for daily logs. 🥛", date: "2026-08-28T17:30:00.000Z" },
+          { author: "Arjun Dev", text: "Great work Siddhartha! Love the idea of a personal cloud sync without any third-party app dependency. Very clean architecture.", date: "2026-08-28T17:45:00.000Z" }
+        ]
+      },
+      {
         id: "blog_101",
         title: "Building LifeOS: Direct Cloud Synchronization with Render & Drive",
         category: "Tech",
