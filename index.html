@@ -919,23 +919,60 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent-indigo); 
     <!-- User Profile Header Card -->
     <div class="m-card" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(168, 85, 247, 0.15)); border: 1px solid rgba(168, 85, 247, 0.3);">
       <div style="display:flex; align-items:center; gap:1rem; margin-bottom:1rem;">
-        <div style="width:54px; height:54px; border-radius:50%; background:linear-gradient(135deg, var(--accent-indigo), var(--accent-purple)); display:flex; align-items:center; justify-content:center; font-size:1.8rem; color:white; box-shadow:0 4px 12px rgba(99,102,241,0.4);">
+        <div style="width:54px; height:54px; border-radius:50%; background:linear-gradient(135deg, var(--accent-indigo), var(--accent-purple)); display:flex; align-items:center; justify-content:center; font-size:1.8rem; color:white; box-shadow:0 4px 12px rgba(99,102,241,0.4);" id="acctAvatar">
           👤
         </div>
         <div style="flex:1;">
-          <div style="font-weight:700; font-size:1.1rem; color:var(--text-main);" id="acctProfileName">Siddhartha</div>
-          <div style="font-size:0.75rem; color:var(--text-sub);" id="acctProfileEmail">siddhartha12495@gmail.com</div>
-          <div style="font-size:0.75rem; color:var(--accent-cyan); margin-top:0.2rem;" id="acctProfileMobile">📱 +91 9876543210</div>
-          <div style="margin-top:0.3rem;">
-            <span class="badge b-purple" id="acctBadge">PRO Member</span>
+          <div style="font-weight:700; font-size:1.1rem; color:var(--text-main);" id="acctProfileName">Guest User</div>
+          <div style="font-size:0.75rem; color:var(--text-sub);" id="acctProfileEmail">Not logged in</div>
+          <div style="font-size:0.75rem; color:var(--accent-cyan); margin-top:0.2rem;" id="acctProfileMobile">📱 —</div>
+          <div style="margin-top:0.3rem; display:flex; gap:0.3rem; flex-wrap:wrap;">
+            <span class="badge b-purple" id="acctRoleBadge">👑 Admin (Developer &amp; Owner)</span>
             <span class="badge b-green" id="acctStatusBadge">🟢 Logged In</span>
           </div>
         </div>
       </div>
       <div style="display:flex; gap:0.5rem;">
-        <button class="m-btn-sm" style="flex:1; background:var(--bg-glass); border:1px solid rgba(255,255,255,0.1); color:var(--text-main);" onclick="toggleAccountEditModal()">✏️ Edit Profile</button>
-        <button class="m-btn-sm" style="background:rgba(239,68,68,0.2); border:1px solid rgba(239,68,68,0.4); color:#f87171;" onclick="handleUserSignOut()">🚪 Sign Out</button>
+        <button class="m-btn-sm" style="flex:1; background:var(--bg-glass); border:1px solid rgba(255,255,255,0.1); color:var(--text-main); font-weight:700;" onclick="toggleAccountEditModal()">✏️ Edit Profile</button>
+        <button class="m-btn-sm" style="background:rgba(239,68,68,0.2); border:1px solid rgba(239,68,68,0.4); color:#f87171; font-weight:700;" onclick="handleUserSignOut()">🚪 Sign Out</button>
       </div>
+    </div>
+
+    <!-- Edit Profile Card (Hidden by default, shown when clicking Edit Profile) -->
+    <div class="m-card" id="editProfileCard" style="display:none; border:1px solid var(--accent-indigo);">
+      <div class="m-title">
+        <div class="m-title-text">✏️ Edit My Account Details</div>
+        <span class="badge b-cyan">Profile</span>
+      </div>
+      <form id="editProfileForm" style="display:flex; flex-direction:column; gap:0.6rem;">
+        <div>
+          <label style="font-size:0.7rem; color:var(--text-sub);">Full Name</label>
+          <input type="text" id="editProfileName" placeholder="Enter Full Name" required style="margin-bottom:0;">
+        </div>
+        <div>
+          <label style="font-size:0.7rem; color:var(--text-sub);">Mobile Number</label>
+          <input type="tel" id="editProfileMobile" placeholder="+91 9876543210" required style="margin-bottom:0;">
+        </div>
+        <div>
+          <label style="font-size:0.7rem; color:var(--text-sub);">Gmail Account ID</label>
+          <input type="email" id="editProfileEmail" placeholder="siddhartha12495@gmail.com" required style="margin-bottom:0;">
+        </div>
+        <div>
+          <label style="font-size:0.7rem; color:var(--text-sub);">Security Password / PIN</label>
+          <input type="password" id="editProfilePassword" placeholder="Enter Password" required style="margin-bottom:0;">
+        </div>
+        <div id="editProfileRoleGroup">
+          <label style="font-size:0.7rem; color:var(--text-sub);">Account Role</label>
+          <select id="editProfileRole" style="width:100%; padding:0.6rem; background:rgba(255,255,255,0.05); border:1px solid var(--card-border); border-radius:0.5rem; color:var(--text-main); font-size:0.8rem;">
+            <option value="admin">👑 Admin (Developer & Owner - Full Access)</option>
+            <option value="user">👤 Regular User (Personal Workspace Only)</option>
+          </select>
+        </div>
+        <div style="display:flex; gap:0.5rem; margin-top:0.4rem;">
+          <button type="submit" class="m-btn" style="flex:1; background:linear-gradient(135deg,#6366f1,#8b5cf6);">💾 Save Changes</button>
+          <button type="button" class="m-btn-sm" style="padding:0.6rem 1rem; background:rgba(255,255,255,0.08); color:var(--text-sub);" onclick="toggleAccountEditModal(false)">Cancel</button>
+        </div>
+      </form>
     </div>
 
     <!-- 🔑 Drive Token Setup Card — FIRST STEP -->
@@ -4680,20 +4717,97 @@ function recoverAccountInfo(prefix) {
   }
 }
 
-function toggleAccountEditModal() {
-  const card = document.getElementById('accountSignInCard');
-  if (card) {
+function renderUserAccountUI() {
+  const account = currentUser || JSON.parse(localStorage.getItem('m_account') || 'null');
+  
+  const nameEl    = document.getElementById('acctProfileName');
+  const emailEl   = document.getElementById('acctProfileEmail');
+  const mobileEl  = document.getElementById('acctProfileMobile');
+  const roleEl    = document.getElementById('acctRoleBadge');
+  const statusEl  = document.getElementById('acctStatusBadge');
+  const avatarEl  = document.getElementById('acctAvatar');
+
+  if (!account || !account.isLoggedIn) {
+    if (nameEl)   nameEl.textContent = 'Guest User';
+    if (emailEl)  emailEl.textContent = 'Not logged in';
+    if (mobileEl) mobileEl.textContent = '📱 —';
+    if (roleEl)   { roleEl.textContent = '👤 Guest Mode'; roleEl.className = 'badge b-cyan'; }
+    if (statusEl) { statusEl.textContent = '🔴 Offline / Guest'; statusEl.className = 'badge b-rose'; }
+    return;
+  }
+
+  const isAdmin = (account.email && account.email.toLowerCase() === 'siddhartha12495@gmail.com') ||
+                  account.role === 'admin' ||
+                  (account.name && account.name.toLowerCase().includes('siddhartha'));
+
+  account.role = isAdmin ? 'admin' : (account.role || 'user');
+
+  if (nameEl)   nameEl.textContent = account.name || 'Siddhartha';
+  if (emailEl)  emailEl.textContent = account.email || 'siddhartha12495@gmail.com';
+  if (mobileEl) mobileEl.textContent = account.mobile ? `📱 ${account.mobile}` : '📱 —';
+
+  if (roleEl) {
+    if (isAdmin) {
+      roleEl.textContent = '👑 Admin (Developer & Owner)';
+      roleEl.className = 'badge b-purple';
+    } else {
+      roleEl.textContent = '👤 Standard User';
+      roleEl.className = 'badge b-cyan';
+    }
+  }
+
+  if (statusEl) {
+    statusEl.textContent = '🟢 Logged In';
+    statusEl.className = 'badge b-green';
+  }
+
+  if (avatarEl) {
+    avatarEl.textContent = isAdmin ? '👑' : '👤';
+  }
+
+  const devTokenCard = document.getElementById('driveTokenSetupCard');
+  if (devTokenCard) {
+    devTokenCard.style.display = isAdmin ? 'block' : 'none';
+  }
+}
+
+function toggleAccountEditModal(show) {
+  const card = document.getElementById('editProfileCard');
+  if (!card) return;
+
+  const isVisible = card.style.display === 'block';
+  const targetShow = show !== undefined ? show : !isVisible;
+
+  if (targetShow) {
+    const acc = currentUser || JSON.parse(localStorage.getItem('m_account') || '{}');
+    document.getElementById('editProfileName').value     = acc.name || '';
+    document.getElementById('editProfileMobile').value   = acc.mobile || '';
+    document.getElementById('editProfileEmail').value    = acc.email || '';
+    document.getElementById('editProfilePassword').value = acc.password || '';
+    
+    const roleSelect = document.getElementById('editProfileRole');
+    if (roleSelect) roleSelect.value = acc.role || 'user';
+
+    card.style.display = 'block';
     card.scrollIntoView({ behavior: 'smooth' });
-    switchAuthMode('signup');
-    document.getElementById('inputSignUpName').focus();
+  } else {
+    card.style.display = 'none';
   }
 }
 
 function handleUserSignOut() {
-  currentUser = { name: 'Guest User', email: '', mobile: '', isLoggedIn: false };
-  localStorage.setItem('m_account', JSON.stringify(currentUser));
-  renderUserAccountUI();
-  alert('🚪 You have been signed out safely.');
+  if (confirm('Are you sure you want to sign out of LifeOS?')) {
+    currentUser = { name: 'Guest User', email: '', mobile: '', isLoggedIn: false, role: 'user' };
+    localStorage.removeItem('m_account');
+    renderUserAccountUI();
+    
+    const overlay = document.getElementById('welcomeAuthOverlay');
+    if (overlay) {
+      overlay.style.display = 'flex';
+      switchGateMode('signin');
+    }
+    alert('🚪 You have been signed out safely.');
+  }
 }
 
 function syncUserRegistrationToGoogleDrive(userData) {
@@ -4869,6 +4983,41 @@ if (document.getElementById('gateSignInForm')) {
     const loginInput = document.getElementById('gateSignInLogin')?.value.trim() || '';
     const passInput  = document.getElementById('gateSignInPassword')?.value.trim() || '';
     driveSignIn(loginInput, passInput, 'gate');
+  };
+}
+
+if (document.getElementById('editProfileForm')) {
+  document.getElementById('editProfileForm').onsubmit = e => {
+    e.preventDefault();
+    const name     = document.getElementById('editProfileName').value.trim();
+    const mobile   = document.getElementById('editProfileMobile').value.trim();
+    const email    = document.getElementById('editProfileEmail').value.trim();
+    const password = document.getElementById('editProfilePassword').value.trim();
+    const role     = document.getElementById('editProfileRole').value;
+
+    if (!name || !mobile || !email) {
+      alert('Please fill in Name, Mobile, and Email.');
+      return;
+    }
+
+    currentUser = currentUser || {};
+    currentUser.name     = name;
+    currentUser.mobile   = mobile;
+    currentUser.email    = email;
+    currentUser.password = password;
+    currentUser.role     = role;
+    currentUser.isLoggedIn = true;
+
+    const idx = usersDatabase.findIndex(u => (u.email && u.email.toLowerCase() === email.toLowerCase()) || u.mobile === mobile);
+    if (idx >= 0) {
+      usersDatabase[idx] = { ...usersDatabase[idx], name, mobile, email, password, role };
+      localStorage.setItem('m_users_db', JSON.stringify(usersDatabase));
+    }
+
+    localStorage.setItem('m_account', JSON.stringify(currentUser));
+    renderUserAccountUI();
+    toggleAccountEditModal(false);
+    alert('✅ Profile updated successfully!');
   };
 }
 
