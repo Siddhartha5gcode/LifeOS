@@ -151,6 +151,52 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent-indigo); 
 .data-table th, .data-table td { padding: 0.6rem 0.8rem; border-bottom: 1px solid var(--card-border); }
 .data-table th { background: #0f172a; color: var(--text-sub); font-weight: 700; position: sticky; top: 0; z-index: 2; }
 .data-table th:first-child, .data-table td:first-child { text-align: left; }
+
+/* ==========================================
+   🌐 DESKTOP WEBSITE & APK RESPONSIVE ADAPTABILITY
+   ========================================== */
+@media (min-width: 900px) {
+  .bottom-nav { display: none !important; }
+  .desktop-sidebar {
+    display: flex !important;
+    flex-direction: column;
+    position: fixed; top: 0; left: 0; bottom: 0; width: 250px;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(20px);
+    border-right: 1px solid var(--card-border);
+    padding: 1.5rem 1rem;
+    z-index: 1000;
+  }
+  .desktop-sidebar .brand-title {
+    font-size: 1.35rem; font-weight: 800;
+    background: linear-gradient(135deg, #fff, var(--accent-cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .desktop-nav-menu {
+    display: flex; flex-direction: column; gap: 0.35rem; margin-top: 1.5rem; flex: 1; overflow-y: auto;
+  }
+  .desktop-nav-item {
+    display: flex; align-items: center; gap: 0.75rem;
+    padding: 0.75rem 1rem; border-radius: 0.75rem;
+    color: var(--text-sub); font-weight: 600; font-size: 0.9rem;
+    cursor: pointer; transition: all 0.2s ease;
+  }
+  .desktop-nav-item:hover {
+    background: rgba(255, 255, 255, 0.05); color: var(--text-main);
+  }
+  .desktop-nav-item.active {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(6, 182, 212, 0.25));
+    color: var(--accent-cyan); border: 1px solid rgba(6, 182, 212, 0.3);
+  }
+  body { padding-bottom: 2rem; }
+  .app-header { margin-left: 250px; border-bottom: 1px solid var(--card-border); }
+  .main-view { margin-left: 250px; padding: 2rem; max-width: 1400px; }
+  .m-grid-2 { grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
+}
+
+@media (max-width: 899px) {
+  .desktop-sidebar { display: none !important; }
+}
 </style>
 </head>
 <body>
@@ -227,6 +273,38 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent-indigo); 
 
   </div>
 </div>
+
+<!-- Desktop Website Sidebar (Visible on screens >= 900px) -->
+<aside class="desktop-sidebar">
+  <div style="display:flex; align-items:center; gap:0.75rem; padding-bottom:1.25rem; border-bottom:1px solid var(--card-border);">
+    <div style="background:linear-gradient(135deg, var(--accent-indigo), var(--accent-cyan)); padding:0.5rem 0.75rem; border-radius:0.75rem; font-weight:800; font-size:1.2rem;">⚡</div>
+    <div>
+      <div class="brand-title">LifeOS</div>
+      <div style="font-size:0.7rem; color:var(--text-sub);">Personal Assistant Web</div>
+    </div>
+  </div>
+
+  <div class="desktop-nav-menu">
+    <div class="desktop-nav-item active" data-tab="m-dash" onclick="switchNav(this, 'm-dash')"><span>⚡</span> Dashboard</div>
+    <div class="desktop-nav-item" data-tab="m-finance" onclick="switchNav(this, 'm-finance')"><span>💰</span> Finance</div>
+    <div class="desktop-nav-item" data-tab="m-habits" onclick="switchNav(this, 'm-habits')"><span>🔥</span> Habits</div>
+    <div class="desktop-nav-item" data-tab="m-notes" onclick="switchNav(this, 'm-notes')"><span>📝</span> Notes & Journal</div>
+    <div class="desktop-nav-item" data-tab="m-bills" onclick="switchNav(this, 'm-bills')"><span>📑</span> Bills & Reminders</div>
+    <div class="desktop-nav-item" data-tab="m-milk" onclick="switchNav(this, 'm-milk')"><span>🥛</span> Milk Tracker</div>
+    <div class="desktop-nav-item" data-tab="m-lend" onclick="switchNav(this, 'm-lend')"><span>💸</span> Borrow & Lend</div>
+    <div class="desktop-nav-item" data-tab="m-calculators" onclick="switchNav(this, 'm-calculators')"><span>🧮</span> Calculators</div>
+    <div class="desktop-nav-item" data-tab="m-backup" onclick="switchNav(this, 'm-backup')"><span>☁️</span> Cloud Backup & Sync</div>
+    <div class="desktop-nav-item" data-tab="m-account" onclick="switchNav(this, 'm-account')"><span>👤</span> Account</div>
+  </div>
+
+  <div style="padding:0.85rem; background:rgba(255,255,255,0.03); border:1px solid var(--card-border); border-radius:0.75rem; font-size:0.72rem; color:var(--text-sub);">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.25rem;">
+      <span style="font-weight:700; color:var(--text-main);">☁️ Cloud Sync</span>
+      <span class="badge b-green" style="font-size:0.6rem;">Live</span>
+    </div>
+    <div style="font-size:0.65rem; color:var(--accent-cyan); overflow:hidden; text-overflow:ellipsis;" id="desktopSyncIdInfo">Sync ID: ...</div>
+  </div>
+</aside>
 
 <!-- Header -->
 <header class="app-header">
@@ -1499,14 +1577,29 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent-indigo); 
     <!-- Render Cloud Sync -->
     <div class="m-card" style="border:1px solid rgba(99,102,241,0.3); background:rgba(99,102,241,0.06);">
       <div class="m-title"><div class="m-title-text">🚀 Render Cloud Sync</div><span class="badge b-indigo" id="renderSyncBadge">Auto</span></div>
-      <p style="font-size:0.75rem; color:var(--text-sub); margin-bottom:0.75rem;">Your LifeOS data is automatically synced to a private cloud server every 30 minutes. Restore your data on any device.</p>
+      <p style="font-size:0.75rem; color:var(--text-sub); margin-bottom:0.75rem;">Your LifeOS data is automatically synced to a private cloud server. Sync seamlessly between your Android APK and Web Dashboard.</p>
       <div id="renderSyncStatus" style="font-size:0.72rem; color:var(--accent-gold); margin-bottom:0.65rem; text-align:center;">⏳ Checking sync status...</div>
       <div style="display:flex; flex-direction:column; gap:0.5rem;">
         <button onclick="syncNowRender()" style="width:100%; padding:0.75rem; background:linear-gradient(135deg,#6366f1,#8b5cf6); color:white; font-weight:700; border:none; border-radius:0.65rem; cursor:pointer;">☁️ Sync to Cloud Now</button>
         <button onclick="fetchFromRender()" style="width:100%; padding:0.65rem; background:rgba(255,255,255,0.06); border:1px solid rgba(99,102,241,0.3); color:var(--accent-indigo); font-weight:700; border-radius:0.65rem; cursor:pointer;">⬇️ Restore from Cloud</button>
       </div>
-      <div style="margin-top:0.6rem; font-size:0.68rem; color:var(--text-sub); text-align:center;">
-        Server: <span style="color:var(--accent-cyan);">lifeos-9y33.onrender.com</span> &nbsp;·&nbsp;
+
+      <!-- Device Pairing & Shared Sync ID -->
+      <div style="margin-top:0.75rem; padding-top:0.75rem; border-top:1px solid rgba(255,255,255,0.1);">
+        <div style="font-size:0.78rem; font-weight:700; color:var(--text-main); margin-bottom:0.3rem;">🔗 Link App & Web (Shared Sync ID)</div>
+        <div style="font-size:0.7rem; color:var(--text-sub); margin-bottom:0.5rem;">Use the same Sync ID on your Android APK and Website to sync data in real-time across devices.</div>
+        <div style="display:flex; gap:0.4rem; margin-bottom:0.4rem;">
+          <input type="text" id="syncUserIdInput" placeholder="Enter Sync ID (e.g. siddhartha)" style="flex:1; margin-bottom:0; font-size:0.8rem; padding:0.45rem 0.6rem;">
+          <button onclick="updateSyncUserId()" style="padding:0.45rem 0.75rem; background:var(--accent-cyan); color:#0b0f19; font-weight:700; border:none; border-radius:0.5rem; cursor:pointer; font-size:0.78rem;">Set Sync ID</button>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-size:0.68rem; color:var(--text-sub);">Current Sync ID: <strong id="currentSyncUserIdDisplay" style="color:var(--accent-gold);">—</strong></span>
+          <button onclick="copySyncUserId()" style="background:none; border:none; color:var(--accent-cyan); font-size:0.68rem; cursor:pointer; text-decoration:underline;">📋 Copy ID</button>
+        </div>
+      </div>
+
+      <div style="margin-top:0.75rem; font-size:0.68rem; color:var(--text-sub); text-align:center;">
+        Server: <span style="color:var(--accent-cyan);">lifeos-backend-zzqm.onrender.com</span> &nbsp;·&nbsp;
         Last sync: <span id="renderLastSync" style="color:var(--accent-green);">—</span>
       </div>
     </div>
@@ -1773,6 +1866,9 @@ function saveAll() {
 
   // 3. Debounced Drive sync (15s after last save)
   scheduleDriveSync();
+
+  // 4. Debounced Render cloud sync (real-time cross-device sync)
+  if (typeof scheduleRenderSync === 'function') scheduleRenderSync();
 
   renderApp();
 }
@@ -2070,9 +2166,12 @@ function triggerInAppOAuth() {
 }
 
 function switchNav(el, tabId) {
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-tab, .desktop-nav-item').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  
   if (el) el.classList.add('active');
+  document.querySelectorAll(`[data-tab="${tabId}"]`).forEach(t => t.classList.add('active'));
+
   const targetTab = document.getElementById(tabId);
   if (targetTab) targetTab.classList.add('active');
   if (tabId === 'm-loancalc') renderLoanCalc();
@@ -3190,6 +3289,7 @@ function initBackupModule() {
   }
 
   renderBackupHistory();
+  updateSyncUserIdDisplay();
 }
 
 function saveBackupSettings() {
@@ -3351,6 +3451,7 @@ function _autoLocalBackup() {
   const now = new Date().toLocaleString('en-IN');
   localStorage.setItem('lifeos_last_local_backup', now);
   if (document.getElementById('backupLastLocal')) document.getElementById('backupLastLocal').textContent = now;
+  if (typeof scheduleRenderSync === 'function') scheduleRenderSync();
 }
 
 // Auto Drive backup every 15 minutes
@@ -3370,7 +3471,7 @@ function startAutoDriveBackup() {
 // ☁️ RENDER CLOUD SYNC ENGINE
 // ==========================================
 
-const RENDER_SYNC_URL = 'https://lifeos-9y33.onrender.com';
+const RENDER_SYNC_URL = 'https://lifeos-backend-zzqm.onrender.com';
 
 function _getRenderUserId() {
   let uid = localStorage.getItem('lifeos_render_uid');
@@ -3459,6 +3560,76 @@ function startAutoRenderSync() {
 function syncNowRender() {
   syncToRender(false);
 }
+
+// ─── Shared Sync ID Management & Cross-Device Auto Sync ───
+function updateSyncUserId() {
+  const input = document.getElementById('syncUserIdInput');
+  if (!input || !input.value.trim()) { alert('Please enter a valid Sync ID'); return; }
+  const newId = input.value.trim();
+  localStorage.setItem('lifeos_render_uid', newId);
+  updateSyncUserIdDisplay();
+  if (confirm(`Sync ID updated to "${newId}". Do you want to fetch cloud data for this ID now?`)) {
+    fetchFromRender();
+  }
+}
+
+function copySyncUserId() {
+  const uid = _getRenderUserId();
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(uid).then(() => {
+      alert('📋 Copied Sync ID: ' + uid + '\n\nPaste this Sync ID into your other device (APK App or Web) to link them!');
+    }).catch(() => { prompt('Copy your Sync ID:', uid); });
+  } else {
+    prompt('Copy your Sync ID:', uid);
+  }
+}
+
+function updateSyncUserIdDisplay() {
+  const uid = _getRenderUserId();
+  const el1 = document.getElementById('currentSyncUserIdDisplay');
+  if (el1) el1.textContent = uid;
+  const el2 = document.getElementById('desktopSyncIdInfo');
+  if (el2) el2.textContent = 'Sync ID: ' + uid;
+  const input = document.getElementById('syncUserIdInput');
+  if (input && !input.value) input.value = uid;
+}
+
+// Auto-debounced sync on data mutation
+let _renderSyncDebounceTimer = null;
+function scheduleRenderSync() {
+  if (_renderSyncDebounceTimer) clearTimeout(_renderSyncDebounceTimer);
+  _renderSyncDebounceTimer = setTimeout(() => {
+    syncToRender(true); // silent sync
+  }, 3000);
+}
+
+// Auto-silent cloud sync on page/app launch
+async function silentStartupSync() {
+  const userId = _getRenderUserId();
+  updateSyncUserIdDisplay();
+  try {
+    const res = await fetch(RENDER_SYNC_URL + '/api/sync/' + userId);
+    if (res.ok) {
+      const json = await res.json();
+      if (json.data) {
+        const allKeys = [
+          'lifeos_db','lifeos_user','lifeos_milk','lifeos_lend','lifeos_loan',
+          'lifeos_backup_settings','m_expenses','m_habits','m_notes','m_bills','m_groceries','m_loan'
+        ];
+        allKeys.forEach(k => { if (json.data[k]) localStorage.setItem(k, json.data[k]); });
+        if (typeof renderApp === 'function') renderApp();
+        _addBackupLog('🔄 Cloud data auto-synced on launch', 'ok');
+      }
+    }
+  } catch(e) {
+    console.log('Silent startup sync:', e.message);
+  }
+}
+
+// Trigger silent startup sync when page loads
+window.addEventListener('DOMContentLoaded', () => {
+  silentStartupSync();
+});
 
 // Backup-before-update: runs on page load to preserve data before any app update refreshes
 (function() {
