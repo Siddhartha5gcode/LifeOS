@@ -225,7 +225,24 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent-indigo); 
       </div>
       <div style="margin-bottom:0.6rem;">
         <label style="font-size:0.75rem; color:var(--text-sub); display:block; margin-bottom:0.2rem;">Mobile Number</label>
-        <input type="tel" id="gateSignUpMobile" placeholder="+91 9876543210" required>
+        <div style="display:flex; gap:0.4rem;">
+          <select id="gateSignUpCountryCode" style="padding:0.65rem 0.3rem; background:rgba(255,255,255,0.08); border:1px solid var(--card-border); border-radius:0.5rem; color:var(--text-main); font-size:0.78rem; font-weight:700; width:110px;">
+            <option value="+91" selected>🇮🇳 +91 (IN)</option>
+            <option value="+1">🇺🇸 +1 (US)</option>
+            <option value="+44">🇬🇧 +44 (UK)</option>
+            <option value="+971">🇦🇪 +971 (AE)</option>
+            <option value="+966">🇸🇦 +966 (KSA)</option>
+            <option value="+65">🇸🇬 +65 (SG)</option>
+            <option value="+61">🇦🇺 +61 (AU)</option>
+            <option value="+49">🇩🇪 +49 (DE)</option>
+            <option value="+33">🇫🇷 +33 (FR)</option>
+            <option value="+81">🇯🇵 +81 (JP)</option>
+            <option value="+92">🇵🇰 +92 (PK)</option>
+            <option value="+880">🇧🇩 +880 (BD)</option>
+            <option value="+977">🇳🇵 +977 (NP)</option>
+          </select>
+          <input type="tel" id="gateSignUpMobile" placeholder="9876543210" required style="margin-bottom:0; flex:1;">
+        </div>
       </div>
       <div style="margin-bottom:0.6rem;">
         <label style="font-size:0.75rem; color:var(--text-sub); display:block; margin-bottom:0.2rem;">Gmail Account ID</label>
@@ -267,8 +284,23 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent-indigo); 
       <div id="gateSignInOtpForm" style="display:none;">
         <div style="margin-bottom:0.6rem;">
           <label style="font-size:0.75rem; color:var(--text-sub); display:block; margin-bottom:0.2rem;">Registered Mobile Number</label>
-          <div style="display:flex; gap:0.4rem;">
-            <input type="tel" id="gateOtpMobile" placeholder="+91 9876543210" style="margin-bottom:0; flex:1;">
+          <div style="display:flex; gap:0.3rem; flex-wrap:wrap;">
+            <select id="gateOtpCountryCode" style="padding:0.6rem 0.3rem; background:rgba(255,255,255,0.08); border:1px solid var(--card-border); border-radius:0.5rem; color:var(--text-main); font-size:0.75rem; font-weight:700; width:100px;">
+              <option value="+91" selected>🇮🇳 +91 (IN)</option>
+              <option value="+1">🇺🇸 +1 (US)</option>
+              <option value="+44">🇬🇧 +44 (UK)</option>
+              <option value="+971">🇦🇪 +971 (AE)</option>
+              <option value="+966">🇸🇦 +966 (KSA)</option>
+              <option value="+65">🇸🇬 +65 (SG)</option>
+              <option value="+61">🇦🇺 +61 (AU)</option>
+              <option value="+49">🇩🇪 +49 (DE)</option>
+              <option value="+33">🇫🇷 +33 (FR)</option>
+              <option value="+81">🇯🇵 +81 (JP)</option>
+              <option value="+92">🇵🇰 +92 (PK)</option>
+              <option value="+880">🇧🇩 +880 (BD)</option>
+              <option value="+977">🇳🇵 +977 (NP)</option>
+            </select>
+            <input type="tel" id="gateOtpMobile" placeholder="9876543210" style="margin-bottom:0; flex:1; min-width:120px;">
             <button type="button" id="gateSendOtpBtn" onclick="requestGateOtp()" style="padding:0.6rem 0.8rem; background:var(--accent-cyan); color:#0b0f19; font-weight:700; border:none; border-radius:0.5rem; font-size:0.75rem; cursor:pointer;">📩 Send OTP</button>
           </div>
         </div>
@@ -951,7 +983,24 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent-indigo); 
         </div>
         <div>
           <label style="font-size:0.7rem; color:var(--text-sub);">Mobile Number</label>
-          <input type="tel" id="editProfileMobile" placeholder="+91 9876543210" required style="margin-bottom:0;">
+          <div style="display:flex; gap:0.4rem;">
+            <select id="editProfileCountryCode" style="padding:0.6rem 0.3rem; background:rgba(255,255,255,0.08); border:1px solid var(--card-border); border-radius:0.5rem; color:var(--text-main); font-size:0.75rem; font-weight:700; width:100px;">
+              <option value="+91" selected>🇮🇳 +91 (IN)</option>
+              <option value="+1">🇺🇸 +1 (US)</option>
+              <option value="+44">🇬🇧 +44 (UK)</option>
+              <option value="+971">🇦🇪 +971 (AE)</option>
+              <option value="+966">🇸🇦 +966 (KSA)</option>
+              <option value="+65">🇸🇬 +65 (SG)</option>
+              <option value="+61">🇦🇺 +61 (AU)</option>
+              <option value="+49">🇩🇪 +49 (DE)</option>
+              <option value="+33">🇫🇷 +33 (FR)</option>
+              <option value="+81">🇯🇵 +81 (JP)</option>
+              <option value="+92">🇵🇰 +92 (PK)</option>
+              <option value="+880">🇧🇩 +880 (BD)</option>
+              <option value="+977">🇳🇵 +977 (NP)</option>
+            </select>
+            <input type="tel" id="editProfileMobile" placeholder="9876543210" required style="margin-bottom:0; flex:1;">
+          </div>
         </div>
         <div>
           <label style="font-size:0.7rem; color:var(--text-sub);">Gmail Account ID</label>
@@ -4604,9 +4653,19 @@ function switchSignInMethod(method) {
 
 function requestGateOtp() {
   const mobileInput = document.getElementById('gateOtpMobile');
-  const mobile = mobileInput ? mobileInput.value.trim() : '';
-  if (!mobile || mobile.replace(/\D/g, '').length < 7) {
+  const countryCode = document.getElementById('gateOtpCountryCode')?.value || '+91';
+  let rawMobile     = mobileInput ? mobileInput.value.trim() : '';
+
+  if (!rawMobile) {
     alert('Please enter a valid mobile number.');
+    return;
+  }
+
+  const mobile = rawMobile.startsWith('+') ? rawMobile : `${countryCode} ${rawMobile}`;
+  const digits = mobile.replace(/\D/g, '');
+
+  if (digits.length < 7) {
+    alert('Please enter a valid mobile number with at least 7 digits.');
     return;
   }
   
@@ -4621,11 +4680,13 @@ function requestGateOtp() {
 }
 
 function verifyGateOtp() {
-  const enteredEl = document.getElementById('gateOtpCode');
-  const mobileEl  = document.getElementById('gateOtpMobile');
-  const entered   = enteredEl ? enteredEl.value.trim() : '';
-  const mobile    = mobileEl ? mobileEl.value.trim() : '';
-  const digits    = mobile.replace(/\D/g, '');
+  const enteredEl   = document.getElementById('gateOtpCode');
+  const mobileInput = document.getElementById('gateOtpMobile');
+  const countryCode = document.getElementById('gateOtpCountryCode')?.value || '+91';
+  const entered     = enteredEl ? enteredEl.value.trim() : '';
+  let rawMobile     = mobileInput ? mobileInput.value.trim() : '';
+  const mobile      = rawMobile.startsWith('+') ? rawMobile : `${countryCode} ${rawMobile}`;
+  const digits      = mobile.replace(/\D/g, '');
 
   if (!entered || entered !== _currentGeneratedOtp) {
     alert('❌ Invalid OTP code! Please enter the 6-digit code displayed above.');
@@ -4638,7 +4699,8 @@ function verifyGateOtp() {
       name: "User " + (digits.slice(-4) || 'Mobile'),
       email: `${digits || 'user'}@lifeos.app`,
       mobile: mobile,
-      isLoggedIn: true
+      isLoggedIn: true,
+      role: 'user'
     };
     usersDatabase.push(matchedUser);
     localStorage.setItem('m_users_db', JSON.stringify(usersDatabase));
@@ -4649,7 +4711,7 @@ function verifyGateOtp() {
   localStorage.setItem('m_account', JSON.stringify(currentUser));
   renderUserAccountUI();
   document.getElementById('welcomeAuthOverlay').style.display = 'none';
-  alert(`✅ OTP Verified Successfully!\nWelcome back ${currentUser.name}!`);
+  alert(`✅ OTP Verified Successfully!\nWelcome back ${currentUser.name}! (${mobile})`);
 }
 
 function skipAuthAsGuest() {
@@ -4781,7 +4843,19 @@ function toggleAccountEditModal(show) {
   if (targetShow) {
     const acc = currentUser || JSON.parse(localStorage.getItem('m_account') || '{}');
     document.getElementById('editProfileName').value     = acc.name || '';
-    document.getElementById('editProfileMobile').value   = acc.mobile || '';
+    
+    let mobileStr = acc.mobile || '';
+    if (mobileStr.startsWith('+')) {
+      const parts = mobileStr.split(' ');
+      const code = parts[0];
+      const rest = parts.slice(1).join(' ') || mobileStr.replace(code, '').trim();
+      const ccEl = document.getElementById('editProfileCountryCode');
+      if (ccEl && Array.from(ccEl.options).some(opt => opt.value === code)) ccEl.value = code;
+      document.getElementById('editProfileMobile').value = rest;
+    } else {
+      document.getElementById('editProfileMobile').value = mobileStr;
+    }
+
     document.getElementById('editProfileEmail').value    = acc.email || '';
     document.getElementById('editProfilePassword').value = acc.password || '';
     
@@ -4880,17 +4954,19 @@ function driveWriteUsersDB(users) {
 // 1. GATE SIGN UP SUBMISSION — Drive Backend
 document.getElementById('gateSignUpForm').onsubmit = e => {
   e.preventDefault();
-  const name     = document.getElementById('gateSignUpName').value.trim();
-  const mobile   = document.getElementById('gateSignUpMobile').value.trim();
-  const email    = document.getElementById('gateSignUpEmail').value.trim().toLowerCase();
-  const password = document.getElementById('gateSignUpPassword').value.trim();
+  const name        = document.getElementById('gateSignUpName').value.trim();
+  const rawMobile   = document.getElementById('gateSignUpMobile').value.trim();
+  const countryCode = document.getElementById('gateSignUpCountryCode')?.value || '+91';
+  const mobile      = rawMobile.startsWith('+') ? rawMobile : `${countryCode} ${rawMobile}`;
+  const email       = document.getElementById('gateSignUpEmail').value.trim().toLowerCase();
+  const password    = document.getElementById('gateSignUpPassword').value.trim();
 
   if (!name || !email || !password) {
     alert('❌ Please fill all required fields.');
     return;
   }
 
-  const newUser = { name, mobile, email, password, isLoggedIn: true, registeredAt: new Date().toISOString() };
+  const newUser = { name, mobile, email, password, isLoggedIn: false, role: 'user', registeredAt: new Date().toISOString() };
 
   // Try Drive-backed sign up
   const driveUsers = driveReadUsersDB();
@@ -4900,30 +4976,30 @@ document.getElementById('gateSignUpForm').onsubmit = e => {
     if (exists) {
       alert('⚠️ An account with this email already exists on Google Drive. Please Sign In instead.');
       switchGateMode('signin');
+      const loginInp = document.getElementById('gateSignInLogin');
+      if (loginInp) loginInp.value = email;
       return;
     }
     driveUsers.push(newUser);
     const writeRes = driveWriteUsersDB(driveUsers);
     console.log('Drive write result:', writeRes);
-    // Also merge into local usersDatabase
     usersDatabase.push(newUser);
     localStorage.setItem('m_users_db', JSON.stringify(usersDatabase));
-    currentUser = newUser;
-    localStorage.setItem('m_account', JSON.stringify(currentUser));
-    renderUserAccountUI();
-    document.getElementById('welcomeAuthOverlay').style.display = 'none';
-    alert(`🎉 Welcome to LifeOS, ${name}!\n✅ Account saved to Google Drive (lifeos_users.json)\n📧 ${email}`);
   } else {
-    // Fallback: localStorage only (browser/dev mode)
+    // Fallback: localStorage only
     usersDatabase.push(newUser);
     localStorage.setItem('m_users_db', JSON.stringify(usersDatabase));
-    currentUser = newUser;
-    localStorage.setItem('m_account', JSON.stringify(currentUser));
     syncUserRegistrationToGoogleDrive(newUser);
-    renderUserAccountUI();
-    document.getElementById('welcomeAuthOverlay').style.display = 'none';
-    alert(`🎉 Welcome to LifeOS, ${name}!\n(Offline mode — data saved locally)`);
   }
+
+  // Pre-fill login input & switch to Sign In mode (Do NOT log in automatically)
+  const loginInp = document.getElementById('gateSignInLogin');
+  if (loginInp) loginInp.value = email;
+  const otpMobInp = document.getElementById('gateOtpMobile');
+  if (otpMobInp) otpMobInp.value = rawMobile;
+
+  switchGateMode('signin');
+  alert(`🎉 Account Created Successfully for ${name}!\n\n🔑 Sign In is required. Please enter your Password or request a Mobile OTP to log in.`);
 };
 
 function performQuickAdminSignIn() {
@@ -4989,11 +5065,13 @@ if (document.getElementById('gateSignInForm')) {
 if (document.getElementById('editProfileForm')) {
   document.getElementById('editProfileForm').onsubmit = e => {
     e.preventDefault();
-    const name     = document.getElementById('editProfileName').value.trim();
-    const mobile   = document.getElementById('editProfileMobile').value.trim();
-    const email    = document.getElementById('editProfileEmail').value.trim();
-    const password = document.getElementById('editProfilePassword').value.trim();
-    const role     = document.getElementById('editProfileRole').value;
+    const name        = document.getElementById('editProfileName').value.trim();
+    const rawMobile   = document.getElementById('editProfileMobile').value.trim();
+    const countryCode = document.getElementById('editProfileCountryCode')?.value || '+91';
+    const mobile      = rawMobile.startsWith('+') ? rawMobile : `${countryCode} ${rawMobile}`;
+    const email       = document.getElementById('editProfileEmail').value.trim();
+    const password    = document.getElementById('editProfilePassword').value.trim();
+    const role        = document.getElementById('editProfileRole').value;
 
     if (!name || !mobile || !email) {
       alert('Please fill in Name, Mobile, and Email.');
@@ -5091,7 +5169,7 @@ document.getElementById('acctSignUpForm').onsubmit = e => {
     return;
   }
 
-  const newUser = { name, mobile, email, password, isLoggedIn: true, registeredAt: new Date().toISOString() };
+  const newUser = { name, mobile, email, password, isLoggedIn: false, role: 'user', registeredAt: new Date().toISOString() };
 
   const driveUsers = driveReadUsersDB();
   if (driveUsers !== null) {
@@ -5099,6 +5177,8 @@ document.getElementById('acctSignUpForm').onsubmit = e => {
     if (exists) {
       alert('⚠️ Account already exists on Drive for this email. Please Sign In.');
       switchAuthMode('signin');
+      const loginInp = document.getElementById('inputSignInLogin');
+      if (loginInp) loginInp.value = email;
       return;
     }
     driveUsers.push(newUser);
@@ -5106,20 +5186,18 @@ document.getElementById('acctSignUpForm').onsubmit = e => {
     console.log('Drive write result (acct tab):', writeRes);
     usersDatabase.push(newUser);
     localStorage.setItem('m_users_db', JSON.stringify(usersDatabase));
-    currentUser = newUser;
-    localStorage.setItem('m_account', JSON.stringify(currentUser));
-    renderUserAccountUI();
-    alert(`🎉 Account created for ${name}!\n✅ Details synced to Google Drive (lifeos_users.json)`);
   } else {
     // Offline fallback
     usersDatabase.push(newUser);
     localStorage.setItem('m_users_db', JSON.stringify(usersDatabase));
-    currentUser = newUser;
-    localStorage.setItem('m_account', JSON.stringify(currentUser));
     syncUserRegistrationToGoogleDrive(newUser);
-    renderUserAccountUI();
-    alert(`🎉 Account created for ${name}! (Offline mode)`);
   }
+
+  const loginInp = document.getElementById('inputSignInLogin');
+  if (loginInp) loginInp.value = email;
+
+  switchAuthMode('signin');
+  alert(`🎉 Registration successful for ${name}!\n\n🔑 Sign In is required. Please enter your Password to log in.`);
 };
 
 try {
