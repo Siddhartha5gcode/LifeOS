@@ -5946,9 +5946,16 @@ function addBlogComment(blogId) {
 try {
   loadPublicBlogs();
 
+  currentUser = getStoredUserSession();
+  const savedWs = localStorage.getItem('lifeos_active_workspace');
+
   if (currentUser && currentUser.isLoggedIn) {
-    // ✅ Logged in — load private workspace
-    switchWorkspaceMode('private');
+    // ✅ Logged in — load active workspace (default to private)
+    if (savedWs === 'public') {
+      switchWorkspaceMode('public');
+    } else {
+      switchWorkspaceMode('private');
+    }
     const expDateEl = document.getElementById('mExpDate');
     if (expDateEl) expDateEl.valueAsDate = new Date();
     const liveDateEl = document.getElementById('liveDate');
@@ -5957,8 +5964,8 @@ try {
     if (typeof renderApp === 'function') renderApp();
     if (typeof checkWelcomeAuthGateway === 'function') checkWelcomeAuthGateway();
   } else {
-    // 🔒 Not logged in — send to login page
-    window.location.replace('login-signup.html');
+    // 🌐 Guest / Unauthenticated — default to public workspace
+    switchWorkspaceMode('public');
   }
 } catch(err) {
   console.warn("LifeOS init error:", err);
