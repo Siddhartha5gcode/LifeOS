@@ -5006,30 +5006,37 @@ function renderBillsList(filter) {
   }).join('');
 }
 
-const usersDatabase = []; // Accounts are stored on Backend Server (Render / Drive Cloud)
-let currentUser = JSON.parse(localStorage.getItem('m_account') || 'null');
+function getStoredUserSession() {
+  try {
+    const session = JSON.parse(localStorage.getItem('lifeos_user_session') || 'null');
+    const storedAccount = JSON.parse(localStorage.getItem('m_account') || 'null');
+    if (session && session.user) {
+      return { isLoggedIn: true, name: session.user.name, email: session.user.email, mobile: session.user.mobile || '' };
+    }
+    if (storedAccount && storedAccount.isLoggedIn) {
+      return storedAccount;
+    }
+  } catch(e) {}
+  return null;
+}
+
+let currentUser = getStoredUserSession();
 let _currentGeneratedOtp = null;
 
 function checkWelcomeAuthGateway() {
   const overlay = document.getElementById('welcomeAuthOverlay');
-  
-  const session = JSON.parse(localStorage.getItem('lifeos_user_session') || 'null');
-  const storedAccount = JSON.parse(localStorage.getItem('m_account') || 'null');
+  currentUser = getStoredUserSession();
 
-  if ((session && session.user) || (storedAccount && storedAccount.isLoggedIn)) {
-    const user = (session && session.user) ? session.user : storedAccount;
-    currentUser = { isLoggedIn: true, name: user.name, email: user.email, mobile: user.mobile || '' };
+  if (currentUser && currentUser.isLoggedIn) {
     localStorage.setItem('m_account', JSON.stringify(currentUser));
     if (overlay) overlay.style.display = 'none';
 
-    // Update Dashboard UI profile display
     const dashName = document.getElementById('dashProfileName');
     const dashMail = document.getElementById('dashProfileEmail');
     if (dashName) dashName.innerText = currentUser.name || 'Siddhartha';
     if (dashMail) dashMail.innerText = currentUser.email || 'siddhartha12495@gmail.com';
   } else {
-    // If not authenticated, open the standalone Blogchatter login-signup.html page directly!
-    window.location.href = 'login-signup.html';
+    if (overlay) overlay.style.display = 'none';
   }
 }
 

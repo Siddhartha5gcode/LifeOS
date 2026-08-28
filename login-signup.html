@@ -549,6 +549,7 @@
         email: userData.email || 'siddhartha12495@gmail.com',
         mobile: userData.mobile || ''
       }));
+      localStorage.setItem('lifeos_active_workspace', 'private');
     }
 
     async function handleLoginSubmit(e) {
@@ -560,7 +561,7 @@
         const res = await fetch(RENDER_SYNC_URL + '/api/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password })
+          body: JSON.stringify({ login: email, email: email, password: password })
         });
         const data = await res.json();
         if (res.ok && data.success && data.user) {
@@ -569,7 +570,7 @@
           setTimeout(() => {
             const params = new URLSearchParams(window.location.search);
             window.location.href = params.get('redirect') || 'index.html';
-          }, 1000);
+          }, 800);
           return;
         }
       } catch(err) {}
@@ -579,7 +580,7 @@
       setTimeout(() => {
         const params = new URLSearchParams(window.location.search);
         window.location.href = params.get('redirect') || 'index.html';
-      }, 1000);
+      }, 800);
     }
 
     async function handleRegisterSubmit(e) {
@@ -608,14 +609,14 @@
         if (res.ok && data.success && data.user) {
           saveUserSession(data.user);
           showToast('🎉 Account registered successfully!');
-          setTimeout(() => window.location.href = 'index.html', 1000);
+          setTimeout(() => window.location.href = 'index.html', 800);
           return;
         }
       } catch(err) {}
 
       saveUserSession({ name: fullName, email: email, mobile: mobile });
       showToast('🎉 Account registered successfully!');
-      setTimeout(() => window.location.href = 'index.html', 1000);
+      setTimeout(() => window.location.href = 'index.html', 800);
     }
 
     function socialAuth(provider) {
@@ -624,7 +625,7 @@
         email: `siddhartha_${provider.toLowerCase()}@gmail.com`
       });
       showToast(`✅ Logged in with ${provider}!`);
-      setTimeout(() => window.location.href = 'index.html', 1000);
+      setTimeout(() => window.location.href = 'index.html', 800);
     }
 
     function handleForgotPass() {

@@ -230,7 +230,8 @@ app.post('/api/auth/register', async (req, res) => {
 });
 
 app.post('/api/auth/login', async (req, res) => {
-  const { login, password } = req.body;
+  const login = req.body.login || req.body.email || req.body.mobile;
+  const password = req.body.password;
   if (!login) return res.status(400).json({ success: false, error: 'Email or mobile number is required.' });
 
   const normLogin = login.toLowerCase().trim();
