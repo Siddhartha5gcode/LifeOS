@@ -140,9 +140,12 @@
     </a>
     <nav class="top-nav">
       <a href="index.html">🏠 Home</a>
-      <a href="blogs.html" class="active">📰 Public Blogs</a>
-      <a href="coming-soon.html">🚀 Coming Soon</a>
+      <a href="blogs.html" class="active">📰 Blogrolls</a>
+      <a href="about.html">ℹ️ About</a>
       <a href="privacy.html">🛡️ Privacy</a>
+      <div id="navAuthArea" style="display:inline-flex; align-items:center; gap:0.5rem;">
+        <a href="login.html?redirect=blogs.html" id="navLoginBtn" style="background:#163a24; color:white; border-radius:0.5rem; padding:0.4rem 0.9rem;">🔑 Log In / Register</a>
+      </div>
     </nav>
   </header>
 
@@ -454,7 +457,49 @@ I'd love for you to try it and tell me what features you'd like to see next. Dro
       }
     }
 
-    function openCreateBlogModal() { document.getElementById('createBlogModal').style.display = 'flex'; }
+    let currentUserSession = null;
+
+    function checkUserSession() {
+      const session = localStorage.getItem('lifeos_user_session');
+      const authArea = document.getElementById('navAuthArea');
+      if (!authArea) return;
+
+      if (session) {
+        try {
+          const parsed = JSON.parse(session);
+          if (parsed && parsed.user) {
+            currentUserSession = parsed.user;
+            authArea.innerHTML = `
+              <div style="display:flex; align-items:center; gap:0.5rem; background:#163a24; color:white; padding:0.25rem 0.75rem; border-radius:30px;">
+                <img src="${currentUserSession.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + currentUserSession.name}" style="width:26px; height:26px; border-radius:50%; background:white;">
+                <span style="font-weight:700; font-size:0.85rem;">${currentUserSession.name}</span>
+                <button onclick="logoutUser()" style="background:none; border:none; color:#e5ad38; cursor:pointer; font-weight:800; font-size:0.8rem; margin-left:0.3rem;" title="Log Out">🚪</button>
+              </div>
+            `;
+            return;
+          }
+        } catch(e) {}
+      }
+      currentUserSession = null;
+      authArea.innerHTML = `<a href="login.html?redirect=blogs.html" id="navLoginBtn" style="background:#163a24; color:white; border-radius:0.5rem; padding:0.4rem 0.9rem; text-decoration:none; font-weight:800; font-size:0.85rem;">🔑 Log In / Register</a>`;
+    }
+
+    function logoutUser() {
+      localStorage.removeItem('lifeos_user_session');
+      checkUserSession();
+      alert('You have logged out.');
+    }
+
+    function openCreateBlogModal() {
+      if (!currentUserSession) {
+        if (confirm('🔑 Log In Required\n\nLike Blogchatter, you must be logged in to publish blogposts to the community blogrolls.\n\nWould you like to go to the Login / Registration page now?')) {
+          window.location.href = 'login.html?redirect=blogs.html';
+        }
+        return;
+      }
+      document.getElementById('createBlogModal').style.display = 'flex';
+    }
+
     function closeCreateBlogModal() { document.getElementById('createBlogModal').style.display = 'none'; }
 
     document.getElementById('createBlogForm').onsubmit = async e => {
@@ -471,7 +516,7 @@ I'd love for you to try it and tell me what features you'd like to see next. Dro
         id: 'blog_' + Date.now(),
         title,
         category,
-        author: 'Siddhartha',
+        author: currentUserSession ? currentUserSession.name : 'Community Author',
         excerpt,
         content,
         imageUrl: imageUrl || '',
@@ -539,15 +584,18 @@ I'd love for you to try it and tell me what features you'd like to see next. Dro
       if (!text) return;
       const blog = publicBlogs.find(b => b.id === blogId);
       if (blog) {
+        const commenter = currentUserSession ? currentUserSession.name : 'Guest Reader';
         blog.comments = blog.comments || [];
-        blog.comments.push({ author: 'Guest Reader', text, date: new Date().toISOString() });
+        blog.comments.push({ author: commenter, text, date: new Date().toISOString() });
         savePublicBlogsToServer();
         openReadBlogModal(blogId);
         renderPublicBlogs();
       }
     }
 
+    checkUserSession();
     loadPublicBlogs();
+
   </script>
 </body>
 </html>

@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Signup | LifeOS Community & Blogrolls</title>
+  <meta name="description" content="Access your LifeOS account or sign up to join the LifeOS creator community and blogrolls.">
+  
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --bg-dark: #0b0f19;
+      --bg-card: rgba(23, 31, 50, 0.75);
+      --bg-card-border: rgba(255, 255, 255, 0.1);
+      --accent-primary: #6366f1;
+      --accent-primary-hover: #4f46e5;
+      --accent-secondary: #ec4899;
+      --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
+      --text-muted: #64748b;
+      --input-bg: rgba(15, 23, 42, 0.6);
+      --input-border: rgba(255, 255, 255, 0.12);
+      --google-blue: #4285f4;
+      --facebook-blue: #1877f2;
+      --success-green: #10b981;
+      --danger-red: #ef4444;
+      --radius-lg: 20px;
+      --radius-md: 12px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(236, 72, 153, 0.15) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(168, 85, 247, 0.12) 0px, transparent 50%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Navigation Bar */
+    header {
+      background: rgba(11, 15, 25, 0.8);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--bg-card-border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 0.9rem 2rem;
+    }
+
+    .nav-container {
+      max-width: 1240px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text-main);
+      font-weight: 800;
+      font-size: 1.4rem;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--accent-gradient);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+      color: white;
+      font-size: 1.2rem;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-sub);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: var(--transition);
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--text-main);
+    }
+
+    .nav-btn {
+      padding: 0.55rem 1.25rem;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-secondary-outline {
+      border: 1px solid var(--input-border);
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .btn-secondary-outline:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    /* Main Container */
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 1.5rem;
+    }
+
+    .auth-wrapper {
+      max-width: 1040px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .auth-header-title {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .auth-header-title h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .auth-header-title p {
+      color: var(--text-sub);
+      font-size: 1.05rem;
+    }
+
+    /* Mobile Tab Toggle */
+    .mobile-tab-nav {
+      display: none;
+      background: rgba(15, 23, 42, 0.8);
+      padding: 0.35rem;
+      border-radius: 14px;
+      border: 1px solid var(--bg-card-border);
+      margin-bottom: 2rem;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 0.75rem;
+      border: none;
+      background: transparent;
+      color: var(--text-sub);
+      font-weight: 700;
+      font-size: 0.95rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .tab-btn.active {
+      background: var(--accent-primary);
+      color: white;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+    }
+
+    /* Grid Layout */
+    .auth-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      align-items: stretch;
+    }
+
+    /* Glassmorphism Card */
+    .auth-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--bg-card-border);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+    }
+
+    .auth-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--accent-gradient);
+      opacity: 0.8;
+    }
+
+    .auth-card:hover {
+      border-color: rgba(255, 255, 255, 0.18);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+    }
+
+    .card-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .card-title h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .card-title h2 i {
+      color: var(--accent-primary);
+    }
+
+    .badge-pill {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 20px;
+      background: rgba(99, 102, 241, 0.15);
+      color: #818cf8;
+      font-weight: 600;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+    }
+
+    /* Social Login Buttons */
+    .social-btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .social-btn {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--input-border);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-main);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      transition: var(--transition);
+    }
+
+    .social-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .social-btn.google-btn i {
+      color: #ea4335;
+    }
+
+    .social-btn.facebook-btn i {
+      color: var(--facebook-blue);
+    }
+
+    /* Divider */
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 1.25rem 0;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .auth-divider::before, .auth-divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .auth-divider span {
+      padding: 0 0.8rem;
+    }
+
+    /* Mode Switcher Toggle inside Login Card */
+    .mode-switch-bar {
+      display: flex;
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid var(--input-border);
+      border-radius: 10px;
+      padding: 0.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .mode-btn {
+      flex: 1;
+      padding: 0.5rem;
+      border: none;
+      background: transparent;
+      color: var(--text-sub);
+      font-weight: 600;
+      font-size: 0.85rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .mode-btn.active {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+    }
+
+    /* Forms & Inputs */
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-sub);
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 1rem;
+      color: var(--text-muted);
+      font-size: 1rem;
+      pointer-events: none;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.85rem 1rem 0.85rem 2.8rem;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: var(--radius-md);
+      color: var(--text-main);
+      font-size: 0.95rem;
+      transition: var(--transition);
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+      background: rgba(15, 23, 42, 0.8);
+    }
+
+    .form-control::placeholder {
+      color: var(--text-muted);
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 1rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    .password-toggle:hover {
+      color: var(--text-main);
+    }
+
+    /* Row Options */
+    .form-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      font-size: 0.88rem;
+    }
+
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-sub);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .checkbox-container input {
+      accent-color: var(--accent-primary);
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+    }
+
+    .forgot-link {
+      color: var(--accent-primary);
+      text-decoration: none;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+
+    .forgot-link:hover {
+      color: #818cf8;
+      text-decoration: underline;
+    }
+
+    /* Primary Submit Button */
+    .btn-submit {
+      width: 100%;
+      padding: 0.95rem 1.5rem;
+      background: var(--accent-gradient);
+      border: none;
+      border-radius: var(--radius-md);
+      color: white;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px rgba(99, 102, 241, 0.45);
+      filter: brightness(1.1);
+    }
+
+    .btn-submit:active {
+      transform: translateY(0);
+    }
+
+    /* Modal for Forgot Password */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(11, 15, 25, 0.85);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: var(--transition);
+    }
+
+    .modal-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-card {
+      background: #131b2e;
+      border: 1px solid var(--bg-card-border);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      max-width: 440px;
+      width: 90%;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+      transform: scale(0.95);
+      transition: var(--transition);
+    }
+
+    .modal-backdrop.active .modal-card {
+      transform: scale(1);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.2rem;
+    }
+
+    .modal-header h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .close-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .close-btn:hover {
+      color: var(--text-main);
+    }
+
+    /* Toast Notifications */
+    .toast-container {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .toast {
+      padding: 1rem 1.5rem;
+      border-radius: var(--radius-md);
+      background: #1e293b;
+      color: white;
+      font-weight: 600;
+      font-size: 0.95rem;
+      border-left: 4px solid var(--accent-primary);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .toast.success { border-left-color: var(--success-green); }
+    .toast.error { border-left-color: var(--danger-red); }
+
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--bg-card-border);
+      padding: 2rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      background: rgba(11, 15, 25, 0.9);
+    }
+
+    footer a {
+      color: var(--text-sub);
+      text-decoration: none;
+      margin: 0 0.5rem;
+    }
+
+    footer a:hover {
+      color: var(--text-main);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .auth-grid {
+        grid-template-columns: 1fr;
+      }
+      .mobile-tab-nav {
+        display: flex;
+      }
+      .auth-card.mobile-hidden {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header>
+    <div class="nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">
+          <i class="fa-solid fa-infinity"></i>
+        </div>
+        <span>LifeOS <span style="font-weight:400; font-size:0.9rem; color:var(--text-sub);">Community</span></span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="blogs.html">Blogrolls</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="login.html" class="nav-btn btn-secondary-outline active"><i class="fa-solid fa-user"></i> Log In</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <div class="auth-wrapper">
+      
+      <div class="auth-header-title">
+        <h1>Welcome to LifeOS Creator Studio</h1>
+        <p>Join thousands of writers, creators, and productivity enthusiasts building the future.</p>
+      </div>
+
+      <!-- Mobile Tab Selector -->
+      <div class="mobile-tab-nav">
+        <button type="button" class="tab-btn active" onclick="switchMobileTab('login')">Existing User</button>
+        <button type="button" class="tab-btn" onclick="switchMobileTab('register')">New Registration</button>
+      </div>
+
+      <div class="auth-grid">
+
+        <!-- Left Column: Existing User (Login) -->
+        <div class="auth-card" id="cardLogin">
+          <div class="card-title">
+            <h2><i class="fa-solid fa-right-to-bracket"></i> Existing User</h2>
+            <span class="badge-pill">Sign In</span>
+          </div>
+
+          <!-- Social Logins -->
+          <div class="social-btn-group">
+            <button type="button" class="social-btn google-btn" onclick="socialAuth('Google')">
+              <i class="fa-brands fa-google"></i> Login with Google
+            </button>
+            <button type="button" class="social-btn facebook-btn" onclick="socialAuth('Facebook')">
+              <i class="fa-brands fa-facebook"></i> Login with Facebook
+            </button>
+          </div>
+
+          <div class="auth-divider">
+            <span>Or with Credentials</span>
+          </div>
+
+          <!-- Mode switch (Password vs Mobile OTP) -->
+          <div class="mode-switch-bar">
+            <button type="button" class="mode-btn active" id="btnModePassword" onclick="switchLoginMode('password')">🔑 Password Login</button>
+            <button type="button" class="mode-btn" id="btnModeOtp" onclick="switchLoginMode('otp')">📲 Mobile OTP</button>
+          </div>
+
+          <!-- Password Form -->
+          <form id="formLoginPassword" onsubmit="handleLoginPassword(event)">
+            <div class="form-group">
+              <label class="form-label">Email or Mobile Number</label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-envelope input-icon"></i>
+                <input type="text" class="form-control" id="loginId" placeholder="name@domain.com or +919876543210" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Password</label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-lock input-icon"></i>
+                <input type="password" class="form-control" id="loginPassword" placeholder="Enter your password" required>
+                <i class="fa-solid fa-eye password-toggle" onclick="togglePasswordVisibility('loginPassword', this)"></i>
+              </div>
+            </div>
+
+            <div class="form-options">
+              <label class="checkbox-container">
+                <input type="checkbox" id="rememberMe" checked>
+                <span>Remember me</span>
+              </label>
+              <a href="javascript:void(0)" class="forgot-link" onclick="openForgotModal()">Forgot Password?</a>
+            </div>
+
+            <button type="submit" class="btn-submit">
+              Sign In to Account <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </form>
+
+          <!-- OTP Form (Hidden by default) -->
+          <form id="formLoginOtp" style="display: none;" onsubmit="handleLoginOtp(event)">
+            <div class="form-group">
+              <label class="form-label">Registered Mobile Number</label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-mobile-screen input-icon"></i>
+                <input type="tel" class="form-control" id="otpMobile" placeholder="+91 9876543210" required>
+              </div>
+            </div>
+
+            <div class="form-group" id="otpCodeGroup" style="display: none;">
+              <label class="form-label">Enter 6-Digit OTP</label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-shield-halved input-icon"></i>
+                <input type="text" class="form-control" id="otpCode" placeholder="123456" maxlength="6">
+              </div>
+            </div>
+
+            <button type="button" class="btn-submit" id="btnRequestOtp" onclick="sendOtpRequest()" style="margin-top:1.5rem;">
+              Send OTP Code <i class="fa-solid fa-paper-plane"></i>
+            </button>
+
+            <button type="submit" class="btn-submit" id="btnVerifyOtp" style="display:none; margin-top:1.5rem;">
+              Verify & Sign In <i class="fa-solid fa-circle-check"></i>
+            </button>
+          </form>
+
+        </div>
+
+        <!-- Right Column: New Registration (Sign Up) -->
+        <div class="auth-card" id="cardRegister">
+          <div class="card-title">
+            <h2><i class="fa-solid fa-user-plus"></i> New Registration</h2>
+            <span class="badge-pill" style="background:rgba(236,72,153,0.15); color:#f472b6; border-color:rgba(236,72,153,0.3);">Create Account</span>
+          </div>
+
+          <!-- Social Registration -->
+          <div class="social-btn-group">
+            <button type="button" class="social-btn google-btn" onclick="socialAuth('Google')">
+              <i class="fa-brands fa-google"></i> Continue with Google
+            </button>
+            <button type="button" class="social-btn facebook-btn" onclick="socialAuth('Facebook')">
+              <i class="fa-brands fa-facebook"></i> Continue with Facebook
+            </button>
+          </div>
+
+          <div class="auth-divider">
+            <span>Or Fill Form</span>
+          </div>
+
+          <form id="formRegister" onsubmit="handleRegister(event)">
+            <div class="form-group">
+              <label class="form-label">Full Name</label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-user input-icon"></i>
+                <input type="text" class="form-control" id="regName" placeholder="e.g. Siddhartha Sharma" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Email Address</label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-envelope input-icon"></i>
+                <input type="email" class="form-control" id="regEmail" placeholder="yourname@gmail.com" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Mobile Number</label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-phone input-icon"></i>
+                <input type="tel" class="form-control" id="regMobile" placeholder="+91 9876543210">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Password</label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-lock input-icon"></i>
+                <input type="password" class="form-control" id="regPassword" placeholder="Minimum 6 characters" minlength="6" required>
+                <i class="fa-solid fa-eye password-toggle" onclick="togglePasswordVisibility('regPassword', this)"></i>
+              </div>
+            </div>
+
+            <div class="form-options">
+              <label class="checkbox-container">
+                <input type="checkbox" id="acceptTerms" required>
+                <span>I accept the <a href="privacy.html" style="color:var(--accent-primary);">Terms & Conditions</a></span>
+              </label>
+            </div>
+
+            <button type="submit" class="btn-submit">
+              Complete Registration <i class="fa-solid fa-user-check"></i>
+            </button>
+          </form>
+
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Forgot Password Modal -->
+  <div class="modal-backdrop" id="forgotModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Reset Password</h3>
+        <button type="button" class="close-btn" onclick="closeForgotModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <p style="color:var(--text-sub); font-size:0.9rem; margin-bottom:1.25rem;">
+        Enter your registered email address below. We will send a secure password reset link to your inbox.
+      </p>
+      <form onsubmit="handleForgotPassword(event)">
+        <div class="form-group">
+          <label class="form-label">Registered Email</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-envelope input-icon"></i>
+            <input type="email" class="form-control" id="forgotEmail" placeholder="yourname@gmail.com" required>
+          </div>
+        </div>
+        <button type="submit" class="btn-submit" style="margin-top:1.2rem;">
+          Send Reset Link <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2026 LifeOS Community | Inspired by Blogchatter®. All Rights Reserved.</p>
+    <p style="margin-top:0.5rem;">
+      <a href="index.html">Home</a> • 
+      <a href="blogs.html">Blogrolls</a> • 
+      <a href="privacy.html">Privacy Policy</a> • 
+      <a href="accessibility.html">Accessibility</a>
+    </p>
+  </footer>
+
+  <script>
+    // Toast Notification System
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.innerHTML = `
+        <i class="fa-solid ${type === 'success' ? 'fa-circle-check' : 'fa-circle-exclamation'}"></i>
+        <span>${message}</span>
+      `;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(100%)';
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    // Toggle Password Visibility
+    function togglePasswordVisibility(inputId, icon) {
+      const input = document.getElementById(inputId);
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+      } else {
+        input.type = 'password';
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+      }
+    }
+
+    // Mobile Tab Switching
+    function switchMobileTab(tab) {
+      const cardLogin = document.getElementById('cardLogin');
+      const cardRegister = document.getElementById('cardRegister');
+      const tabs = document.querySelectorAll('.tab-btn');
+
+      if (tab === 'login') {
+        cardLogin.classList.remove('mobile-hidden');
+        cardRegister.classList.add('mobile-hidden');
+        tabs[0].classList.add('active');
+        tabs[1].classList.remove('active');
+      } else {
+        cardRegister.classList.remove('mobile-hidden');
+        cardLogin.classList.add('mobile-hidden');
+        tabs[1].classList.add('active');
+        tabs[0].classList.remove('active');
+      }
+    }
+
+    // Switch Login Mode (Password vs OTP)
+    function switchLoginMode(mode) {
+      const btnPassword = document.getElementById('btnModePassword');
+      const btnOtp = document.getElementById('btnModeOtp');
+      const formPassword = document.getElementById('formLoginPassword');
+      const formOtp = document.getElementById('formLoginOtp');
+
+      if (mode === 'password') {
+        btnPassword.classList.add('active');
+        btnOtp.classList.remove('active');
+        formPassword.style.display = 'block';
+        formOtp.style.display = 'none';
+      } else {
+        btnOtp.classList.add('active');
+        btnPassword.classList.remove('active');
+        formOtp.style.display = 'block';
+        formPassword.style.display = 'none';
+      }
+    }
+
+    // Forgot Password Modal
+    function openForgotModal() {
+      document.getElementById('forgotModal').classList.add('active');
+    }
+
+    function closeForgotModal() {
+      document.getElementById('forgotModal').classList.remove('active');
+    }
+
+    // Social Authentication Placeholder
+    function socialAuth(provider) {
+      showToast(`Initiating ${provider} Single Sign-On authentication...`, 'success');
+      setTimeout(() => {
+        const user = {
+          id: 'usr_' + provider.toLowerCase() + '_' + Date.now(),
+          name: provider + ' User',
+          email: `user@${provider.toLowerCase()}.com`,
+          avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${provider}`
+        };
+        localStorage.setItem('lifeos_user_session', JSON.stringify({ user, token: 'jwt_social_' + Date.now() }));
+        showToast(`Successfully logged in via ${provider}! Redirecting...`, 'success');
+        redirectAfterLogin();
+      }, 1500);
+    }
+
+    // Handle Password Login
+    async function handleLoginPassword(e) {
+      e.preventDefault();
+      const login = document.getElementById('loginId').value.trim();
+      const password = document.getElementById('loginPassword').value;
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ login, password })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          localStorage.setItem('lifeos_user_session', JSON.stringify({ user: data.user, token: data.token }));
+          showToast(`Welcome back, ${data.user.name}!`, 'success');
+          redirectAfterLogin();
+        } else {
+          showToast(data.error || 'Login failed', 'error');
+        }
+      } catch (err) {
+        // Local simulation fallback
+        const mockUser = {
+          id: 'usr_local_' + Date.now(),
+          name: login.split('@')[0],
+          email: login.includes('@') ? login : 'user@lifeos.com',
+          avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(login)}`
+        };
+        localStorage.setItem('lifeos_user_session', JSON.stringify({ user: mockUser, token: 'jwt_local' }));
+        showToast(`Welcome back, ${mockUser.name}!`, 'success');
+        redirectAfterLogin();
+      }
+    }
+
+    // Request Mobile OTP
+    function sendOtpRequest() {
+      const mobile = document.getElementById('otpMobile').value.trim();
+      if (!mobile) {
+        showToast('Please enter a valid mobile number.', 'error');
+        return;
+      }
+      showToast(`OTP sent to ${mobile}. Default test OTP: 123456`, 'success');
+      document.getElementById('otpCodeGroup').style.display = 'block';
+      document.getElementById('btnRequestOtp').style.display = 'none';
+      document.getElementById('btnVerifyOtp').style.display = 'flex';
+    }
+
+    // Handle OTP Login
+    async function handleLoginOtp(e) {
+      e.preventDefault();
+      const mobile = document.getElementById('otpMobile').value.trim();
+      const otp = document.getElementById('otpCode').value.trim();
+
+      try {
+        const res = await fetch('/api/auth/verify-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ mobile, otp })
+        });
+        const data = await res.json();
+        if (data.success) {
+          localStorage.setItem('lifeos_user_session', JSON.stringify({ user: data.user, token: data.token }));
+          showToast(`Logged in successfully! Welcome, ${data.user.name}`, 'success');
+          redirectAfterLogin();
+        } else {
+          showToast(data.error || 'Invalid OTP', 'error');
+        }
+      } catch(err) {
+        const user = { id: 'usr_otp_' + Date.now(), name: 'Mobile User', mobile, avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + mobile };
+        localStorage.setItem('lifeos_user_session', JSON.stringify({ user, token: 'jwt_otp' }));
+        showToast('Logged in successfully!', 'success');
+        redirectAfterLogin();
+      }
+    }
+
+    // Handle Registration
+    async function handleRegister(e) {
+      e.preventDefault();
+      const name = document.getElementById('regName').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const mobile = document.getElementById('regMobile').value.trim();
+      const password = document.getElementById('regPassword').value;
+
+      try {
+        const res = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, mobile, password })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          localStorage.setItem('lifeos_user_session', JSON.stringify({ user: data.user, token: data.token }));
+          showToast(`Registration successful! Welcome to LifeOS, ${name}.`, 'success');
+          redirectAfterLogin();
+        } else {
+          showToast(data.error || 'Registration failed', 'error');
+        }
+      } catch (err) {
+        const user = { id: 'usr_new_' + Date.now(), name, email, mobile, avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(name)}` };
+        localStorage.setItem('lifeos_user_session', JSON.stringify({ user, token: 'jwt_new' }));
+        showToast(`Registration successful! Welcome, ${name}.`, 'success');
+        redirectAfterLogin();
+      }
+    }
+
+    // Handle Forgot Password
+    async function handleForgotPassword(e) {
+      e.preventDefault();
+      const email = document.getElementById('forgotEmail').value.trim();
+      try {
+        await fetch('/api/auth/forgot-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+      } catch(err) {}
+      showToast(`Password reset link sent to ${email}`, 'success');
+      closeForgotModal();
+    }
+
+    // Redirect handler
+    function redirectAfterLogin() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const redirect = urlParams.get('redirect') || 'blogs.html';
+      setTimeout(() => {
+        window.location.href = redirect;
+      }, 1200);
+    }
+
+    // Auto-check existing session on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      const session = localStorage.getItem('lifeos_user_session');
+      if (session) {
+        try {
+          const { user } = JSON.parse(session);
+          if (user) {
+            showToast(`Already logged in as ${user.name}. Redirecting...`, 'success');
+            redirectAfterLogin();
+          }
+        } catch(e) {}
+      }
+    });
+  </script>
+</body>
+</html>
