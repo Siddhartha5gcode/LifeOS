@@ -2906,13 +2906,30 @@ function addMilkRecord() {
 }
 
 function deleteMilkRecord(date, type) {
-  const label = type === 'cow' ? '🐄 Cow' : '💪 Buffalo';
+  const recType = type || 'cow';
+  const label = recType === 'cow' ? '🐄 Cow' : '💪 Buffalo';
   if (!confirm('Delete ' + label + ' record for ' + date + '?')) return;
   const db = _getMilkDB();
-  db.records = db.records.filter(r => !(r.date === date && r.type === type));
+  db.records = db.records.filter(r => !(r.date === date && (r.type || 'cow') === recType));
   _saveMilkDB(db);
   renderMilkRecords();
   renderMilkSummary();
+}
+
+function editMilkRecord(date, type) {
+  const db = _getMilkDB();
+  const recType = type || 'cow';
+  const rec = db.records.find(r => r.date === date && (r.type || 'cow') === recType);
+  if (!rec) return;
+
+  if (document.getElementById('milkDateInput')) document.getElementById('milkDateInput').value = rec.date;
+  if (document.getElementById('milkQtyInput'))  document.getElementById('milkQtyInput').value = rec.qty;
+  if (document.getElementById('milkStatusSelect')) document.getElementById('milkStatusSelect').value = rec.status;
+  if (document.getElementById('milkNoteInput'))   document.getElementById('milkNoteInput').value = rec.note || '';
+  selectMilkType(recType);
+
+  const formCard = document.getElementById('milkDateInput')?.closest('.m-card');
+  if (formCard) formCard.scrollIntoView({ behavior: 'smooth' });
 }
 
 function populateMilkMonthSelector() {
@@ -3030,7 +3047,10 @@ function renderMilkRecords() {
       </div>
       <div style="text-align:right; flex-shrink:0;">
         <div style="font-size:0.72rem; font-weight:800; color:${statusColor[r.status]};">${r.qty > 0 ? '₹' + r.amount.toFixed(0) : '—'}</div>
-        <button onclick="deleteMilkRecord('${r.date}')" style="margin-top:0.2rem; padding:0.15rem 0.4rem; background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.3); color:#f87171; border-radius:0.35rem; font-size:0.65rem; cursor:pointer;">🗑️ Del</button>
+        <div style="display:flex; gap:0.25rem; margin-top:0.2rem; justify-content:flex-end;">
+          <button onclick="editMilkRecord('${r.date}', '${r.type || 'cow'}')" style="padding:0.15rem 0.4rem; background:rgba(99,102,241,0.15); border:1px solid rgba(99,102,241,0.3); color:var(--accent-indigo); border-radius:0.35rem; font-size:0.65rem; cursor:pointer;">✏️ Edit</button>
+          <button onclick="deleteMilkRecord('${r.date}', '${r.type || 'cow'}')" style="padding:0.15rem 0.4rem; background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.3); color:#f87171; border-radius:0.35rem; font-size:0.65rem; cursor:pointer;">🗑️ Del</button>
+        </div>
       </div>
     </div>`;
   }).join('');
@@ -3106,15 +3126,86 @@ function addLendRecord() {
   alert('✅ ' + (type === 'lend' ? '💸 Lend' : '🤲 Borrow') + ' record saved for ' + person + ' — ₹' + amount);
 }
 
+function partialSettleLendRecord(id) {
+  const db = _getLendDB();
+  const rec = db.records.find(r => r.id === id);
+  if (!rec) return;
+
+  if (!rec.payments) rec.payments = [];
+  const paidSoFar = rec.payments.reduce((s, p) => s + (p.amount || 0), 0);
+  const remaining = rec.amount - paidSoFar;
+
+  if (remaining <= 0) { alert('This record is already fully paid!'); return; }
+
+  const amtStr = prompt(`💵 Partial Payment for ${rec.person}\nTotal: ₹${rec.amount} | Paid: ₹${paidSoFar} | Remaining: ₹${remaining}\n\nEnter payment amount:`, remaining);
+  if (amtStr === null) return;
+  const amt = parseFloat(amtStr);
+  if (isNaN(amt) || amt <= 0) { alert('Please enter a valid amount.'); return; }
+  if (amt > remaining) { alert(`Payment cannot exceed remaining balance of ₹${remaining}`); return; }
+
+  const note = (prompt('Optional payment note (e.g. GPay, Cash):', 'Partial Payment') || '').trim();
+
+  rec.payments.push({
+    id: Date.now(),
+    amount: amt,
+    date: new Date().toLocaleDateString('en-IN', {day:'numeric', month:'short', year:'numeric'}),
+    note: note || 'Partial Payment'
+  });
+
+  const newTotalPaid = paidSoFar + amt;
+  if (newTotalPaid >= rec.amount) {
+    rec.status = 'settled';
+    rec.settledAt = new Date().toISOString();
+  } else {
+    rec.status = 'partial';
+  }
+
+  _saveLendDB(db);
+  renderLendRecords();
+  renderLendSummary();
+  alert(`✅ Recorded ₹${amt} payment from/to ${rec.person}.\nRemaining Balance: ₹${rec.amount - newTotalPaid}`);
+}
+
 function settleLendRecord(id) {
   const db = _getLendDB();
   const rec = db.records.find(r => r.id === id);
   if (!rec) return;
-  if (!confirm('Mark as Settled?\n' + rec.person + ' — ₹' + rec.amount)) return;
+
+  if (!rec.payments) rec.payments = [];
+  const paidSoFar = rec.payments.reduce((s, p) => s + (p.amount || 0), 0);
+  const remaining = rec.amount - paidSoFar;
+
+  if (!confirm(`Mark as Fully Settled?\n${rec.person} — Remaining: ₹${remaining}`)) return;
+
+  if (remaining > 0) {
+    rec.payments.push({
+      id: Date.now(),
+      amount: remaining,
+      date: new Date().toLocaleDateString('en-IN', {day:'numeric', month:'short', year:'numeric'}),
+      note: 'Full Settlement'
+    });
+  }
   rec.status = 'settled';
   rec.settledAt = new Date().toISOString();
   _saveLendDB(db);
-  renderLendRecords('all');
+  renderLendRecords();
+  renderLendSummary();
+}
+
+function deleteLendPayment(recId, payId) {
+  const db = _getLendDB();
+  const rec = db.records.find(r => r.id === recId);
+  if (!rec || !rec.payments) return;
+  if (!confirm('Delete this partial payment from history?')) return;
+
+  rec.payments = rec.payments.filter(p => p.id !== payId);
+  const paid = rec.payments.reduce((s, p) => s + (p.amount || 0), 0);
+  if (paid >= rec.amount) rec.status = 'settled';
+  else if (paid > 0) rec.status = 'partial';
+  else rec.status = 'pending';
+
+  _saveLendDB(db);
+  renderLendRecords();
   renderLendSummary();
 }
 
@@ -3125,7 +3216,7 @@ function deleteLendRecord(id) {
   if (!confirm('Delete record for ' + rec.person + ' — ₹' + rec.amount + '?')) return;
   db.records = db.records.filter(r => r.id !== id);
   _saveLendDB(db);
-  renderLendRecords('all');
+  renderLendRecords();
   renderLendSummary();
 }
 
@@ -3133,10 +3224,21 @@ function renderLendSummary() {
   const db = _getLendDB();
   const lentAll      = db.records.filter(r => r.type === 'lend');
   const borrowedAll  = db.records.filter(r => r.type === 'borrow');
+  
   const totalLent    = lentAll.reduce((s, r) => s + r.amount, 0);
-  const lentPending  = lentAll.filter(r => r.status === 'pending').reduce((s, r) => s + r.amount, 0);
+  const lentPending  = lentAll.reduce((s, r) => {
+    const paid = (r.payments || []).reduce((pSum, p) => pSum + (p.amount || 0), 0);
+    const rem = r.status === 'settled' ? 0 : Math.max(0, r.amount - paid);
+    return s + rem;
+  }, 0);
+
   const totalBorrow  = borrowedAll.reduce((s, r) => s + r.amount, 0);
-  const borrowPend   = borrowedAll.filter(r => r.status === 'pending').reduce((s, r) => s + r.amount, 0);
+  const borrowPend   = borrowedAll.reduce((s, r) => {
+    const paid = (r.payments || []).reduce((pSum, p) => pSum + (p.amount || 0), 0);
+    const rem = r.status === 'settled' ? 0 : Math.max(0, r.amount - paid);
+    return s + rem;
+  }, 0);
+
   const net = lentPending - borrowPend;
 
   document.getElementById('lendTotalLent').textContent     = '₹ ' + totalLent.toLocaleString('en-IN');
@@ -3172,7 +3274,7 @@ function renderLendRecords(filter) {
   let records = db.records;
   if (_lendCurrentFilter === 'lend')    records = records.filter(r => r.type === 'lend');
   if (_lendCurrentFilter === 'borrow')  records = records.filter(r => r.type === 'borrow');
-  if (_lendCurrentFilter === 'pending') records = records.filter(r => r.status === 'pending');
+  if (_lendCurrentFilter === 'pending') records = records.filter(r => r.status !== 'settled');
   if (_lendCurrentFilter === 'settled') records = records.filter(r => r.status === 'settled');
 
   badge.textContent = records.length;
@@ -3181,27 +3283,68 @@ function renderLendRecords(filter) {
 
   list.innerHTML = records.map(r => {
     const isLend    = r.type === 'lend';
-    const settled   = r.status === 'settled';
+    const payments  = r.payments || [];
+    const paidAmount= payments.reduce((s, p) => s + (p.amount || 0), 0);
+    const remaining = r.status === 'settled' ? 0 : Math.max(0, r.amount - paidAmount);
+    const settled   = r.status === 'settled' || remaining <= 0;
+    const isPartial = !settled && paidAmount > 0;
     const isOverdue = !settled && r.dueDate && r.dueDate < new Date().toISOString().split('T')[0];
+
     const typeColor = isLend ? 'rgba(239,68,68,0.15)' : 'rgba(99,102,241,0.15)';
     const typeBorder= isLend ? 'rgba(239,68,68,0.3)' : 'rgba(99,102,241,0.3)';
     const typeLabel = isLend ? '💸 Lent' : '🤲 Borrowed';
     const typeColor2= isLend ? 'var(--accent-rose)' : 'var(--accent-indigo)';
+
+    const pct = Math.min(100, Math.round((paidAmount / r.amount) * 100));
+
     return `<div style="background:${settled ? 'rgba(16,185,129,0.05)' : typeColor}; border:1px solid ${settled ? 'rgba(16,185,129,0.2)' : typeBorder}; border-radius:0.75rem; padding:0.75rem;">
-      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.4rem;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.3rem;">
         <div>
-          <span style="font-size:0.82rem; font-weight:800; color:var(--text-main);">${r.person}</span>
-          <span style="margin-left:0.4rem; font-size:0.65rem; padding:0.1rem 0.4rem; border-radius:1rem; background:${typeColor}; color:${typeColor2}; font-weight:700;">${typeLabel}</span>
-          ${isOverdue ? '<span style="margin-left:0.3rem; font-size:0.65rem; padding:0.1rem 0.4rem; border-radius:1rem; background:rgba(239,68,68,0.2); color:#f87171; font-weight:700;">⚠️ Overdue</span>' : ''}
-          ${settled ? '<span style="margin-left:0.3rem; font-size:0.65rem; padding:0.1rem 0.4rem; border-radius:1rem; background:rgba(16,185,129,0.2); color:var(--accent-green); font-weight:700;">✅ Settled</span>' : ''}
+          <span style="font-size:0.85rem; font-weight:800; color:var(--text-main);">${r.person}</span>
+          <span style="margin-left:0.3rem; font-size:0.63rem; padding:0.1rem 0.4rem; border-radius:1rem; background:${typeColor}; color:${typeColor2}; font-weight:700;">${typeLabel}</span>
+          ${isOverdue ? '<span style="margin-left:0.25rem; font-size:0.62rem; padding:0.1rem 0.35rem; border-radius:1rem; background:rgba(239,68,68,0.2); color:#f87171; font-weight:700;">⚠️ Overdue</span>' : ''}
+          ${settled ? '<span style="margin-left:0.25rem; font-size:0.62rem; padding:0.1rem 0.35rem; border-radius:1rem; background:rgba(16,185,129,0.2); color:var(--accent-green); font-weight:700;">✅ Settled</span>' : ''}
+          ${isPartial ? '<span style="margin-left:0.25rem; font-size:0.62rem; padding:0.1rem 0.35rem; border-radius:1rem; background:rgba(245,158,11,0.2); color:var(--accent-gold); font-weight:700;">🌗 Partial</span>' : ''}
         </div>
-        <span style="font-size:0.95rem; font-weight:800; color:${settled ? 'var(--accent-green)' : typeColor2};">₹ ${r.amount.toLocaleString('en-IN')}</span>
+        <div style="text-align:right;">
+          <div style="font-size:0.95rem; font-weight:800; color:${settled ? 'var(--accent-green)' : typeColor2};">₹ ${r.amount.toLocaleString('en-IN')}</div>
+          ${!settled && paidAmount > 0 ? `<div style="font-size:0.65rem; color:var(--accent-green);">Paid: ₹${paidAmount.toLocaleString('en-IN')}</div>` : ''}
+          ${!settled ? `<div style="font-size:0.68rem; font-weight:700; color:var(--accent-gold);">Rem: ₹${remaining.toLocaleString('en-IN')}</div>` : ''}
+        </div>
       </div>
+
+      <!-- Payment Progress Bar -->
+      ${paidAmount > 0 && !settled ? `
+      <div style="margin:0.4rem 0; background:rgba(255,255,255,0.08); border-radius:1rem; height:6px; overflow:hidden;">
+        <div style="width:${pct}%; background:linear-gradient(90deg, var(--accent-gold), var(--accent-green)); height:100%;"></div>
+      </div>` : ''}
+
       <div style="font-size:0.68rem; color:var(--text-sub); margin-bottom:0.5rem;">
-        📅 ${r.date}${r.dueDate ? ' · Due: ' + r.dueDate : ''}${r.note ? ' · ' + r.note : ''}
+        📅 ${r.date}${r.dueDate ? ' · Due: ' + r.dueDate : ''}${r.note ? ' · <i>' + r.note + '</i>' : ''}
       </div>
-      <div style="display:flex; gap:0.4rem;">
-        ${!settled ? `<button onclick="settleLendRecord(${r.id})" style="flex:1; padding:0.35rem; background:rgba(16,185,129,0.2); border:1px solid rgba(16,185,129,0.35); color:var(--accent-green); font-weight:700; border-radius:0.4rem; cursor:pointer; font-size:0.72rem;">✅ Settle</button>` : ''}
+
+      <!-- Payment History List -->
+      ${payments.length > 0 ? `
+      <details style="margin-bottom:0.5rem; background:rgba(0,0,0,0.2); padding:0.4rem 0.6rem; border-radius:0.5rem; font-size:0.68rem;">
+        <summary style="cursor:pointer; font-weight:700; color:var(--accent-cyan);">📜 Payment History (${payments.length} paid)</summary>
+        <div style="display:flex; flex-direction:column; gap:0.25rem; margin-top:0.3rem;">
+          ${payments.map(p => `
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:0.15rem;">
+              <span>📅 ${p.date} · <i>${p.note}</i></span>
+              <div style="display:flex; align-items:center; gap:0.4rem;">
+                <strong style="color:var(--accent-green);">+₹${p.amount.toLocaleString('en-IN')}</strong>
+                <button onclick="deleteLendPayment(${r.id}, ${p.id})" style="background:none; border:none; color:#f87171; cursor:pointer; font-size:0.65rem;">🗑️</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </details>` : ''}
+
+      <div style="display:flex; gap:0.35rem;">
+        ${!settled ? `
+          <button onclick="partialSettleLendRecord(${r.id})" style="flex:1; padding:0.35rem; background:rgba(245,158,11,0.2); border:1px solid rgba(245,158,11,0.35); color:var(--accent-gold); font-weight:700; border-radius:0.4rem; cursor:pointer; font-size:0.72rem;">💵 Partial Pay</button>
+          <button onclick="settleLendRecord(${r.id})" style="flex:1; padding:0.35rem; background:rgba(16,185,129,0.2); border:1px solid rgba(16,185,129,0.35); color:var(--accent-green); font-weight:700; border-radius:0.4rem; cursor:pointer; font-size:0.72rem;">✅ Full Settle</button>
+        ` : ''}
         <button onclick="deleteLendRecord(${r.id})" style="padding:0.35rem 0.6rem; background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.3); color:#f87171; font-weight:700; border-radius:0.4rem; cursor:pointer; font-size:0.72rem;">🗑️</button>
       </div>
     </div>`;
