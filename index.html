@@ -1496,6 +1496,21 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent-indigo); 
       <div id="driveBackupLog" style="margin-top:0.6rem; font-size:0.72rem; color:var(--text-sub); max-height:120px; overflow-y:auto; display:flex; flex-direction:column; gap:0.2rem;"></div>
     </div>
 
+    <!-- Render Cloud Sync -->
+    <div class="m-card" style="border:1px solid rgba(99,102,241,0.3); background:rgba(99,102,241,0.06);">
+      <div class="m-title"><div class="m-title-text">🚀 Render Cloud Sync</div><span class="badge b-indigo" id="renderSyncBadge">Auto</span></div>
+      <p style="font-size:0.75rem; color:var(--text-sub); margin-bottom:0.75rem;">Your LifeOS data is automatically synced to a private cloud server every 30 minutes. Restore your data on any device.</p>
+      <div id="renderSyncStatus" style="font-size:0.72rem; color:var(--accent-gold); margin-bottom:0.65rem; text-align:center;">⏳ Checking sync status...</div>
+      <div style="display:flex; flex-direction:column; gap:0.5rem;">
+        <button onclick="syncNowRender()" style="width:100%; padding:0.75rem; background:linear-gradient(135deg,#6366f1,#8b5cf6); color:white; font-weight:700; border:none; border-radius:0.65rem; cursor:pointer;">☁️ Sync to Cloud Now</button>
+        <button onclick="fetchFromRender()" style="width:100%; padding:0.65rem; background:rgba(255,255,255,0.06); border:1px solid rgba(99,102,241,0.3); color:var(--accent-indigo); font-weight:700; border-radius:0.65rem; cursor:pointer;">⬇️ Restore from Cloud</button>
+      </div>
+      <div style="margin-top:0.6rem; font-size:0.68rem; color:var(--text-sub); text-align:center;">
+        Server: <span style="color:var(--accent-cyan);">lifeos-9y33.onrender.com</span> &nbsp;·&nbsp;
+        Last sync: <span id="renderLastSync" style="color:var(--accent-green);">—</span>
+      </div>
+    </div>
+
     <!-- Auto-Backup Settings -->
     <div class="m-card">
       <div class="m-title"><div class="m-title-text">⏰ Auto-Backup Settings</div></div>
@@ -2676,6 +2691,8 @@ window.addEventListener('load', () => {
   initLendModule();
   initBackupModule();
   startAutoDriveBackup();
+  startAutoRenderSync();           // ☁️ Start Render cloud sync every 30 min
+  setTimeout(() => syncToRender(true), 5000); // Initial silent sync after 5s
 });
 
 // ==========================================
@@ -3155,6 +3172,12 @@ function initBackupModule() {
   const lastDrive = localStorage.getItem('lifeos_last_drive_backup');
   if (document.getElementById('backupLastLocal')) document.getElementById('backupLastLocal').textContent = lastLocal || 'Never';
   if (document.getElementById('backupLastDrive')) document.getElementById('backupLastDrive').textContent = lastDrive || 'Never';
+  const lastRender = localStorage.getItem('lifeos_last_render_sync');
+  if (document.getElementById('renderLastSync')) document.getElementById('renderLastSync').textContent = lastRender || 'Not synced yet';
+  if (document.getElementById('renderSyncStatus')) {
+    document.getElementById('renderSyncStatus').textContent = lastRender ? '☁️ Last synced: ' + lastRender : '⏳ Not synced yet';
+    document.getElementById('renderSyncStatus').style.color = lastRender ? 'var(--accent-green)' : 'var(--accent-gold)';
+  }
 
   // Data size
   let totalBytes = 0;
@@ -3341,6 +3364,100 @@ function startAutoDriveBackup() {
       if (token) backupToDriveNow();
     }
   }, 15 * 60 * 1000); // every 15 minutes
+}
+
+// ==========================================
+// ☁️ RENDER CLOUD SYNC ENGINE
+// ==========================================
+
+const RENDER_SYNC_URL = 'https://lifeos-9y33.onrender.com';
+
+function _getRenderUserId() {
+  let uid = localStorage.getItem('lifeos_render_uid');
+  if (!uid) {
+    // Generate a stable unique ID for this device/user
+    uid = 'user_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
+    localStorage.setItem('lifeos_render_uid', uid);
+  }
+  return uid;
+}
+
+async function syncToRender(silent) {
+  const userId = _getRenderUserId();
+  const data   = _getAllAppData();
+  // Also include m_ keys (expenses, habits, etc.)
+  data.m_expenses  = localStorage.getItem('m_expenses')  || '[]';
+  data.m_habits    = localStorage.getItem('m_habits')    || '[]';
+  data.m_notes     = localStorage.getItem('m_notes')     || '[]';
+  data.m_bills     = localStorage.getItem('m_bills')     || '[]';
+  data.m_groceries = localStorage.getItem('m_groceries') || '[]';
+  data.m_loan      = localStorage.getItem('m_loan')      || '{}';
+
+  try {
+    const res = await fetch(RENDER_SYNC_URL + '/api/sync/' + userId, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ data, version: (window.LIFEOS_VERSION && window.LIFEOS_VERSION.version) || '1.0' })
+    });
+    if (res.ok) {
+      const now = new Date().toLocaleString('en-IN');
+      localStorage.setItem('lifeos_last_render_sync', now);
+      if (document.getElementById('renderSyncStatus')) {
+        document.getElementById('renderSyncStatus').textContent = '☁️ Synced: ' + now;
+        document.getElementById('renderSyncStatus').style.color = 'var(--accent-green)';
+      }
+      _addBackupLog('☁️ Render cloud sync success', 'ok');
+      if (!silent) alert('✅ Data synced to Render cloud!');
+    } else {
+      throw new Error('HTTP ' + res.status);
+    }
+  } catch(ex) {
+    if (document.getElementById('renderSyncStatus')) {
+      document.getElementById('renderSyncStatus').textContent = '⚠️ Sync failed: ' + ex.message;
+      document.getElementById('renderSyncStatus').style.color = 'var(--accent-rose)';
+    }
+    _addBackupLog('❌ Render sync failed: ' + ex.message, 'error');
+    if (!silent) alert('❌ Render sync failed: ' + ex.message);
+  }
+}
+
+async function fetchFromRender() {
+  const userId = _getRenderUserId();
+  try {
+    const res  = await fetch(RENDER_SYNC_URL + '/api/sync/' + userId);
+    if (res.status === 404) { alert('⚠️ No cloud backup found yet. Sync your data first.'); return; }
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const json = await res.json();
+    const data = json.data;
+    if (!data) { alert('⚠️ Cloud backup is empty.'); return; }
+
+    if (!confirm('Restore data from Render cloud?\nLast synced: ' + (json.lastSynced || 'unknown') + '\n\nThis will overwrite current local data.')) return;
+
+    const allKeys = [
+      'lifeos_db','lifeos_user','lifeos_milk','lifeos_lend','lifeos_loan',
+      'lifeos_backup_settings','m_expenses','m_habits','m_notes','m_bills','m_groceries','m_loan'
+    ];
+    allKeys.forEach(k => { if (data[k]) localStorage.setItem(k, data[k]); });
+    _addBackupLog('⬇️ Restored from Render cloud (synced: ' + (json.lastSynced || '') + ')', 'ok');
+    alert('✅ Data restored from Render cloud! Reload the app to apply.');
+  } catch(ex) {
+    _addBackupLog('❌ Render restore failed: ' + ex.message, 'error');
+    alert('❌ Render restore failed: ' + ex.message);
+  }
+}
+
+// Auto Render sync every 30 minutes (silent)
+let _autoRenderTimer = null;
+function startAutoRenderSync() {
+  if (_autoRenderTimer) clearInterval(_autoRenderTimer);
+  _autoRenderTimer = setInterval(() => {
+    syncToRender(true); // silent = no alert popup
+  }, 30 * 60 * 1000); // every 30 minutes
+}
+
+// Called from Backup UI "Sync Now" button
+function syncNowRender() {
+  syncToRender(false);
 }
 
 // Backup-before-update: runs on page load to preserve data before any app update refreshes
